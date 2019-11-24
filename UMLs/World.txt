@@ -1,0 +1,19 @@
+World
+----------------------------------------
+ - tiles: Tile**
+ - rowCount : int
+ - colCount : int
+ - tileCount : int
+----------------------------------------
+ + World(ifstream& file)
+ + ~World()
+ - clear()
+ - setSize(ifstream& file)
+ - setupTiles(ifstream& file)
+ + height() : int
+ + width() : int
+ + size() : int
+ + tile(const int& x, const int& y) : Tile*
+ + operator[](const int& index) : Tile*
+ + operator()(const int& x, const int& y) : Tile*
+ + BadDimensions : class
