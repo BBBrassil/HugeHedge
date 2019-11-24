@@ -37,7 +37,6 @@ public:
 		std::string fileName;
 	public:
 		EndOfFile(std::string s) { fileName = s; }
-		void setFileName(std::string s) { fileName = s; }
 		std::string getFileName() { return fileName; }
 	};
 
@@ -46,7 +45,6 @@ public:
 		std::string fileName;
 	public:
 		FileOpenFailure(std::string s) { fileName = s; }
-		void setFileName(std::string s) { fileName = s; }
 		std::string getFileName() { return fileName; }
 	};
 };
