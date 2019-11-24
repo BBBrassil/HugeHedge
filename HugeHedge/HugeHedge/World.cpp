@@ -194,7 +194,7 @@ void makeTile(const char& type, const Position& position) {
 	Used for errors and when the player inspects a tile outside of the World.
 */
 ////////////////////////////////////////////////////////////////////////////////
-Tile& World::getDefaultTile() {
+Tile& World::getDefaultTile() const {
 	return *defaultTile;
 }
 
@@ -203,7 +203,7 @@ Tile& World::getDefaultTile() {
 	Converts xy coordinates to an index in a 1D array.
 */
 ////////////////////////////////////////////////////////////////////////////////
-int World::xyToIndex(const int& x, const int& y) {
+int World::xyToIndex(const int& x, const int& y) const {
 	return (colCount * x) + y;
 }
 
@@ -214,7 +214,7 @@ int World::xyToIndex(const int& x, const int& y) {
 	Returns the default tile if these coordinates fall outside the World.
 */
 ////////////////////////////////////////////////////////////////////////////////
-Tile& World::tile(const int& x, const int& y) {
+Tile& World::tile(const int& x, const int& y) const {
 	if( !(x >= 0 && x < width()) || !(y >= 0 || y < height()) )
 		return getDefaultTile();
 	return *tiles[xyToIndex(x, y)];
@@ -227,7 +227,7 @@ Tile& World::tile(const int& x, const int& y) {
 	Returns the default tile if the given index is out of bounds.
 */
 ////////////////////////////////////////////////////////////////////////////////
-Tile& World::operator[](const int& index) {
+Tile& World::operator[](const int& index) const {
 	if( index < 0 || index > tileCount )
 		return getDefaultTile();
 	return *tiles[index];
@@ -240,6 +240,6 @@ Tile& World::operator[](const int& index) {
 	Returns the default tile if these coordinates fall outside the World.
 */
 ////////////////////////////////////////////////////////////////////////////////
-Tile& World::operator()(const int& x, const int& y) {
+Tile& World::operator()(const int& x, const int& y) const {
 	return tile(x, y);
 }

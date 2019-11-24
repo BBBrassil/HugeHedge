@@ -24,16 +24,15 @@ public:
 	int height() const { return rowCount; }
 	int width() const { return colCount; }
 	int size() const { return tileCount; }
-	Tile& getDefaultTile();
+	Tile& getDefaultTile() const;
 	int xyToIndex(const int& x, const int& y);
-	Tile& tile(const int& x, const int& y);
-	Tile& operator[](const int& index);
-	Tile& operator()(const int& x, const int& y);
+	Tile& tile(const int& x, const int& y) const;
+	Tile& operator[](const int& index) const;
+	Tile& operator()(const int& x, const int& y) const;
 
 	// File exception parent class
 	class FileException {
 	private:
-		virtual void dummy() = 0; // needed to make this class abstract
 		std::string fileName;
 	public:
 		FileException(const std::string& s) { fileName = s; }

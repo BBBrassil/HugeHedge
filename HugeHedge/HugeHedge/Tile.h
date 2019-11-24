@@ -33,7 +33,6 @@ public:
 	// File exception parent class
 	class FileException {
 	private:
-		virtual void dummy() = 0; // needed to make this class abstract
 		std::string fileName;
 	public:
 		FileException(const std::string& s) { fileName = s; }
