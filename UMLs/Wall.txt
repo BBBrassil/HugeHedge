@@ -1,8 +1,0 @@
-Wall
-- $description
-- $token
-
-+ $setup
-+ isWall() : bool
-+ toChar() : char
-+ toString() : string
