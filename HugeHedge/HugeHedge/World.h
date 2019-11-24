@@ -37,6 +37,7 @@ public:
 		std::string fileName;
 	public:
 		FileException(const std::string& s) { fileName = s; }
+		std::string getFileName() const { return fileName; }
 	};
 
 	// BadDimensions exception
