@@ -12,7 +12,7 @@
 	Returns the Tile that lies to the north.
 */
 ////////////////////////////////////////////////////////////////////////////////
-Tile& Tile::north() {
+Tile& Tile::north() const {
 	return getWorld().tile(position.x, position.y + 1);
 }
 
@@ -21,7 +21,7 @@ Tile& Tile::north() {
 	Returns the Tile that lies to the east.
 */
 ////////////////////////////////////////////////////////////////////////////////
-Tile& Tile::east() {
+Tile& Tile::east() const {
 	return getWorld().tile(position.x + 1, position.y);
 }
 
@@ -30,7 +30,7 @@ Tile& Tile::east() {
 	Returns a pointer to the Tile that lies to the south.
 */
 ////////////////////////////////////////////////////////////////////////////////
-Tile& Tile::south() {
+Tile& Tile::south() const {
 	return getWorld().tile(position.x, position.y - 1);
 }
 
@@ -39,7 +39,7 @@ Tile& Tile::south() {
 	Returns the Tile that lies to the west.
 */
 ////////////////////////////////////////////////////////////////////////////////
-Tile& Tile::west() {
+Tile& Tile::west() const {
 	return getWorld().tile(position.x - 1, position.y);
 }
 ////////////////////////////////////////////////////////////////////////////////
@@ -47,7 +47,7 @@ Tile& Tile::west() {
 	Returns the tile at the given xy coordinates in the world.
 */
 ////////////////////////////////////////////////////////////////////////////////
-Tile& Tile::operator()(const int& x, const int& y) {
+Tile& Tile::operator()(const int& x, const int& y) const {
 	return getWorld().tile(x, y);
 }
 
@@ -56,12 +56,22 @@ Tile& Tile::operator()(const int& x, const int& y) {
 	Returns the tile that lies in the given direction.
 */
 ////////////////////////////////////////////////////////////////////////////////
-Tile& Tile::operator()(const int& cardinal) {
+Tile& Tile::operator()(const int& cardinal) const {
 	switch( cardinal ) {
 	case NORTH: return north(); break;
 	case EAST: return east(); break;
 	case SOUTH: return south(); break;
 	case WEST: return west(); break;
-	default: return World::nullTile(); break;
+	default: return getWorld().getDefaultTile(); break;
 	}
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/*	operator<<
+	Prints toString() method.
+*/
+////////////////////////////////////////////////////////////////////////////////
+std::ostream& operator<<(std::ostream& os, const Tile& t) {
+	os << t.toString();
+	return os;
 }

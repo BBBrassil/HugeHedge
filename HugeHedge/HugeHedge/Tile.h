@@ -7,6 +7,7 @@
 
 #include "Position.h"
 #include <string>
+#include <iostream>
 
 class World;
 
@@ -15,21 +16,20 @@ private:
 	Position position;
 public:
 	Tile(const Position& p) { position = p; }
-	virtual bool isWall() = 0;
-	virtual char toChar() = 0;
-	virtual std::string toString() = 0;
-	World& getWorld() { return *position.world; }
+	virtual bool isWall() const = 0;
+	virtual char toChar() const = 0;
+	virtual std::string toString() const = 0;
+	World& getWorld() const { return *position.world; }
 	int getX() const { return position.x; }
 	int getY() const { return position.y; }
-	Tile& north();
-	Tile& east();
-	Tile& south();
-	Tile& west();
-	Tile& operator()(const int& x, const int& y);
-	Tile& operator()(const int& cardinal);
-	friend std::ostream operator<<(std::ostream& os, Tile& t);
-
-
+	Tile& north() const;
+	Tile& east() const;
+	Tile& south() const;
+	Tile& west() const;
+	Tile& operator()(const int& x, const int& y) const;
+	Tile& operator()(const int& cardinal) const;
+	friend std::ostream& operator<<(std::ostream& os, const Tile& t);
+	
 	// File exception parent class
 	class FileException {
 	private:
