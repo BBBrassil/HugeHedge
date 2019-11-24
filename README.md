@@ -1,7 +1,7 @@
 # HugeHedge
 A text-based adventure game in which the player is trapped in a maze.
 
-##Requirements
+## Requirements
 
 >Your final project should demonstrate: 
 >* Header files
@@ -27,7 +27,7 @@ A text-based adventure game in which the player is trapped in a maze.
 >* A friend function not related to the << and >> operator
 >Don’t forget: analysis, design, testing, pseudocode & documentation!!!
 
-##Proposal
+## Proposal
 **Concept**:
 A text-based adventure game in which the player is trapped in a maze. To escape, the player will have to locate the tile with the exit and find the key to unlock it.
 
