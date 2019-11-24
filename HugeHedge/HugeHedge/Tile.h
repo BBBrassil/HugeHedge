@@ -29,13 +29,20 @@ public:
 	Tile& operator()(const int& cardinal);
 	friend std::ostream operator<<(std::ostream& os, Tile& t);
 
-	class FileOpenFailure {
+
+	// File exception parent class
+	class FileException {
 	private:
+		virtual void dummy() = 0; // needed to make this class abstract
 		std::string fileName;
 	public:
-		FileOpenFailure(std::string s) { fileName = s; }
-		void setFileName(std::string s) { fileName = s; }
-		std::string getFileName() { return fileName; }
+		FileException(const std::string& s) { fileName = s; }
+	};
+
+	// FileOpenFailure exception
+	class FileOpenFailure : FileException {
+	public:
+		FileOpenFailure(const std::string& s) : FileException(s) {}
 	};
 };
 

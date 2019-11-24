@@ -22,15 +22,18 @@
 | + operator()(const int& index) : Tile&           |
 | + operator()(const int& x, const int& y) : Tile& |
 
-| BadDimensions |
-| ------------- |
-|               |
-|               |
+| BadDimensions             |
+| ------------------------- |
+|                           |
+| - fileName : string       |
+|                           |
+| + BadDimensions(string s) |
+| + getFileName() : string  |
 
 | EndOfFile                |
 | ------------------------ |
 |                          |
-| - fileName               |
+| - fileName : string      |
 |                          |
 | + EndOfFile(string s)    |
 | + getFileName() : string |
@@ -38,7 +41,7 @@
 | FileOpenFailure             |
 | --------------------------- |
 |                             |
-| - fileName                  |
+| - fileName : string         |
 |                             |
 | + FileOpenFailure(string s) |
 | + getFileName() : string    |

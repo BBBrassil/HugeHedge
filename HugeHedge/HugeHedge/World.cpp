@@ -39,7 +39,7 @@ World::~World() {
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	clear()
-	Deallocates memory for the tiles array.
+	Deallocates memory for the tiles array and defaultTile.
 */
 ////////////////////////////////////////////////////////////////////////////////
 void World::clear() {
@@ -75,7 +75,7 @@ void World::setSize() {
 		std::getline(file, line);
 		// World must have substance
 		if( line == "" )
-			throw BadDimensions();
+			throw BadDimensions(fileName);
 		row = 1;
 		col = line.length();
 		while( std::getline(file, line) ) {
@@ -83,7 +83,7 @@ void World::setSize() {
 			length = line.length();
 			// World must be a rectangle
 			if( length != col )
-				throw BadDimensions();
+				throw BadDimensions(fileName);
 		}
 
 		rowCount = row;

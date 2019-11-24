@@ -30,22 +30,31 @@ public:
 	Tile& operator[](const int& index);
 	Tile& operator()(const int& x, const int& y);
 
-	class BadDimensions {};
-
-	class EndOfFile {
+	// File exception parent class
+	class FileException {
 	private:
+		virtual void dummy() = 0; // needed to make this class abstract
 		std::string fileName;
 	public:
-		EndOfFile(std::string s) { fileName = s; }
-		std::string getFileName() { return fileName; }
+		FileException(const std::string& s) { fileName = s; }
 	};
 
-	class FileOpenFailure {
-	private:
-		std::string fileName;
+	// BadDimensions exception
+	class BadDimensions : FileException {
 	public:
-		FileOpenFailure(std::string s) { fileName = s; }
-		std::string getFileName() { return fileName; }
+		BadDimensions(const std::string& s) : FileException(s) {}
+	};
+
+	// EndOfFile exception
+	class EndOfFile : FileException {
+	public:
+		EndOfFile(const std::string& s) : FileException(s) {}
+	};
+
+	// FileOpenFailure exception
+	class FileOpenFailure : FileException {
+	public:
+		FileOpenFailure(const std::string& s) : FileException(s) {}
 	};
 };
 
