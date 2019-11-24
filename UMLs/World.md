@@ -16,9 +16,9 @@
 | + height() : int                                 |
 | + width() : int                                  |
 | + size() : int                                   |
+| + getDefaultTile() : Tile&                       |
 | + xyToIndex(const int& x, const int& y) : int    |
 | + tile(const int& x, const int& y) : Tile&       |
-| + getDefaultTile() : Tile&                       |
 | + operator()(const int& index) : Tile&           |
 | + operator()(const int& x, const int& y) : Tile& |
 

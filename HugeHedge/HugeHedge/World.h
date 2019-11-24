@@ -24,9 +24,9 @@ public:
 	int height() const { return rowCount; }
 	int width() const { return colCount; }
 	int size() const { return tileCount; }
+	Tile& getDefaultTile();
 	int xyToIndex(const int& x, const int& y);
 	Tile& tile(const int& x, const int& y);
-	Tile& getDefaultTile();
 	Tile& operator[](const int& index);
 	Tile& operator()(const int& x, const int& y);
 

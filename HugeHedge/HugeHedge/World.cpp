@@ -17,8 +17,8 @@
 	- fn: Name of text file used to read the tile layout.
 */
 ////////////////////////////////////////////////////////////////////////////////
-World::World(const std::string& fn) {
-	fileName = fn;
+World::World(const std::string& s) {
+	fileName = s;
 
 	try {
 		setSize();
@@ -58,7 +58,7 @@ void World::clear() {
 	counts the number of rows and columns in the file to determine the world's
 	height, width, and tile count.
 
-	! Throws an OpenFileFailure exception if the input file fails to open.
+	! Throws a FileOpenFailure exception if the input file fails to open.
 	! Throws a BadDimensions exception if the data read from the file will not
 	  create a rectangular maze layout.
 */
@@ -103,7 +103,9 @@ void World::setSize() {
 
 	Determines which tiles to create by reading the layout from a text file.
 
-	! Throws an OpenFileFailure exception if any input files fail to open.
+	! Throws a FileOpenFailure exception if any input files fail to open.
+	! Throws an EndOfFile exception if the end of a file is reached before setup
+	  is complete.
 */
 ////////////////////////////////////////////////////////////////////////////////
 void World::setupTiles() {
@@ -164,7 +166,7 @@ void World::setupTiles() {
 ////////////////////////////////////////////////////////////////////////////////
 /*	makeTile()
 	Creates a Tile object of a given type at a given position.
-	- type: Character determining type of tile to create.
+	- type:      Character determining type of tile to create.
 	- position:  Position of the tile.
 */
 ////////////////////////////////////////////////////////////////////////////////
@@ -186,6 +188,17 @@ void makeTile(const char& type, const Position& position) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+/*	getDefaultTile()
+	Returns the default Tile object.
+
+	Used for errors and when the player inspects a tile outside of the World.
+*/
+////////////////////////////////////////////////////////////////////////////////
+Tile& World::getDefaultTile() {
+	return *defaultTile;
+}
+
+////////////////////////////////////////////////////////////////////////////////
 /*	xyToIndex()
 	Converts xy coordinates to an index in a 1D array.
 */
@@ -197,6 +210,8 @@ int World::xyToIndex(const int& x, const int& y) {
 ////////////////////////////////////////////////////////////////////////////////
 /*	tile()
 	Returns the Tile at the given xy coordinates in the World.
+
+	Returns the default tile if these coordinates fall outside the World.
 */
 ////////////////////////////////////////////////////////////////////////////////
 Tile& World::tile(const int& x, const int& y) {
@@ -206,19 +221,10 @@ Tile& World::tile(const int& x, const int& y) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/*	defaultTile()
-	Returns the default Tile object.
-
-	Used for errors and when the player inspects a tile outside of the World.
-*/
-////////////////////////////////////////////////////////////////////////////////
-Tile& World::getDefaultTile() {
-	return *defaultTile;
-}
-
-////////////////////////////////////////////////////////////////////////////////
 /*	operator[]
 	Returns the Tile at the given 1D index in the tiles array.
+
+	Returns the default tile if the given index is out of bounds.
 */
 ////////////////////////////////////////////////////////////////////////////////
 Tile& World::operator[](const int& index) {
@@ -230,6 +236,8 @@ Tile& World::operator[](const int& index) {
 ////////////////////////////////////////////////////////////////////////////////
 /*	operator()
 	Returns the Tile at the given xy coordinates in the World.
+
+	Returns the default tile if these coordinates fall outside the World.
 */
 ////////////////////////////////////////////////////////////////////////////////
 Tile& World::operator()(const int& x, const int& y) {
