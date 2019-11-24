@@ -1,6 +1,0 @@
-﻿  Direction.cpp
-  HugeHedge.cpp
-  Tile.cpp
-  World.cpp
-  Generating Code...
-P:\_Sync\Dropbox\HomeOne\CIT-237 C++\Final Project\HugeHedge\HugeHedge\World.cpp(7,10): fatal error C1083: Cannot open include file: 'Exit.h': No such file or directory
