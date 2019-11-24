@@ -1,6 +1,6 @@
 | _Direction_                                  |
 | ---------------------------------------------|
-| ---------------------------------------------|
+|                                              |
 | + _dummy()_                                  |
 | + `rightFrom(const int& cardinal) : int`     |
 | + `opposite(const int& cardinal) : int`      |
