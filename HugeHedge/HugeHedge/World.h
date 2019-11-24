@@ -25,7 +25,7 @@ public:
 	int width() const { return colCount; }
 	int size() const { return tileCount; }
 	Tile& getDefaultTile() const;
-	int xyToIndex(const int& x, const int& y);
+	int xyToIndex(const int& x, const int& y) const;
 	Tile& tile(const int& x, const int& y) const;
 	Tile& operator[](const int& index) const;
 	Tile& operator()(const int& x, const int& y) const;
