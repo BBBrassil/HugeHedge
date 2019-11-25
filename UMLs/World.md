@@ -22,26 +22,28 @@
 | + operator()(const int& index) : Tile&           |
 | + operator()(const int& x, const int& y) : Tile& |
 
-| BadDimensions             |
+| FileException             |
 | ------------------------- |
 |                           |
 | - fileName : string       |
 |                           |
-| + BadDimensions(string s) |
+| + FileException(string s) |
 | + getFileName() : string  |
+
+| BadDimensions             |
+| ------------------------- |
+|                           |
+|                           |
+| + BadDimensions(string s) |
 
 | EndOfFile                |
 | ------------------------ |
 |                          |
-| - fileName : string      |
 |                          |
 | + EndOfFile(string s)    |
-| + getFileName() : string |
 
 | FileOpenFailure             |
 | --------------------------- |
 |                             |
-| - fileName : string         |
 |                             |
 | + FileOpenFailure(string s) |
-| + getFileName() : string    |
