@@ -14,7 +14,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	Constructor
-	- fn: Name of text file used to read the tile layout.
+	- s: Name of text file used to read the tile layout.
 */
 ////////////////////////////////////////////////////////////////////////////////
 World::World(const std::string& s) {
@@ -122,7 +122,10 @@ void World::setupTiles() {
 		throw;
 	}
 	try {
-		defaultTile = new UniqueTile("DefaultTile");
+		position.world = this;
+		position.x = -1;
+		position.y = -1;
+		defaultTile = new UniqueTile(position);
 	}
 	catch( Tile::FileOpenFailure ) {
 		delete defaultTile;
