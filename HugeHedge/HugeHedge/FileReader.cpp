@@ -90,7 +90,14 @@ int FileReader::findDelimiter(const std::string& s, const char& delimiter) const
 */
 ////////////////////////////////////////////////////////////////////////////////
 std::string FileReader::key(const std::string& s) const {
-	int index = findDelimiter(s, '=');
+	int index;
+
+	try {
+		index = findDelimiter(s, '=');
+	}
+	catch( BadFormat ) {
+		throw;
+	}
 
 	return s.substr(0, index);
 }

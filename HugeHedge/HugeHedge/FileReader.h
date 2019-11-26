@@ -114,4 +114,5 @@ public:
 		std::string getKeyName() const { return keyName; }
 	};
 };
+
 #endif
