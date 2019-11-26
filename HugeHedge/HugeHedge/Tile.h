@@ -29,21 +29,6 @@ public:
 	Tile& operator()(const int& x, const int& y) const;
 	Tile& operator()(const int& cardinal) const;
 	friend std::ostream& operator<<(std::ostream& os, const Tile& t);
-	
-	// File exception parent class
-	class FileException {
-	private:
-		std::string fileName;
-	public:
-		FileException(const std::string& s) { fileName = s; }
-		std::string getFileName() const { return fileName; }
-	};
-
-	// FileOpenFailure exception
-	class FileOpenFailure : FileException {
-	public:
-		FileOpenFailure(const std::string& s) : FileException(s) {}
-	};
 };
 
 #endif

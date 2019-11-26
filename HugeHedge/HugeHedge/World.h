@@ -5,6 +5,8 @@
 #ifndef WORLD_H
 #define WORLD_H
 
+#include <string>
+
 class Tile;
 
 class World {
@@ -30,31 +32,18 @@ public:
 	Tile& operator[](const int& index) const;
 	Tile& operator()(const int& x, const int& y) const;
 
-	// File exception parent class
-	class FileException {
+	//////////////////////////////////////////////////////////////////////////////
+	/* BadDimensions exception
+		Thrown when the data read from a file would not produce a rectangular
+		tile set for the World.
+	*/
+	//////////////////////////////////////////////////////////////////////////////
+	class BadDimensions {
 	private:
 		std::string fileName;
 	public:
-		FileException(const std::string& s) { fileName = s; }
-		std::string getFileName() const { return fileName; }
-	};
-
-	// BadDimensions exception
-	class BadDimensions : FileException {
-	public:
-		BadDimensions(const std::string& s) : FileException(s) {}
-	};
-
-	// EndOfFile exception
-	class EndOfFile : FileException {
-	public:
-		EndOfFile(const std::string& s) : FileException(s) {}
-	};
-
-	// FileOpenFailure exception
-	class FileOpenFailure : FileException {
-	public:
-		FileOpenFailure(const std::string& s) : FileException(s) {}
+		BadDimensions(const std::string& s) { fileName = s; }
+		std::string getFileName() { return fileName; }
 	};
 };
 

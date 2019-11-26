@@ -4,6 +4,7 @@
 
 #include "World.h"
 
+#include "FileReader.h"
 #include "Path.h"
 #include "Position.h"
 #include "Tile.h"
@@ -67,9 +68,14 @@ void World::setSize() {
 	int row, col, length;
 	std::string line;
 	std::ifstream file(fileName);
+	FileReader reader;
 
-	if( file.fail() )
-		throw FileOpenFailure(fileName);
+	try {
+		reader.open(fileName);
+	}
+	catch( FileReader::FileOpenFail ) {
+		throw;
+	}
 
 	try {
 		std::getline(file, line);
@@ -90,11 +96,11 @@ void World::setSize() {
 		colCount = col;
 	}
 	catch( BadDimensions ) {
-		file.close();
+		reader.close();
 		throw;
 	}
 
-	file.close();
+	reader.close();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -103,7 +109,7 @@ void World::setSize() {
 
 	Determines which tiles to create by reading the layout from a text file.
 
-	! Throws a FileOpenFailure exception if any input files fail to open.
+	! Throws a FileOpenFail exception if any input files fail to open.
 	! Throws an EndOfFile exception if the end of a file is reached before setup
 	  is complete.
 */
@@ -113,12 +119,13 @@ void World::setupTiles() {
 	char ch;
 	Position position;
 	std::ifstream file;
+	FileReader reader;
 
 	try {
 		Path.setup();
 		Wall.setup();
 	}
-	catch( Tile::FileOpenFailure ) {
+	catch( FileReader::FileException ) {
 		throw;
 	}
 	try {
@@ -127,15 +134,14 @@ void World::setupTiles() {
 		position.y = -1;
 		defaultTile = new UniqueTile(position);
 	}
-	catch( Tile::FileOpenFailure ) {
+	catch( FileReader::FileException ) {
 		delete defaultTile;
 		defaultTile = nullptr;
+		throw;
 	}
 
 	try {
-		file.open(fileName);
-		if( file.fail() )
-			throw FileOpenFailure(fileName);
+		reader.open(fileName);
 
 		tiles = new Tile*[tileCount];
 
@@ -152,14 +158,14 @@ void World::setupTiles() {
 			}
 		}
 		if( (tileCount + 1) < height() * width() )
-			throw EndOfFile(fileName);
+			throw FileReader::EndOfFile(fileName);
 	}
-	catch( FileOpenFailure ) {
+	catch( FileReader::FileOpenFail ) {
 		throw;
 	}
-	catch( EndOfFile ) {
+	catch( FileReader::FileException ) {
 		clear();
-		file.close();
+		reader.close();
 		throw;
 	}
 

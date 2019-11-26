@@ -124,12 +124,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Direction.cpp" />
+    <ClCompile Include="FileReader.cpp" />
     <ClCompile Include="HugeHedge.cpp" />
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="World.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Direction.h" />
+    <ClInclude Include="FileReader.h" />
     <ClInclude Include="Position.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="World.h" />
