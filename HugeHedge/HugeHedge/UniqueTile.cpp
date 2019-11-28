@@ -63,6 +63,7 @@ UniqueTile::UniqueTile(const Position& p, const std::string& fn) : Tile(p) {
 /*	read()
 	
 	Reads data from an input stream, storing it in the tile's member variables.
+
 */
 ////////////////////////////////////////////////////////////////////////////////
 void UniqueTile::read(std::istream& ns) {

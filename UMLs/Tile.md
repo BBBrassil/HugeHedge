@@ -5,9 +5,9 @@
 |                                               |
 | + Tile(Position p)                            |
 | + _read(istream& ns)_                         |
-| + _isWall() : bool_                           |
-| + _toChar() : char_                           |
 | + _toString() : string_                       |
+| + _toChar() : char_                           |
+| + _isWall() : bool_                           |
 | + getWorld() : World&                         |
 | + getX() : int                                |
 | + getY() : int                                |

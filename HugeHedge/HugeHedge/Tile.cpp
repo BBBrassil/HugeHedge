@@ -69,7 +69,8 @@ Tile& Tile::operator()(const int& cardinal) const {
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	operator<<
-	Prints toString() method.
+	Prints the pure virtual toString() method which classes that implement Tile
+	will need to define.
 */
 ////////////////////////////////////////////////////////////////////////////////
 std::ostream& operator<<(std::ostream& os, const Tile& t) {
@@ -80,6 +81,9 @@ std::ostream& operator<<(std::ostream& os, const Tile& t) {
 ////////////////////////////////////////////////////////////////////////////////
 /*	operator>>
 	Reads member variable data from an input stream.
+
+	Calls the pure virtual read() method which classes that implement Tile will
+	need to define.
 */
 ////////////////////////////////////////////////////////////////////////////////
 std::istream& operator>>(std::istream& ns, Tile& t) {

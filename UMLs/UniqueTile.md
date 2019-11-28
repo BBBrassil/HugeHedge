@@ -2,9 +2,9 @@
 | ----------------------------------- |
 |                                     |
 | - fileName : string                 |
-| - wall : bool                       |
-| - token : char                      |
 | - name : string                     |
+| - token : char                      |
+| - wall : bool                       |
 |                                     |
 | + UniqueTile(Position p, string fn) |
 | + read(istream& ns)                 |
