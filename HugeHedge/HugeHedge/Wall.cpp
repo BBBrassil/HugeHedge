@@ -1,8 +1,8 @@
-//	UniqueTile.cpp
+//	Wall.cpp
 //	Programmer: Brendan Brassil
 //	Date Last Modified: 2019-11-28
 
-#include "UniqueTile.h"
+#include "Wall.h"
 
 #include "StreamReader.h"
 
@@ -10,8 +10,21 @@
 /*	Constructor
 */
 ////////////////////////////////////////////////////////////////////////////////
-UniqueTile::UniqueTile(const Position& p, const std::string& fn) : Tile(p) {
+Wall::Wall(const Position& p) : Tile(p) {
+	fileName = "";
+	objectName = "";
+	token = '\0';
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/*	read()
+	
+	Reads data from an input stream, storing it in the tile's member variables.
+*/
+////////////////////////////////////////////////////////////////////////////////
+void Wall::read(const std::string& fn) {
 	StreamReader* reader = new StreamReader();
+	std::string line;
 
 	// Open input file.
 	fileName = fn;
@@ -28,7 +41,10 @@ UniqueTile::UniqueTile(const Position& p, const std::string& fn) : Tile(p) {
 	// Include the file name when rethrowing exceptions because the reader doesn't
 	// know it.
 	try {
-		reader->file >> *this;
+		StreamReader::getline(reader->file(), line);
+		objectName = line;
+		StreamReader::getline(reader->file(), line);
+		token = line[0];
 	}
 	catch( StreamReader::EmptyStream ) {
 		reader->close();
@@ -54,33 +70,8 @@ UniqueTile::UniqueTile(const Position& p, const std::string& fn) : Tile(p) {
 		reader = nullptr;
 		throw StreamReader::MissingValue(ex.getString(), fileName);
 	}
-	
+
 	reader->close();
 	delete reader;
 	reader = nullptr;
-}
-
-////////////////////////////////////////////////////////////////////////////////
-/*	read()
-	
-	Reads data from an input stream, storing it in the tile's member variables.
-
-*/
-////////////////////////////////////////////////////////////////////////////////
-void UniqueTile::read(std::istream& ns) {
-	std::string line;
-
-	try {
-		StreamReader::getline(ns, line);
-		objectName = line;
-		StreamReader::getline(ns, line);
-		token = line[0];
-		StreamReader::getline(ns, line);
-		if( line != "0" || "1" )
-			throw StreamReader::BadString(line);
-		wall = line[0] - '0';
-	}
-	catch( ... ) {
-		throw;
-	}
 }

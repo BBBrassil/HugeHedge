@@ -27,9 +27,9 @@ class World;
 class Tile {
 private:
 	Position position;
+	virtual void read(std::istream& ns) = 0;
 public:
 	Tile(const Position& p) { position = p; }
-	virtual void read(std::istream& ns) = 0;
 	virtual std::string toString() const = 0;
 	virtual char toChar() const = 0;
 	virtual bool isWall() const = 0;

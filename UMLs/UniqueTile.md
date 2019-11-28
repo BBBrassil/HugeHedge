@@ -2,7 +2,7 @@
 | ----------------------------------- |
 |                                     |
 | - fileName : string                 |
-| - name : string                     |
+| - objectName : string               |
 | - token : char                      |
 | - wall : bool                       |
 |                                     |

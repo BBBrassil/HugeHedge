@@ -18,13 +18,13 @@
 class UniqueTile : public Tile {
 private:
 	std::string fileName;
-	std::string name;
+	std::string objectName;
 	char token;
 	bool wall;
+	virtual void read(std::istream& ns);
 public:
 	UniqueTile(const Position& p, const std::string& fn);
-	void read(std::istream& ns);
-	std::string toString() const { return name; }
+	std::string toString() const { return objectName; }
 	char toChar() const { return token; }
 	bool isWall() const { return wall; }
 };

@@ -1,13 +1,12 @@
-| Wall                  |
-| --------------------- |
-|                       |
-| - `fileName : string` |
-| - `token : char`      |
-| - `name : string`     |
-|                       |
-| + Wall(Position p)    |
-| + ~Wall()             |
-| + `setup()`           |
-| + isWall() : bool     |
-| + toChar() : char     |
-| + toString() : string |
+| Wall                    |
+| ----------------------- |
+|                         |
+| - `fileName : string`   |
+| - `objectName : string` |
+| - `token : char`        |
+|                         |
+| + Wall(Position p)      |
+| + isWall() : bool       |
+| + toString() : string   |
+| + toChar() : char       |
+| + `setup(string fn)`    |
