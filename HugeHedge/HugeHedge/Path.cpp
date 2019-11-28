@@ -1,4 +1,4 @@
-//	Wall.cpp
+//	Path.cpp
 //	Programmer: Brendan Brassil
 //	Date Last Modified: 2019-11-28
 
