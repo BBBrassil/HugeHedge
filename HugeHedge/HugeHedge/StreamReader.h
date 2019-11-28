@@ -1,6 +1,6 @@
 //	StreamReader.h
 //	Programmer: Brendan Brassil
-//	Date Last Modified: 2019-11-26
+//	Date Last Modified: 2019-11-27
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	StreamReader class
