@@ -1,12 +1,12 @@
 //	Tile.cpp
 //	Programmer: Brendan Brassil
-//	Date Last Modified: 2019-11-27
+//	Date Last Modified: 2019-11-28
 
 #include "Tile.h"
 
 #include "Direction.h"
-#include "World.h"
 #include "StreamReader.h"
+#include "World.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	north()
@@ -83,5 +83,5 @@ std::ostream& operator<<(std::ostream& os, const Tile& t) {
 */
 ////////////////////////////////////////////////////////////////////////////////
 std::istream& operator>>(std::istream& ns, Tile& t) {
-	t.read(ns, t);
+	t.read(ns);
 }

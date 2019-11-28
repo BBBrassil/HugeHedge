@@ -3,7 +3,8 @@
 |                                               |
 | - position : Position                         |
 |                                               |
-| + _read(istream& ns, Tile& t)_                |
+| + Tile(Position p)                            |
+| + _read(istream& ns)_                         |
 | + _isWall() : bool_                           |
 | + _toChar() : char_                           |
 | + _toString() : string_                       |

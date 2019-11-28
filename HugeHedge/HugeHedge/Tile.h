@@ -1,6 +1,6 @@
 //	Tile.h
 //	Programmer: Brendan Brassil
-//	Date Last Modified: 2019-11-27
+//	Date Last Modified: 2019-11-28
 
 #ifndef TILE_H
 #define TILE_H
@@ -16,7 +16,7 @@ private:
 	Position position;
 public:
 	Tile(const Position& p) { position = p; }
-	virtual void read(std::istream& ns, Tile& t) = 0;
+	virtual void read(std::istream& ns) = 0;
 	virtual bool isWall() const = 0;
 	virtual char toChar() const = 0;
 	virtual std::string toString() const = 0;

@@ -94,7 +94,7 @@ public:
 	private:
 		std::string fileName;
 	public:
-		FileOpenFail(const std::string& fn = "") { fileName = fn; }
+		FileOpenFail(const std::string& fn) { fileName = fn; }
 		std::string getFileName() const { return fileName; }
 	};
 
