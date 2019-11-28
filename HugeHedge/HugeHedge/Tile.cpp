@@ -75,3 +75,12 @@ std::ostream& operator<<(std::ostream& os, const Tile& t) {
 	os << t.toString();
 	return os;
 }
+
+////////////////////////////////////////////////////////////////////////////////
+/*	operator>>
+	Reads member variable data from an input stream.
+*/
+////////////////////////////////////////////////////////////////////////////////
+std::istream& operator>>(std::istream& ns, Tile& t) {
+	
+}
