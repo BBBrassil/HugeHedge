@@ -3,10 +3,10 @@
 |                                               |
 | - position : Position                         |
 |                                               |
+| + _read(istream& ns, Tile& t)_                |
 | + _isWall() : bool_                           |
 | + _toChar() : char_                           |
 | + _toString() : string_                       |
-| + _read(istream& ns)_                         |
 | + getWorld() : World&                         |
 | + getX() : int                                |
 | + getY() : int                                |

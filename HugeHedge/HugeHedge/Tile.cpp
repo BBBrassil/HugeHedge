@@ -6,6 +6,7 @@
 
 #include "Direction.h"
 #include "World.h"
+#include "StreamReader.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	north()
@@ -82,5 +83,5 @@ std::ostream& operator<<(std::ostream& os, const Tile& t) {
 */
 ////////////////////////////////////////////////////////////////////////////////
 std::istream& operator>>(std::istream& ns, Tile& t) {
-	
+	t.read(ns, t);
 }

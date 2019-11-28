@@ -16,6 +16,7 @@ private:
 	Position position;
 public:
 	Tile(const Position& p) { position = p; }
+	virtual void read(std::istream& ns, Tile& t) = 0;
 	virtual bool isWall() const = 0;
 	virtual char toChar() const = 0;
 	virtual std::string toString() const = 0;
