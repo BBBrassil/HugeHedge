@@ -20,8 +20,8 @@
 #ifndef STREAMREADER_H
 #define STREAMREADER_H
 
-#include <iostream>
 #include <fstream>
+#include <iostream>
 #include <string>
 
 class StreamReader {

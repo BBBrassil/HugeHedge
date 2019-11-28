@@ -19,8 +19,8 @@
 #define TILE_H
 
 #include "Position.h"
-#include <string>
 #include <iostream>
+#include <string>
 
 class World;
 
