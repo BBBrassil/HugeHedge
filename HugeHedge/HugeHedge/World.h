@@ -5,6 +5,7 @@
 #ifndef WORLD_H
 #define WORLD_H
 
+#include "Position.h"
 #include <string>
 
 class Tile;
