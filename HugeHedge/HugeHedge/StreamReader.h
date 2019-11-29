@@ -56,21 +56,6 @@ public:
 	};
 
 	///////////////////////////////////////////////////////////////////////////////
-	/*	EmptyFile exception
-		Thrown when no data can be read from a stream because there is nothing in
-		it.
-	*/
-	///////////////////////////////////////////////////////////////////////////////
-	class EmptyStream {
-	private:
-		std::string fileName;
-	public:
-		EmptyStream() { fileName = ""; }
-		EmptyStream(const std::string& fn) { fileName = fn; }
-		std::string getFileName() const { return fileName; }
-	};
-
-	///////////////////////////////////////////////////////////////////////////////
 	/*	EndOfFile exception
 		Thrown when the end of a stream is reached before all the data that needs
 		to be read has been read.
@@ -96,19 +81,7 @@ public:
 	public:
 		FileOpenFail(const std::string& fn) { fileName = fn; }
 		std::string getFileName() const { return fileName; }
-	};
-
-	///////////////////////////////////////////////////////////////////////////////
-	/*	MissingValue exception
-		Thrown when a key is read but the value isn't.
-	*/
-	///////////////////////////////////////////////////////////////////////////////
-	class MissingValue : public BadString {
-	public:
-		MissingValue(const std::string& s) : BadString(s) {}
-		MissingValue(const std::string& s, const std::string& fn) :
-			BadString(s, fn) {}
-	};
+	}
 };
 
 #endif

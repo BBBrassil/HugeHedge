@@ -34,21 +34,19 @@ void StreamReader::close() {
 /*	getline()
 	Extracts a line from an input stream, ignoring comment lines.
 
-	! Throws an EmptyFile exception if nothing is read.
-	! Throws an EndOfFile exception if only comments are read.
+	! Throws an EndOfFile exception if no data is read.
 */
 ////////////////////////////////////////////////////////////////////////////////
 void StreamReader::getline(std::istream& ns, std::string& line) {
 	std::getline(ns, line);
 	if( !ns )
-		throw EmptyStream();
+		throw EndOfFile();
 
 	while( isComment(line) )
 		std::getline(ns, line);
 	if( !ns )
 		throw EndOfFile();
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	isComment()
@@ -82,17 +80,15 @@ std::string StreamReader::keyFrom(const std::string& s) {
 	Extracts a value from a string.
 	Key/value format is "key=value".
 
-	! Throws a BadString exception if the string has no delimiter.
-	! Throws a MissingValue exception if no value is read.
+	! Throws a BadString exception if a value could not be extracted from the
+	  string.
 */
 ////////////////////////////////////////////////////////////////////////////////
 std::string StreamReader::valueFrom(const std::string& s) {
 	int index = s.find_first_of('=');
 
-	if( index < 0 )
+	if( index < 0 || index == s.length() - 1 )
 		throw BadString(s);
-	if( index == s.length() )
-		throw MissingValue(s);
 
 	return s.substr((size_t)index + 1, s.length() - 1);
 }

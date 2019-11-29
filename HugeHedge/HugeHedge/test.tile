@@ -1,0 +1,4 @@
+; Generic Wall
+name=Wall
+token=#
+wall=0

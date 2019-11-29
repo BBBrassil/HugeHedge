@@ -10,14 +10,13 @@ int main() {
 	wallPos.world = nullptr;
 	wallPos.x = 0;
 	wallPos.y = 0;
-	Wall* wall = new Wall(wallPos);
-	wall->setup("Wall.tile");
+	UniqueTile* def = new UniqueTile(wallPos, "default.tile");
 
-	cout << wall->toString() << ' ' << wall->toChar() << ' ' << wall->isWall() << ' '
-		<< wall->getX() << ' ' << wall->getY() << endl;
+	cout << def->toString() << ' ' << def->toChar() << ' ' << def->isWall() << ' '
+		<< def->getX() << ' ' << def->getY() << endl;
 
-	delete wall;
-	wall = nullptr;
+	delete def;
+	def = nullptr;
 
 	cout << endl << endl;
 	system("pause");
