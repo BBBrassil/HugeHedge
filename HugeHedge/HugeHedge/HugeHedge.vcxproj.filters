@@ -21,16 +21,22 @@
     <ClCompile Include="HugeHedge.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="World.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Tile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FileReader.cpp">
+    <ClCompile Include="StreamReader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="StreamReader.cpp">
+    <ClCompile Include="UniqueTile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Wall.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Path.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="World.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -41,16 +47,22 @@
     <ClInclude Include="Position.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="World.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Tile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FileReader.h">
+    <ClInclude Include="StreamReader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="StreamReader.h">
+    <ClInclude Include="UniqueTile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Wall.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Path.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="World.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

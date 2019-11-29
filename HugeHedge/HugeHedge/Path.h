@@ -9,8 +9,7 @@
 	Implements the abstract Tile class.
 	
 	Uses static members for the name, token, etc that are shared between all
-	Path objects. These are read from a file, which can be done before or after
-	a Path is instantiated via the read() method.
+	Path objects.
 */
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -24,9 +23,10 @@ private:
 	static std::string fileName;
 	static std::string objectName;
 	static char token;
-	virtual void read(const std::string& fn);
 public:
 	Path(const Position& p);
+	void read(std::istream& ns);
+	void setup(const std::string& fn);
 	std::string toString() { return objectName; }
 	char toChar() { return token; }
 	bool isWall() { return false; }

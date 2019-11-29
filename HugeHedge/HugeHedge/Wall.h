@@ -9,8 +9,7 @@
 	Implements the abstract Tile class.
 
 	Uses static members for the name, token, etc that are shared between all
-	Wall objects. These are read from a file, which can be done before or after
-	a Wall is instantiated via the read() method.
+	Wall objects.
 */
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -19,17 +18,21 @@
 
 #include "Tile.h"
 
+#include <string>
+
 class Wall : public Tile {
 private:
 	static std::string fileName;
 	static std::string objectName;
 	static char token;
-	virtual void read(const std::string& fn);
 public:
 	Wall(const Position& p);
-	std::string toString() { return objectName; }
-	char toChar() { return token; }
-	bool isWall() { return true; }
+	void read(std::istream& ns);
+	void setup(const std::string& fn);
+	std::string toString() const { return objectName; }
+	char toChar() const { return token; }
+	bool isWall() const { return true; }
+	friend int main();
 };
 
 #endif

@@ -15,13 +15,15 @@
 
 #include "Tile.h"
 
+#include <string>
+
 class UniqueTile : public Tile {
 private:
 	std::string fileName;
 	std::string objectName;
 	char token;
 	bool wall;
-	virtual void read(std::istream& ns);
+	void read(std::istream& ns);
 public:
 	UniqueTile(const Position& p, const std::string& fn);
 	std::string toString() const { return objectName; }

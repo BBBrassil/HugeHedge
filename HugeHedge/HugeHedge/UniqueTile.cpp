@@ -8,6 +8,17 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	Constructor
+	
+	Reads data from a file, storing it in the tile's member variables.
+
+	! Throws a FileOpenFail exception if the file fails to open.
+	! Throws an EmptyStream exception if the stream has no data to read.
+	! Throws an EndOfFile exception if no data can be read from the stream other
+	  than comment lines (which are skipped).
+	! Throws a BadString exception if data can't be read from a line because of
+	  incorrect formatting.
+	! Throws a MissingValue exception if a value can't be extracted from line
+	  either because it's missing or because of incorrect formatting.
 */
 ////////////////////////////////////////////////////////////////////////////////
 UniqueTile::UniqueTile(const Position& p, const std::string& fn) : Tile(p) {
@@ -28,7 +39,7 @@ UniqueTile::UniqueTile(const Position& p, const std::string& fn) : Tile(p) {
 	// Include the file name when rethrowing exceptions because the reader doesn't
 	// know it.
 	try {
-		reader->file >> *this;
+		reader->file() >> *this;
 	}
 	catch( StreamReader::EmptyStream ) {
 		reader->close();
@@ -42,19 +53,19 @@ UniqueTile::UniqueTile(const Position& p, const std::string& fn) : Tile(p) {
 		reader = nullptr;
 		throw StreamReader::EndOfFile(fileName);
 	}
-	catch( StreamReader::BadString ex ) {
-		reader->close();
-		delete reader;
-		reader = nullptr;
-		throw StreamReader::BadString(ex.getString(), fileName);
-	}
 	catch( StreamReader::MissingValue ex ) {
 		reader->close();
 		delete reader;
 		reader = nullptr;
 		throw StreamReader::MissingValue(ex.getString(), fileName);
 	}
-	
+	catch( StreamReader::BadString ex ) {
+		reader->close();
+		delete reader;
+		reader = nullptr;
+		throw StreamReader::BadString(ex.getString(), fileName);
+	}
+
 	reader->close();
 	delete reader;
 	reader = nullptr;
@@ -65,20 +76,32 @@ UniqueTile::UniqueTile(const Position& p, const std::string& fn) : Tile(p) {
 	
 	Reads data from an input stream, storing it in the tile's member variables.
 
+	! Throws an EmptyStream exception if the stream has no data to read.
+	! Throws an EndOfFile exception if no data can be read from the stream other
+	  than comment lines (which are skipped).
+	! Throws a BadString exception if data can't be read from a line because of
+	  incorrect formatting.
+	! Throws a MissingValue exception if a value can't be extracted from line
+	  either because it's missing or because of incorrect formatting.
 */
 ////////////////////////////////////////////////////////////////////////////////
 void UniqueTile::read(std::istream& ns) {
-	std::string line;
-
+	std::string line, data;
+	
 	try {
 		StreamReader::getline(ns, line);
-		objectName = line;
+		data = StreamReader::valueFrom(line);
+		objectName = data;
+
 		StreamReader::getline(ns, line);
-		token = line[0];
+		data = StreamReader::valueFrom(line);
+		token = data[0];
+
 		StreamReader::getline(ns, line);
-		if( line != "0" || "1" )
+		data = StreamReader::valueFrom(line);
+		if( data != "0" || data != "1" )
 			throw StreamReader::BadString(line);
-		wall = line[0] - '0';
+		wall = data[0] - '0';
 	}
 	catch( ... ) {
 		throw;

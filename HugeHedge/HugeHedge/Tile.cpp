@@ -88,4 +88,6 @@ std::ostream& operator<<(std::ostream& os, const Tile& t) {
 ////////////////////////////////////////////////////////////////////////////////
 std::istream& operator>>(std::istream& ns, Tile& t) {
 	t.read(ns);
+
+	return ns;
 }

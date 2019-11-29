@@ -4,9 +4,9 @@
 
 #include "World.h"
 
-#include "FileReader.h"
 #include "Path.h"
 #include "Position.h"
+#include "StreamReader.h"
 #include "Tile.h"
 #include "UniqueTile.h"
 #include "Wall.h"
@@ -68,12 +68,14 @@ void World::setSize() {
 	int row, col, length;
 	std::string line;
 	std::ifstream file(fileName);
-	FileReader reader;
+	StreamReader* reader = new StreamReader();
 
 	try {
-		reader.open(fileName);
+		reader->open(fileName);
 	}
-	catch( FileReader::FileOpenFail ) {
+	catch( StreamReader::FileOpenFail ) {
+		delete reader;
+		reader = nullptr;
 		throw;
 	}
 
@@ -96,11 +98,15 @@ void World::setSize() {
 		colCount = col;
 	}
 	catch( BadDimensions ) {
-		reader.close();
+		reader->close();
+		delete reader;
+		reader = nullptr;
 		throw;
 	}
 
-	reader.close();
+	reader->close();
+	delete reader;
+	reader = nullptr;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -119,29 +125,22 @@ void World::setupTiles() {
 	char ch;
 	Position position;
 	std::ifstream file;
-	FileReader reader;
+	StreamReader* reader = new StreamReader();
 
-	try {
-		Path.setup();
-		Wall.setup();
-	}
-	catch( FileReader::FileException ) {
-		throw;
-	}
 	try {
 		position.world = this;
 		position.x = -1;
 		position.y = -1;
-		defaultTile = new UniqueTile(position);
+		defaultTile = new UniqueTile(position, "Default.tile");
 	}
-	catch( FileReader::FileException ) {
+	catch( StreamReader::FileOpenFail ) {
 		delete defaultTile;
 		defaultTile = nullptr;
 		throw;
 	}
 
 	try {
-		reader.open(fileName);
+		reader->open(fileName);
 
 		tiles = new Tile*[tileCount];
 
@@ -153,19 +152,21 @@ void World::setupTiles() {
 			for( int j = 0; j < width(); j++ ) {
 				ch = line[j];
 				position.y = j;
-				makeTile(ch, position);
+				//makeTile(ch, position);
 				tileCount++;
 			}
 		}
 		if( (tileCount + 1) < height() * width() )
-			throw FileReader::EndOfFile(fileName);
+			throw StreamReader::EndOfFile(fileName);
 	}
-	catch( FileReader::FileOpenFail ) {
+	catch( StreamReader::FileOpenFail ) {
 		throw;
 	}
-	catch( FileReader::FileException ) {
+	catch( ... ) {
 		clear();
-		reader.close();
+		reader->close();
+		delete reader;
+		reader = nullptr;
 		throw;
 	}
 
@@ -179,13 +180,17 @@ void World::setupTiles() {
 	- position:  Position of the tile.
 */
 ////////////////////////////////////////////////////////////////////////////////
+
+/*
 void makeTile(const char& type, const Position& position) {
 	switch( type ) {
 	default:
-		Path(position);
+		Path* t = new Path(position);
+		t->setup("Path.tile");
 		break;
 	case '#':
-		Wall(position);
+		Wall* t = new Wall(position);
+		t->setup("Wall.tile");
 		break;
 	case '?':
 		//PointOfInterest(position);
@@ -196,6 +201,7 @@ void makeTile(const char& type, const Position& position) {
 	}
 }
 
+*/
 ////////////////////////////////////////////////////////////////////////////////
 /*	getDefaultTile()
 	Returns the default Tile object.
