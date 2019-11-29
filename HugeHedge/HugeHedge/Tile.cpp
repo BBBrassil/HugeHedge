@@ -18,7 +18,7 @@ Tile& Tile::north() const {
 		return getWorld().tile(position.x, position.y + 1);
 	}
 	catch( World::OutOfWorld ) {
-		return position.world->getDefaultTile();
+		return getWorld().getDefaultTile();
 	}
 }
 
@@ -32,7 +32,7 @@ Tile& Tile::east() const {
 		return getWorld().tile(position.x + 1, position.y);
 	}
 	catch( World::OutOfWorld ) {
-		return position.world->getDefaultTile();
+		return getWorld().getDefaultTile();
 	}
 }
 
@@ -46,7 +46,7 @@ Tile& Tile::south() const {
 		return getWorld().tile(position.x, position.y - 1);
 	}
 	catch( World::OutOfWorld ) {
-		return position.world->getDefaultTile();
+		return getWorld().getDefaultTile();
 	}
 }
 
@@ -60,8 +60,78 @@ Tile& Tile::west() const {
 		return getWorld().tile(position.x - 1, position.y);
 	}
 	catch( World::OutOfWorld ) {
-		return position.world->getDefaultTile();
+		return getWorld().getDefaultTile();
 	}
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/*	operator++ prefix
+	Returns the tile at the next index in the world's tiles array.
+	Returns the default tile if the index goes out of bounds.	
+	Can be used to iterate through all tiles in a world's array.
+
+	Note: This method increments the index, not the tile; it does nothing to the
+		  tile object. It only returns another tile reference. So it does
+		  exactly the same thing as the postfix operator.
+*/
+////////////////////////////////////////////////////////////////////////////////
+Tile& Tile::operator++() const {
+	try {
+		return getWorld()[getWorld().xyToIndex(getX(), getY() + 1)];
+	}
+	catch( World::OutOfWorld ) {
+		return getWorld().getDefaultTile();
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/*	operator++ postfix
+	Returns the tile at the next index in the world's tiles array.
+	Returns the default tile if the index goes out of bounds.	
+	Can be used to iterate through all tiles in a world's array.
+
+	Note: This method increments the index, not the tile; it does nothing to the
+		  tile object. It only returns another tile reference. So it does
+		  exactly the same thing as the prefix operator.
+*/
+////////////////////////////////////////////////////////////////////////////////
+Tile& Tile::operator++(int) const {
+	return ++(*this);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/*	operator-- prefix
+	Returns the tile at the previous index in the world's tiles array.
+	Returns the default tile if the index goes out of bounds.	
+	Can be used to iterate through all tiles in a world's array.
+
+	Note: This method decrements the index, not the tile; it does nothing to the
+		  tile object. It only returns another tile reference. So it does
+		  exactly the same thing as the postfix operator.
+*/
+////////////////////////////////////////////////////////////////////////////////
+Tile& Tile::operator--() const {
+	try {
+		return getWorld()[getWorld().xyToIndex(getX(), getY() - 1)];
+	}
+	catch( World::OutOfWorld ) {
+		return getWorld().getDefaultTile();
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/*	operator-- postfix
+	Returns the tile at the previous index in the world's tiles array.
+	Returns the default tile if the index goes out of bounds.	
+	Can be used to iterate through all tiles in a world's array.
+
+	Note: This method decrements the index, not the tile; it does nothing to the
+		  tile object. It only returns another tile reference. So it does
+		  exactly the same thing as the prefix operator.
+*/
+////////////////////////////////////////////////////////////////////////////////
+Tile& Tile::operator--(int) const {
+	return --(*this);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -74,7 +144,7 @@ Tile& Tile::operator()(const int& x, const int& y) const {
 		return getWorld().tile(x, y);
 	}
 	catch( World::OutOfWorld ) {
-		return position.world->getDefaultTile();
+		return getWorld().getDefaultTile();
 	}
 }
 
@@ -90,7 +160,7 @@ Tile& Tile::operator()(const int& cardinal) const {
 	case SOUTH: return south(); break;
 	case WEST: return west(); break;
 	}
-	return position.world->getDefaultTile();
+	return getWorld().getDefaultTile();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
