@@ -50,7 +50,7 @@ public:
 	};
 
 	//////////////////////////////////////////////////////////////////////////////
-	/* BadDimensions exception
+	/*	OutOfWorld exception
 		Thrown when something attempts to get a position that exists outside the
 		world's array of tiles.
 	*/
