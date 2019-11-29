@@ -79,7 +79,7 @@ void UniqueTile::read(std::istream& ns) {
 
 		StreamReader::getline(ns, line);
 		data = StreamReader::valueFrom(line);
-		if( data != "0" || data != "1" )
+		if( data != "0" && data != "1" )
 			throw StreamReader::BadString(line);
 		wall = data[0] - '0';
 	}

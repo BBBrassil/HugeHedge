@@ -81,7 +81,7 @@ public:
 	public:
 		FileOpenFail(const std::string& fn) { fileName = fn; }
 		std::string getFileName() const { return fileName; }
-	}
+	};
 };
 
 #endif
