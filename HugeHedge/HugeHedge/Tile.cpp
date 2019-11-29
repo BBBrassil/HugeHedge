@@ -14,7 +14,12 @@
 */
 ////////////////////////////////////////////////////////////////////////////////
 Tile& Tile::north() const {
-	return getWorld().tile(position.x, position.y + 1);
+	try {
+		return getWorld().tile(position.x, position.y + 1);
+	}
+	catch( World::OutOfWorld ) {
+		return position.world->getDefaultTile();
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -23,7 +28,12 @@ Tile& Tile::north() const {
 */
 ////////////////////////////////////////////////////////////////////////////////
 Tile& Tile::east() const {
-	return getWorld().tile(position.x + 1, position.y);
+	try {
+		return getWorld().tile(position.x + 1, position.y);
+	}
+	catch( World::OutOfWorld ) {
+		return position.world->getDefaultTile();
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -32,7 +42,12 @@ Tile& Tile::east() const {
 */
 ////////////////////////////////////////////////////////////////////////////////
 Tile& Tile::south() const {
-	return getWorld().tile(position.x, position.y - 1);
+	try {
+		return getWorld().tile(position.x, position.y - 1);
+	}
+	catch( World::OutOfWorld ) {
+		return position.world->getDefaultTile();
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -41,15 +56,26 @@ Tile& Tile::south() const {
 */
 ////////////////////////////////////////////////////////////////////////////////
 Tile& Tile::west() const {
-	return getWorld().tile(position.x - 1, position.y);
+	try {
+		return getWorld().tile(position.x - 1, position.y);
+	}
+	catch( World::OutOfWorld ) {
+		return position.world->getDefaultTile();
+	}
 }
+
 ////////////////////////////////////////////////////////////////////////////////
 /*	operator() overloaded for xy coordinates
 	Returns the tile at the given xy coordinates in the world.
 */
 ////////////////////////////////////////////////////////////////////////////////
 Tile& Tile::operator()(const int& x, const int& y) const {
-	return getWorld().tile(x, y);
+	try {
+		return getWorld().tile(x, y);
+	}
+	catch( World::OutOfWorld ) {
+		return position.world->getDefaultTile();
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -63,8 +89,8 @@ Tile& Tile::operator()(const int& cardinal) const {
 	case EAST: return east(); break;
 	case SOUTH: return south(); break;
 	case WEST: return west(); break;
-	default: return getWorld().getDefaultTile(); break;
 	}
+	return position.world->getDefaultTile();
 }
 
 ////////////////////////////////////////////////////////////////////////////////

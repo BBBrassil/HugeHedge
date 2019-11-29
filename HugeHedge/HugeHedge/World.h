@@ -28,6 +28,8 @@ public:
 	int size() const { return tileCount; }
 	Tile& getDefaultTile() const;
 	int xyToIndex(const int& x, const int& y) const;
+	int indexToX(const int& index) const;
+	int indexToY(const int& index) const;
 	Tile& tile(const int& x, const int& y) const;
 	Tile& operator[](const int& index) const;
 	Tile& operator()(const int& x, const int& y) const;
@@ -44,6 +46,29 @@ public:
 	public:
 		BadDimensions(const std::string& s) { fileName = s; }
 		std::string getFileName() { return fileName; }
+	};
+
+	//////////////////////////////////////////////////////////////////////////////
+	/* BadDimensions exception
+		Thrown when something attempts to get a position that exists outside the
+		world's array of tiles.
+	*/
+	//////////////////////////////////////////////////////////////////////////////
+	class OutOfWorld {
+	private:
+		Position position;
+	public:
+		OutOfWorld(World* w, const int& n) {
+			position.world = w;
+			position.x = w->indexToX(n);
+			position.y = w->indexToY(n);
+		}
+		OutOfWorld(World* w, const int&x, const int& y) {
+			position.world = w;
+			position.x = x;
+			position.y = y;
+		}
+		Position getPosition() const { return position; }
 	};
 };
 

@@ -42,6 +42,10 @@ public:
 	Tile& west() const;
 	Tile& operator()(const int& x, const int& y) const;
 	Tile& operator()(const int& cardinal) const;
+	Tile& operator++() const;
+	Tile& operator++(int) const;
+	Tile& operator--() const;
+	Tile& operator--(int) const;
 	friend std::ostream& operator<<(std::ostream& os, const Tile& t);
 	friend std::istream& operator>>(std::istream& ns, Tile& t);
 };

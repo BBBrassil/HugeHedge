@@ -1,6 +1,6 @@
 //	World.cpp
 //	Programmer: Brendan Brassil
-//	Date Last Modified: 2019-11-24
+//	Date Last Modified: 2019-11-28
 
 #include "World.h"
 
@@ -223,6 +223,24 @@ int World::xyToIndex(const int& x, const int& y) const {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+/*	indexToX()
+	Converts an index in a 1D array to an x-coordinate in a 2D plane.
+*/
+////////////////////////////////////////////////////////////////////////////////
+int World::indexToX(const int& index) const {
+	return index % colCount;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/*	indexToY()
+	Converts an index in a 1D array to a y-coordinate in a 2D plane.
+*/
+////////////////////////////////////////////////////////////////////////////////
+int World::indexToY(const int& index) const {
+	return index / colCount;
+}
+
+////////////////////////////////////////////////////////////////////////////////
 /*	tile()
 	Returns the Tile at the given xy coordinates in the World.
 
@@ -231,8 +249,13 @@ int World::xyToIndex(const int& x, const int& y) const {
 ////////////////////////////////////////////////////////////////////////////////
 Tile& World::tile(const int& x, const int& y) const {
 	if( !(x >= 0 && x < width()) || !(y >= 0 || y < height()) )
-		return getDefaultTile();
-	return *tiles[xyToIndex(x, y)];
+		throw OutOfWorld((World*)this, x, y);
+	try {
+		return *tiles[xyToIndex(x, y)];
+	}
+	catch( OutOfWorld ) {
+		throw;
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -244,7 +267,7 @@ Tile& World::tile(const int& x, const int& y) const {
 ////////////////////////////////////////////////////////////////////////////////
 Tile& World::operator[](const int& index) const {
 	if( index < 0 || index > tileCount )
-		return getDefaultTile();
+		throw OutOfWorld((World*)this, index);
 	return *tiles[index];
 }
 
@@ -256,5 +279,10 @@ Tile& World::operator[](const int& index) const {
 */
 ////////////////////////////////////////////////////////////////////////////////
 Tile& World::operator()(const int& x, const int& y) const {
-	return tile(x, y);
+	try {
+		return tile(x, y);
+	}
+	catch( OutOfWorld ) {
+		throw;
+	}
 }
