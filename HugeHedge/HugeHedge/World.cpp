@@ -52,26 +52,6 @@ World::~World() {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/*	clear()
-	Deallocates memory for the tile map array and defaultTile.
-*/
-////////////////////////////////////////////////////////////////////////////////
-void World::clear() {
-	for( int i = 0; i < size(); i++ ) {
-		if( tileMap[i] != nullptr ) {
-			delete tileMap[i];
-			tileMap[i] = nullptr;
-		}
-	}
-
-	delete[] tileMap;
-	tileMap = nullptr;
-
-	delete defaultTile;
-	defaultTile = nullptr;
-}
-
-////////////////////////////////////////////////////////////////////////////////
 /*	setDimensions()
 	Setup function to determine the dimensions of the world.
 
@@ -122,6 +102,26 @@ void World::setDimensions() {
 		reader->close();
 		throw;
 	}
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/*	clear()
+	Deallocates memory for the tile map array and defaultTile.
+*/
+////////////////////////////////////////////////////////////////////////////////
+void World::clear() {
+	for( int i = 0; i < size(); i++ ) {
+		if( tileMap[i] != nullptr ) {
+			delete tileMap[i];
+			tileMap[i] = nullptr;
+		}
+	}
+
+	delete[] tileMap;
+	tileMap = nullptr;
+
+	delete defaultTile;
+	defaultTile = nullptr;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -1,49 +1,42 @@
-| World                                            |
-| -------------------------------------------------|
-|                                                  |
-| - fileName : string                              |
-| - tiles : Tile**                                 |
-| - defaultTile : Tile*                            |
-| - rowCount : int                                 |
-| - colCount : int                                 |
-| - tileCount : int                                |
-|                                                  |
-| + World(string s)                                |
-| + ~World()                                       |
-| - clear()                                        |
-| - setSize()                                      |
-| - setupTiles()                                   |
-| + height() : int                                 |
-| + width() : int                                  |
-| + size() : int                                   |
-| + getDefaultTile() : Tile&                       |
-| + xyToIndex(const int& x, const int& y) : int    |
-| + tile(const int& x, const int& y) : Tile&       |
-| + operator()(const int& index) : Tile&           |
-| + operator()(const int& x, const int& y) : Tile& |
-
-| FileException             |
-| ------------------------- |
-|                           |
-| - fileName : string       |
-|                           |
-| + FileException(string s) |
-| + getFileName() : string  |
+| World                              |
+| ---------------------------------- |
+|                                    |
+| - fileName : string                |
+| - tiles : Tile**                   |
+| - defaultTile : Tile*              |
+| - rowCount : int                   |
+| - colCount : int                   |
+| - tileCount : int                  |
+|                                    |
+| + World(string s)                  |
+| + ~World()                         |
+| - setDimensions()                  |
+| + readTileData()                   |
+| + makeTileMap()                    |
+| - clear()                          |
+| + height() : int                   |
+| + width() : int                    |
+| + size() : int                     |
+| + xyToIndex(int x, int y) : int    |
+| + indexToX(int index) : int        |
+| + getDefaultTile() : Tile&         |
+| + tile(int index) : Tile&          |
+| + tile(int x, int y) : Tile&       |
+| + operator[](int index) : Tile&    |
+| + operator()(int index) : Tile&    |
+| + operator()(int x, int y) : Tile& |
 
 | BadDimensions             |
 | ------------------------- |
 |                           |
+| - fileName : string       |
 |                           |
 | + BadDimensions(string s) |
+| + getFileName : string    |
 
-| EndOfFile                |
+| OutOfWorld               |
 | ------------------------ |
 |                          |
+| - position : Position    |
 |                          |
-| + EndOfFile(string s)    |
-
-| FileOpenFailure             |
-| --------------------------- |
-|                             |
-|                             |
-| + FileOpenFailure(string s) |
+| + getPosition : Position |

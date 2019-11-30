@@ -1,11 +1,11 @@
-| Wall                    |
+| Path                    |
 | ----------------------- |
 |                         |
 | - `fileName : string`   |
 | - `objectName : string` |
 | - `token : char`        |
 |                         |
-| + Wall(Position p)      |
+| + Path(Position p)      |
 | + toString() : string   |
 | + toChar() : char       |
 | + isWall() : bool       |

@@ -18,8 +18,8 @@ private:
 	int rowCount;
 	int colCount;
 	int tileCount;
-	void clear();
 	void setDimensions();
+	void clear();
 public:
 	World(const std::string& s);
 	~World();

@@ -11,3 +11,4 @@
 | + isWall() : bool                   |
 | + toChar() : char                   |
 | + toString() : string               |
+| + operator>>                        |

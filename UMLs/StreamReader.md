@@ -7,7 +7,9 @@
 | + StreamReader()                                |
 | + open(string s)                                |
 | + close()                                       |
+| + file() : ifstream&                            |
 | + `getline(istream& ns, string& s)`             |
+| + `getlineEOF(istream& ns, string& s)`          |
 | - `isComment(string s) : bool`                  |
 | + `keyFrom(string s) : string`                  |
 | + `valueFrom(string s) : string`                |
@@ -22,15 +24,6 @@
 | + BadString (string s, string fn) |
 | + getString() : string            |
 | + getFileName() : string)         |
-
-| EmptyStream                |
-| -------------------------- |
-|                            |
-| - fileName : string        |
-|                            |
-| + EmptyStream()            |
-| + EmptyStream(string fn)   |
-| + getFileName() : string   |
 
 | EndOfFile                  |
 | -------------------------- |
@@ -48,10 +41,3 @@
 |                             |
 | + FileOpenFail(string fn)   |
 | + getFileName() : string    |
-
-| MissingValue : BadString            |
-| ----------------------------------- |
-|                                     |
-|                                     |
-| + MissingValue(string s)            |
-| + MissingValue(string s, string fn) |

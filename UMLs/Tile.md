@@ -4,7 +4,6 @@
 | - position : Position                         |
 |                                               |
 | + Tile(Position p)                            |
-| + _read(istream& ns)_                         |
 | + _toString() : string_                       |
 | + _toChar() : char_                           |
 | + _isWall() : bool_                           |
@@ -18,4 +17,3 @@
 | + operator()(int x, int y) : Tile&            |
 | + operator()(int cardinal) : Tile&            |
 | + operator<<(ostream& os, Tile& t) : ostream& |
-| + operator>>(istream& ns, Tile& t) : istream& |
