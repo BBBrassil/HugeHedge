@@ -1,22 +1,26 @@
 #include "Path.h"
+#include "Position.h"
+#include "StreamReader.h"
 #include "UniqueTile.h"
 #include "Wall.h"
 
 #include <iostream>
+#include <fstream>
 using namespace std;
 
 int main() {
-	Position wallPos;
-	wallPos.world = nullptr;
-	wallPos.x = 0;
-	wallPos.y = 0;
-	UniqueTile* def = new UniqueTile(wallPos, "default.tile");
+	World* world = new World("World.txt");
+	
+	for( int i = 0; i < world->size(); i++ ) {
+		Tile& t = (*world)[i];
+		cout << t.toChar();
+		if( t.getX() == world->width() - 1 )
+			cout << endl;
+	}
 
-	cout << def->toString() << ' ' << def->toChar() << ' ' << def->isWall() << ' '
-		<< def->getX() << ' ' << def->getY() << endl;
+	delete world;
+	world = nullptr;
 
-	delete def;
-	def = nullptr;
 
 	cout << endl << endl;
 	system("pause");

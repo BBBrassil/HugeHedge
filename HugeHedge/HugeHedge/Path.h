@@ -1,6 +1,6 @@
 //	Path.h
 //	Programmer: Brendan Brassil
-//	Date Last Modified: 2019-11-28
+//	Date Last Modified: 2019-11-29
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	Path class
@@ -18,18 +18,20 @@
 
 #include "Tile.h"
 
+#include "World.h"
+
 class Path : public Tile {
 private:
 	static std::string fileName;
 	static std::string objectName;
 	static char token;
+	static void read(std::istream& ns);
 public:
 	Path(const Position& p);
-	void read(std::istream& ns);
-	void setup(const std::string& fn);
-	std::string toString() { return objectName; }
-	char toChar() { return token; }
-	bool isWall() { return false; }
+	std::string toString() const { return objectName; }
+	char toChar() const { return token; }
+	bool isWall() const { return false; }
+	friend void World::tileSetup();
 };
 
 #endif

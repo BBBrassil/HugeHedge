@@ -1,6 +1,6 @@
 //	Wall.cpp
 //	Programmer: Brendan Brassil
-//	Date Last Modified: 2019-11-28
+//	Date Last Modified: 2019-11-29
 
 #include "Wall.h"
 
@@ -14,11 +14,7 @@ char Wall::token;
 /*	Constructor
 */
 ////////////////////////////////////////////////////////////////////////////////
-Wall::Wall(const Position& p) : Tile(p) {
-	fileName = "";
-	objectName = "";
-	token = '\0';
-}
+Wall::Wall(const Position& p) : Tile(p) {}
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	read()
@@ -47,52 +43,4 @@ void Wall::read(std::istream& ns) {
 	catch( ... ) {
 		throw;
 	}
-}
-
-////////////////////////////////////////////////////////////////////////////////
-/*	setup()
-	
-	Reads data from a file, opens an input stream, then calls the read() method.
-
-	! Throws a FileOpenFail exception if the file fails to open.
-	! Throws an EndOfFile exception if there is no data to read.
-	! Throws a BadString exception if data can't be read from a line because of
-	  incorrect formatting.
-*/
-////////////////////////////////////////////////////////////////////////////////
-void Wall::setup(const std::string& fn) {
-	StreamReader* reader = new StreamReader();
-	std::string line;
-
-	// Open input file.
-	fileName = fn;
-	try {
-		reader->open(fileName);
-	}
-	catch( StreamReader::FileOpenFail ) {
-		throw;
-	}
-
-	// Read data from file.
-	// Include the file name when rethrowing exceptions because the reader doesn't
-	// know it.
-	try {
-		reader->file() >> *this;
-	}
-	catch( StreamReader::EndOfFile ) {
-		reader->close();
-		delete reader;
-		reader = nullptr;
-		throw StreamReader::EndOfFile(fileName);
-	}
-	catch( StreamReader::BadString ex ) {
-		reader->close();
-		delete reader;
-		reader = nullptr;
-		throw StreamReader::BadString(ex.getString(), fileName);
-	}
-
-	reader->close();
-	delete reader;
-	reader = nullptr;
 }

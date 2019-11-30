@@ -1,6 +1,6 @@
 //	World.cpp
 //	Programmer: Brendan Brassil
-//	Date Last Modified: 2019-11-28
+//	Date Last Modified: 2019-11-29
 
 #include "World.h"
 
@@ -20,12 +20,16 @@
 ////////////////////////////////////////////////////////////////////////////////
 World::World(const std::string& s) {
 	fileName = s;
+	rowCount = 0;
+	colCount = 0;
+	tileCount = 0;
 
 	try {
 		setSize();
-		setupTiles();
+		tileSetup();
+		makeTileMap();
 	}
-	catch( BadDimensions ) {
+	catch( ... ) {
 		throw;
 	}
 }
@@ -44,8 +48,15 @@ World::~World() {
 */
 ////////////////////////////////////////////////////////////////////////////////
 void World::clear() {
-	delete[] tiles;
-	tiles = nullptr;
+	for( int i = 0; i < size(); i++ ) {
+		if( tileMap[i] != nullptr ) {
+			delete tileMap[i];
+			tileMap[i] = nullptr;
+		}
+	}
+
+	delete[] tileMap;
+	tileMap = nullptr;
 
 	delete defaultTile;
 	defaultTile = nullptr;
@@ -67,26 +78,17 @@ void World::clear() {
 void World::setSize() {
 	int row, col, length;
 	std::string line;
-	std::ifstream file(fileName);
-	StreamReader* reader = new StreamReader();
-
+	std::unique_ptr<StreamReader> reader(new StreamReader());
+	
 	try {
 		reader->open(fileName);
-	}
-	catch( StreamReader::FileOpenFail ) {
-		delete reader;
-		reader = nullptr;
-		throw;
-	}
-
-	try {
-		std::getline(file, line);
+		std::getline(reader->file(), line);
 		// World must have substance
 		if( line == "" )
 			throw BadDimensions(fileName);
 		row = 1;
 		col = line.length();
-		while( std::getline(file, line) ) {
+		while( std::getline(reader->file(), line) ) {
 			row++;
 			length = line.length();
 			// World must be a rectangle
@@ -96,112 +98,128 @@ void World::setSize() {
 
 		rowCount = row;
 		colCount = col;
+		tileCount = row * col;
+	}
+	catch( StreamReader::FileOpenFail ) {
+		throw;
 	}
 	catch( BadDimensions ) {
 		reader->close();
-		delete reader;
-		reader = nullptr;
 		throw;
 	}
 
 	reader->close();
-	delete reader;
-	reader = nullptr;
-}
-
-////////////////////////////////////////////////////////////////////////////////
-/*	setupTiles()
-	Runs setup methods for tiles and fills the world's tiles array.
-
-	Determines which tiles to create by reading the layout from a text file.
-
-	! Throws a FileOpenFail exception if any input files fail to open.
-	! Throws an EndOfFile exception if the end of a file is reached before setup
-	  is complete.
-*/
-////////////////////////////////////////////////////////////////////////////////
-void World::setupTiles() {
-	std::string line;
-	char ch;
-	Position position;
-	std::ifstream file;
-	StreamReader* reader = new StreamReader();
-
-	try {
-		position.world = this;
-		position.x = -1;
-		position.y = -1;
-		defaultTile = new UniqueTile(position, "Default.tile");
-	}
-	catch( StreamReader::FileOpenFail ) {
-		delete defaultTile;
-		defaultTile = nullptr;
-		throw;
-	}
-
-	try {
-		reader->open(fileName);
-
-		tiles = new Tile*[tileCount];
-
-		tileCount = 0;
-		position.world = this;
-		for( int i = 0; i < height(); i++ ) {
-			std::getline(file, line);
-			position.x = i;
-			for( int j = 0; j < width(); j++ ) {
-				ch = line[j];
-				position.y = j;
-				//makeTile(ch, position);
-				tileCount++;
-			}
-		}
-		if( (tileCount + 1) < height() * width() )
-			throw StreamReader::EndOfFile(fileName);
-	}
-	catch( StreamReader::FileOpenFail ) {
-		throw;
-	}
-	catch( ... ) {
-		clear();
-		reader->close();
-		delete reader;
-		reader = nullptr;
-		throw;
-	}
-
-	file.close();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	makeTile()
 	Creates a Tile object of a given type at a given position.
-	- type:      Character determining type of tile to create.
-	- position:  Position of the tile.
+	Returns a pointer to the tile.
+	- type:     Character determining type of tile to create.
+	- position: Position of the tile.
 */
 ////////////////////////////////////////////////////////////////////////////////
-
-/*
-void makeTile(const char& type, const Position& position) {
+Tile* World::makeTile(const char& type, const Position& position) {
 	switch( type ) {
 	default:
-		Path* t = new Path(position);
-		t->setup("Path.tile");
-		break;
+		return new Path(position);
 	case '#':
-		Wall* t = new Wall(position);
-		t->setup("Wall.tile");
-		break;
+		return new Wall(position);
 	case '?':
-		//PointOfInterest(position);
 		break;
 	case 'O':
-		//MazeExit(position);
 		break;
 	}
 }
 
+void World::tileSetup() {
+	std::string tileFileName, line;
+	Position position;
+	std::unique_ptr<StreamReader> reader(new StreamReader());
+	
+	try {
+		tileFileName = "Default.tile";
+		position.world = this;
+		position.x = -1;
+		position.y = -1;
+		defaultTile = new UniqueTile(position, tileFileName);
+
+		tileFileName = "Wall.tile";
+		reader->open(tileFileName);
+		Wall::read(reader->file());
+		reader->close();
+		
+		tileFileName = "Path.tile";
+		reader->open(tileFileName);
+		Path::read(reader->file());
+		reader->close();
+	}
+	catch( StreamReader::FileOpenFail ) {
+		throw;
+	}
+	catch( StreamReader::EndOfFile ) {
+		throw StreamReader::EndOfFile(tileFileName);
+	}
+	catch( StreamReader::BadString ex ) {
+		throw StreamReader::BadString(ex.getString(), tileFileName);
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/*	makeTileSet()
+	Fills the world's tiles array. Reads all tile member data from the
+	appropriate files.
+
+	Determines which tiles to create by reading the layout from a text file.
+
+	! Throws a FileOpenFail exception if any input files fail to open.
+	! Throws an EndOfFile exception if there is no data to read.
+	! Throws a BadString exception if data can't be read from a line because of
+	  incorrect formatting.
 */
+////////////////////////////////////////////////////////////////////////////////
+void World::makeTileMap() {
+	std::unique_ptr<StreamReader> reader(new StreamReader());
+	Position position;
+	std::string line;
+	char type;
+	
+	tileMap = new Tile*[tileCount];
+	try {
+		reader->open(fileName);
+		position.world = this;
+		for( int i = 0; i < size(); i++ ) {
+			reader->file() >> type;
+			position.x = indexToX(i);
+			position.y = indexToY(i);
+			switch( type ) {
+			case '#':
+				tileMap[i] = new Wall(position);
+				break;
+			default:
+				tileMap[i] = new Path(position);
+				break;
+			}
+		}
+
+		reader->close();
+	}
+	catch( StreamReader::FileOpenFail ) {
+		clear();
+		throw;
+	}
+	catch( StreamReader::EndOfFile ) {
+		reader->close();
+		clear();
+		throw StreamReader::EndOfFile(fileName);
+	}
+	catch( BadDimensions ) {
+		reader->close();
+		clear();
+		throw;
+	}
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 /*	getDefaultTile()
 	Returns the default Tile object.
@@ -251,7 +269,7 @@ Tile& World::tile(const int& x, const int& y) const {
 	if( !(x >= 0 && x < width()) || !(y >= 0 || y < height()) )
 		throw OutOfWorld((World*)this, x, y);
 	try {
-		return *tiles[xyToIndex(x, y)];
+		return *tileMap[xyToIndex(x, y)];
 	}
 	catch( OutOfWorld ) {
 		throw;
@@ -268,7 +286,7 @@ Tile& World::tile(const int& x, const int& y) const {
 Tile& World::operator[](const int& index) const {
 	if( index < 0 || index > tileCount )
 		throw OutOfWorld((World*)this, index);
-	return *tiles[index];
+	return *tileMap[index];
 }
 
 ////////////////////////////////////////////////////////////////////////////////

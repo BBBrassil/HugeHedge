@@ -1,6 +1,6 @@
 //	Wall.h
 //	Programmer: Brendan Brassil
-//	Date Last Modified: 2019-11-28
+//	Date Last Modified: 2019-11-29
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	Wall class
@@ -18,20 +18,20 @@
 
 #include "Tile.h"
 
-#include <string>
+#include "World.h"
 
 class Wall : public Tile {
 private:
 	static std::string fileName;
 	static std::string objectName;
 	static char token;
+	static void read(std::istream& ns);
 public:
 	Wall(const Position& p);
-	void read(std::istream& ns);
-	void setup(const std::string& fn);
 	std::string toString() const { return objectName; }
 	char toChar() const { return token; }
 	bool isWall() const { return true; }
+	friend void World::tileSetup();
 };
 
 #endif
