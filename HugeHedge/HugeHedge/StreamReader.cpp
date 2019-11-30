@@ -1,6 +1,6 @@
 //	StreamReader.cpp
 //	Programmer: Brendan Brassil
-//	Date Last Modified: 2019-11-28
+//	Date Last Modified: 2019-11-29
 
 #include "StreamReader.h"
 
@@ -8,7 +8,7 @@
 /*	open()
 	Opens the StreamReader's file stream with the associated file name.
 
-	! Throws a FileOpenFail exception if the file fails to open.
+	! Throws a FileOpenFail exception if the input file fails to open.
 */
 ////////////////////////////////////////////////////////////////////////////////
 void StreamReader::open(const std::string& fn) {
@@ -18,7 +18,6 @@ void StreamReader::open(const std::string& fn) {
 	if( !fileStream )
 		throw FileOpenFail(fileName);
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	close()
@@ -33,11 +32,31 @@ void StreamReader::close() {
 ////////////////////////////////////////////////////////////////////////////////
 /*	getline()
 	Extracts a line from an input stream, ignoring comment lines.
-
-	! Throws an EndOfFile exception if no data is read.
+	Returns an empty string if nothing was read.
 */
 ////////////////////////////////////////////////////////////////////////////////
-void StreamReader::getline(std::istream& ns, std::string& line) {
+std::istream& StreamReader::getline(std::istream& ns, std::string& line) {
+	std::getline(ns, line);
+	if( !ns )
+		line = "";
+
+	while( isComment(line) )
+		std::getline(ns, line);
+	if( !ns )
+		line = "";
+
+	return ns;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/*	getlineEOF()
+	Extracts a line from an input stream, Signoring comment lines.
+
+	! Throws an EndOfFile exception if the end of the input stream is reached
+	  before the expected data is read.
+*/
+////////////////////////////////////////////////////////////////////////////////
+std::istream& StreamReader::getlineEOF(std::istream& ns, std::string& line) {
 	std::getline(ns, line);
 	if( !ns )
 		throw EndOfFile();
@@ -46,6 +65,7 @@ void StreamReader::getline(std::istream& ns, std::string& line) {
 		std::getline(ns, line);
 	if( !ns )
 		throw EndOfFile();
+	return ns;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -63,7 +83,7 @@ bool StreamReader::isComment(const std::string& s) {
 	Extracts a key from a string.
 	Key/value format is "key=value".
 
-	! Throws a BadString exception if no key is read.
+	! Throws a BadString exception if a value could not be read from the string.
 */
 ////////////////////////////////////////////////////////////////////////////////
 std::string StreamReader::keyFrom(const std::string& s) {
@@ -80,8 +100,7 @@ std::string StreamReader::keyFrom(const std::string& s) {
 	Extracts a value from a string.
 	Key/value format is "key=value".
 
-	! Throws a BadString exception if a value could not be extracted from the
-	  string.
+	! Throws a BadString exception if a value could not be read from the string.
 */
 ////////////////////////////////////////////////////////////////////////////////
 std::string StreamReader::valueFrom(const std::string& s) {

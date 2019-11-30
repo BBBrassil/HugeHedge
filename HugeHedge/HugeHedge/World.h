@@ -1,6 +1,6 @@
 //	World.h
 //	Programmer: Brendan Brassil
-//	Date Last Modified: 2019-11-28
+//	Date Last Modified: 2019-11-29
 
 #ifndef WORLD_H
 #define WORLD_H
@@ -19,11 +19,11 @@ private:
 	int colCount;
 	int tileCount;
 	void clear();
-	void setSize();
+	void setDimensions();
 public:
 	World(const std::string& s);
 	~World();
-	void tileSetup();
+	void readTileData();
 	Tile* makeTile(const char& type, const Position& position);
 	void makeTileMap();
 	int height() const { return rowCount; }
@@ -33,6 +33,7 @@ public:
 	int indexToX(const int& index) const;
 	int indexToY(const int& index) const;
 	Tile& getDefaultTile() const;
+	Tile& tile(const int& index) const;
 	Tile& tile(const int& x, const int& y) const;
 	Tile& operator[](const int& index) const;
 	Tile& operator()(const int& x, const int& y) const;

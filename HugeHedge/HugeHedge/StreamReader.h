@@ -1,6 +1,6 @@
 //	StreamReader.h
 //	Programmer: Brendan Brassil
-//	Date Last Modified: 2019-11-27
+//	Date Last Modified: 2019-11-29
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	StreamReader class
@@ -33,7 +33,8 @@ public:
 	void open(const std::string& fn);
 	void close();
 	std::ifstream& file() { return fileStream; }
-	static void getline(std::istream& ns, std::string& s);
+	static std::istream& getline(std::istream& ns, std::string& s);
+	static std::istream& getlineEOF(std::istream& ns, std::string& s);
 	static bool isComment(const std::string& s);
 	static std::string keyFrom(const std::string& s);
 	static std::string valueFrom(const std::string& s);

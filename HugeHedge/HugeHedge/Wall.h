@@ -31,7 +31,7 @@ public:
 	std::string toString() const { return objectName; }
 	char toChar() const { return token; }
 	bool isWall() const { return true; }
-	friend void World::tileSetup();
+	friend void World::readTileData();
 };
 
 #endif

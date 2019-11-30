@@ -11,11 +11,16 @@
 #include "UniqueTile.h"
 #include "Wall.h"
 #include <fstream>
+#include <sstream>
 #include <string>
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	Constructor
 	- s: Name of text file used to read the tile layout.
+
+	! Throws a FileOpenFailure exception if any input file fails to open.
+	! Throws a BadDimensions exception if the data read from the tile map file\
+	  will not create a rectangular tile map.
 */
 ////////////////////////////////////////////////////////////////////////////////
 World::World(const std::string& s) {
@@ -25,8 +30,8 @@ World::World(const std::string& s) {
 	tileCount = 0;
 
 	try {
-		setSize();
-		tileSetup();
+		setDimensions();
+		readTileData();
 		makeTileMap();
 	}
 	catch( ... ) {
@@ -44,7 +49,7 @@ World::~World() {
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	clear()
-	Deallocates memory for the tiles array and defaultTile.
+	Deallocates memory for the tile map array and defaultTile.
 */
 ////////////////////////////////////////////////////////////////////////////////
 void World::clear() {
@@ -63,38 +68,41 @@ void World::clear() {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/*	setWorldSize()
-	Setup function to determine the dimensions of the World.
+/*	setDimensions()
+	Setup function to determine the dimensions of the world.
 
 	Reads from a file using the file name that was set in the constructor and
 	counts the number of rows and columns in the file to determine the world's
 	height, width, and tile count.
 
 	! Throws a FileOpenFailure exception if the input file fails to open.
-	! Throws a BadDimensions exception if the data read from the file will not
-	  create a rectangular maze layout.
+	! Throws an EndOfFile exception if the end of the input stream is reached
+	  before the expected data is read.
+	! Throws a BadDimensions exception if the data read from the tile map file
+	  will not create a rectangular tile map.
 */
 ////////////////////////////////////////////////////////////////////////////////
-void World::setSize() {
+void World::setDimensions() {
 	int row, col, length;
 	std::string line;
 	std::unique_ptr<StreamReader> reader(new StreamReader());
 	
 	try {
 		reader->open(fileName);
-		std::getline(reader->file(), line);
+		StreamReader::getline(reader->file(), line);
 		// World must have substance
 		if( line == "" )
 			throw BadDimensions(fileName);
 		row = 1;
 		col = line.length();
-		while( std::getline(reader->file(), line) ) {
+		while( StreamReader::getline(reader->file(), line) ) {
 			row++;
 			length = line.length();
 			// World must be a rectangle
 			if( length != col )
 				throw BadDimensions(fileName);
 		}
+		reader->close();
 
 		rowCount = row;
 		colCount = col;
@@ -103,12 +111,14 @@ void World::setSize() {
 	catch( StreamReader::FileOpenFail ) {
 		throw;
 	}
+	catch( StreamReader::EndOfFile ) {
+		reader->close();
+		throw StreamReader::EndOfFile(fileName);
+	}
 	catch( BadDimensions ) {
 		reader->close();
 		throw;
 	}
-
-	reader->close();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -130,9 +140,22 @@ Tile* World::makeTile(const char& type, const Position& position) {
 	case 'O':
 		break;
 	}
+	return nullptr;
 }
 
-void World::tileSetup() {
+////////////////////////////////////////////////////////////////////////////////
+/*	readTileData()
+	Reads data for the default tile and the static members of the Wall and Path
+	classes from their respective files.
+
+	! Throws a FileOpenFail exception if any input file fails to open.
+	! Throws an EndOfFile exception if the end of the input stream is reached
+	  before all the expected data is read.
+	! Throws a BadString exception if data can't be read from a line because of
+	  incorrect formatting.
+*/
+////////////////////////////////////////////////////////////////////////////////
+void World::readTileData() {
 	std::string tileFileName, line;
 	Position position;
 	std::unique_ptr<StreamReader> reader(new StreamReader());
@@ -166,14 +189,15 @@ void World::tileSetup() {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/*	makeTileSet()
+/*	makeTileMap()
 	Fills the world's tiles array. Reads all tile member data from the
 	appropriate files.
 
 	Determines which tiles to create by reading the layout from a text file.
 
-	! Throws a FileOpenFail exception if any input files fail to open.
-	! Throws an EndOfFile exception if there is no data to read.
+	! Throws a FileOpenFail exception if any input file fails to open.
+	! Throws an EndOfFile exception if the end of the input stream is reached
+	  before all the expected data is read.
 	! Throws a BadString exception if data can't be read from a line because of
 	  incorrect formatting.
 */
@@ -182,16 +206,23 @@ void World::makeTileMap() {
 	std::unique_ptr<StreamReader> reader(new StreamReader());
 	Position position;
 	std::string line;
+	std::stringstream ss;
 	char type;
 	
 	tileMap = new Tile*[tileCount];
 	try {
 		reader->open(fileName);
 		position.world = this;
+		// Ignore comments and get only map data characters
+		while( StreamReader::getline(reader->file(), line) )
+			ss << line;
+		// Creat a tile for each character read
 		for( int i = 0; i < size(); i++ ) {
-			reader->file() >> type;
+			ss >> type;
+			// Set tile position
 			position.x = indexToX(i);
 			position.y = indexToY(i);
+			// Determine type of tile to create
 			switch( type ) {
 			case '#':
 				tileMap[i] = new Wall(position);
@@ -201,7 +232,6 @@ void World::makeTileMap() {
 				break;
 			}
 		}
-
 		reader->close();
 	}
 	catch( StreamReader::FileOpenFail ) {
@@ -222,9 +252,8 @@ void World::makeTileMap() {
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	getDefaultTile()
-	Returns the default Tile object.
-
-	Used for errors and when the player inspects a tile outside of the World.
+	Returns the default tile object.
+	Used for when the player inspects a tile that exists outside of the world.
 */
 ////////////////////////////////////////////////////////////////////////////////
 Tile& World::getDefaultTile() const {
@@ -259,10 +288,24 @@ int World::indexToY(const int& index) const {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/*	tile()
-	Returns the Tile at the given xy coordinates in the World.
+/*	tile() overloaded for index
+	Returns the tile at the given 1D index in world's tile map array.
 
-	Returns the default tile if these coordinates fall outside the World.
+	! Throws an OutOfWorld exception if this index falls outside of the array.
+*/
+////////////////////////////////////////////////////////////////////////////////
+Tile& World::tile(const int& index) const {
+	if( index < 0 || index > tileCount )
+		throw OutOfWorld((World*)this, index);
+	return *tileMap[index];
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/*	tile() overloaded for x and y
+	Returns the tile at the given xy coordinates in the world.
+
+	! Throws an OutOfWorld exception if these coordinates fall outside of the
+	  world.
 */
 ////////////////////////////////////////////////////////////////////////////////
 Tile& World::tile(const int& x, const int& y) const {
@@ -278,22 +321,26 @@ Tile& World::tile(const int& x, const int& y) const {
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	operator[]
-	Returns the Tile at the given 1D index in the tiles array.
+	Returns the tile at the given 1D index in world's tile map array.
 
-	Returns the default tile if the given index is out of bounds.
+	! Throws an OutOfWorld exception if this index falls outside of the array.
 */
 ////////////////////////////////////////////////////////////////////////////////
 Tile& World::operator[](const int& index) const {
-	if( index < 0 || index > tileCount )
-		throw OutOfWorld((World*)this, index);
-	return *tileMap[index];
+	try {
+		return tile(index);
+	}
+	catch( OutOfWorld ) {
+		throw;
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	operator()
-	Returns the Tile at the given xy coordinates in the World.
+	Returns the tile at the given xy coordinates in the world.
 
-	Returns the default tile if these coordinates fall outside the World.
+	! Throws an OutOfWorld exception if these coordinates fall outside of the
+	  world.
 */
 ////////////////////////////////////////////////////////////////////////////////
 Tile& World::operator()(const int& x, const int& y) const {

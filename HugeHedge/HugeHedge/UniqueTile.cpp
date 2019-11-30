@@ -12,7 +12,8 @@
 	Reads data from a file, storing it in the tile's member variables.
 
 	! Throws a FileOpenFail exception if the file fails to open.
-	! Throws an EndOfFile exception if there is no data to read.
+	! Throws an EndOfFile exception if the end of the input stream is reached
+	  before the expected data is read.
 	! Throws a BadString exception if data can't be read from a line because of
 	  incorrect formatting.
 */
@@ -60,7 +61,8 @@ UniqueTile::UniqueTile(const Position& p, const std::string& fn) : Tile(p) {
 	Reads data from an input stream, storing it in the unique tile's member
 	variables.
 
-	! Throws an EndOfFile exception if there is no data to read.
+	! Throws an EndOfFile exception if the end of the input stream is reached
+	  before the expected data is read.
 	! Throws a BadString exception if data can't be read from a line because of
 	  incorrect formatting.
 */
@@ -69,15 +71,15 @@ std::istream& operator>>(std::istream& ns, UniqueTile& t) {
 	std::string line, data;
 
 	try {
-		StreamReader::getline(ns, line);
+		StreamReader::getlineEOF(ns, line);
 		data = StreamReader::valueFrom(line);
 		t.objectName = data;
 
-		StreamReader::getline(ns, line);
+		StreamReader::getlineEOF(ns, line);
 		data = StreamReader::valueFrom(line);
 		t.token = data[0];
 
-		StreamReader::getline(ns, line);
+		StreamReader::getlineEOF(ns, line);
 		data = StreamReader::valueFrom(line);
 		if( data != "0" && data != "1" )
 			throw StreamReader::BadString(line);
