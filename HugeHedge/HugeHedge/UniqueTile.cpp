@@ -8,7 +8,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	Constructor
-	
+
 	Reads data from a file, storing it in the tile's member variables.
 
 	! Throws a FileOpenFail exception if the file fails to open.

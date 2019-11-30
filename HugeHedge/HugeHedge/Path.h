@@ -7,7 +7,7 @@
 	A generic tile class for tiles that don't block the player's movement.
 
 	Implements the abstract Tile class.
-	
+
 	Uses static members for the name, token, etc that are shared between all
 	Path objects.
 */

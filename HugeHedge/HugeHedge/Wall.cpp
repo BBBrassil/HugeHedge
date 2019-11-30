@@ -18,9 +18,9 @@ Wall::Wall(const Position& p) : Tile(p) {}
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	read()
-	
+
 	Reads data from an input stream, storing it in the tile's member variables.
-	
+
 	! Throws an EndOfFile exception if the end of the input stream is reached
 	  before the expected data is read.
 	! Throws a BadString exception if data can't be read from a line because of

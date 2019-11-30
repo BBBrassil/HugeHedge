@@ -4,10 +4,10 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	Abstract Tile class
-	
+
 	An abstract class for tile objects that can either block the player's
 	movement or can be occupied by the player and other objects.
-	
+
 	Implemented by:
 	- Path
 	- UniqueTile

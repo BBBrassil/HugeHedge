@@ -83,10 +83,10 @@ void World::clear() {
 */
 ////////////////////////////////////////////////////////////////////////////////
 void World::setDimensions() {
-	int row, col, length;
+	int row, col;
 	std::string line;
 	std::unique_ptr<StreamReader> reader(new StreamReader());
-	
+
 	try {
 		reader->open(fileName);
 		StreamReader::getline(reader->file(), line);
@@ -97,9 +97,8 @@ void World::setDimensions() {
 		col = line.length();
 		while( StreamReader::getline(reader->file(), line) ) {
 			row++;
-			length = line.length();
 			// World must be a rectangle
-			if( length != col )
+			if( line.length() != col )
 				throw BadDimensions(fileName);
 		}
 		reader->close();
@@ -159,7 +158,7 @@ void World::readTileData() {
 	std::string tileFileName, line;
 	Position position;
 	std::unique_ptr<StreamReader> reader(new StreamReader());
-	
+
 	try {
 		tileFileName = "Default.tile";
 		position.world = this;
@@ -171,7 +170,7 @@ void World::readTileData() {
 		reader->open(tileFileName);
 		Wall::read(reader->file());
 		reader->close();
-		
+
 		tileFileName = "Path.tile";
 		reader->open(tileFileName);
 		Path::read(reader->file());
@@ -208,7 +207,7 @@ void World::makeTileMap() {
 	std::string line;
 	std::stringstream ss;
 	char type;
-	
+
 	tileMap = new Tile*[tileCount];
 	try {
 		reader->open(fileName);

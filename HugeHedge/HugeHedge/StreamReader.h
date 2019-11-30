@@ -51,7 +51,8 @@ public:
 	public:
 		BadString(const std::string& s) { fileName = ""; }
 		BadString(const std::string& s, const std::string& fn) {
-			badString = s; fileName = fn; }
+			badString = s; fileName = fn;
+		}
 		std::string getString() const { return badString; }
 		std::string getFileName() const { return fileName; };
 	};
@@ -70,7 +71,7 @@ public:
 		EndOfFile(const std::string& fn) { fileName = fn; }
 		std::string getFileName() const { return fileName; }
 	};
-	
+
 	///////////////////////////////////////////////////////////////////////////////
 	/*	FileOpenFail exception
 		Thrown when a file fails to open.

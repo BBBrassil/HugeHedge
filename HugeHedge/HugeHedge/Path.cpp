@@ -36,7 +36,7 @@ void Path::read(std::istream& ns) {
 		StreamReader::getlineEOF(ns, line);
 		data = StreamReader::valueFrom(line);
 		objectName = data;
-		
+
 		StreamReader::getlineEOF(ns, line);
 		data = StreamReader::valueFrom(line);
 		token = data[0];

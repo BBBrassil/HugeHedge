@@ -66,7 +66,7 @@ Tile& Tile::west() const {
 ////////////////////////////////////////////////////////////////////////////////
 /*	operator++ prefix
 	Returns the tile at the next index in the world's tiles array.
-	Returns the default tile if the index goes out of bounds.	
+	Returns the default tile if the index goes out of bounds.
 	Can be used to iterate through all tiles in a world's array.
 
 	Note: This method increments the index, not the tile; it does nothing to the
@@ -86,7 +86,7 @@ Tile& Tile::operator++() const {
 ////////////////////////////////////////////////////////////////////////////////
 /*	operator++ postfix
 	Returns the tile at the next index in the world's tiles array.
-	Returns the default tile if the index goes out of bounds.	
+	Returns the default tile if the index goes out of bounds.
 	Can be used to iterate through all tiles in a world's array.
 
 	Note: This method increments the index, not the tile; it does nothing to the
@@ -101,7 +101,7 @@ Tile& Tile::operator++(int) const {
 ////////////////////////////////////////////////////////////////////////////////
 /*	operator-- prefix
 	Returns the tile at the previous index in the world's tiles array.
-	Returns the default tile if the index goes out of bounds.	
+	Returns the default tile if the index goes out of bounds.
 	Can be used to iterate through all tiles in a world's array.
 
 	Note: This method decrements the index, not the tile; it does nothing to the
@@ -121,7 +121,7 @@ Tile& Tile::operator--() const {
 ////////////////////////////////////////////////////////////////////////////////
 /*	operator-- postfix
 	Returns the tile at the previous index in the world's tiles array.
-	Returns the default tile if the index goes out of bounds.	
+	Returns the default tile if the index goes out of bounds.
 	Can be used to iterate through all tiles in a world's array.
 
 	Note: This method decrements the index, not the tile; it does nothing to the

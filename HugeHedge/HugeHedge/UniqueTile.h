@@ -4,7 +4,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	UniqueTile class
-	
+
 	Class for tile objects that will have their data read from a file when
 	instantiated. Implements the abstract Tile class.
 

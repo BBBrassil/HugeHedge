@@ -10,7 +10,7 @@ using namespace std;
 
 int main() {
 	World* world = new World("World.txt");
-	
+
 	for( int i = 0; i < world->size(); i++ ) {
 		Tile& t = (*world)[i];
 		cout << t.toChar();
