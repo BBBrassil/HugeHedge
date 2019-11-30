@@ -24,7 +24,6 @@ public:
 	World(const std::string& s);
 	~World();
 	void readTileData();
-	Tile* makeTile(const char& type, const Position& position);
 	void makeTileMap();
 	int height() const { return rowCount; }
 	int width() const { return colCount; }

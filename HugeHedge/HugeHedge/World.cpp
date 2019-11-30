@@ -19,8 +19,12 @@
 	- s: Name of text file used to read the tile layout.
 
 	! Throws a FileOpenFailure exception if any input file fails to open.
-	! Throws a BadDimensions exception if the data read from the tile map file\
+	! Throws an EndOfFile exception if the end of the input stream is reached
+	  before the expected data is read.
+	! Throws a BadDimensions exception if the data read from the tile map file
 	  will not create a rectangular tile map.
+	! Throws a BadString exception if data can't be read from a line because of
+	  incorrect formatting.
 */
 ////////////////////////////////////////////////////////////////////////////////
 World::World(const std::string& s) {
@@ -121,28 +125,6 @@ void World::setDimensions() {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/*	makeTile()
-	Creates a Tile object of a given type at a given position.
-	Returns a pointer to the tile.
-	- type:     Character determining type of tile to create.
-	- position: Position of the tile.
-*/
-////////////////////////////////////////////////////////////////////////////////
-Tile* World::makeTile(const char& type, const Position& position) {
-	switch( type ) {
-	default:
-		return new Path(position);
-	case '#':
-		return new Wall(position);
-	case '?':
-		break;
-	case 'O':
-		break;
-	}
-	return nullptr;
-}
-
-////////////////////////////////////////////////////////////////////////////////
 /*	readTileData()
 	Reads data for the default tile and the static members of the Wall and Path
 	classes from their respective files.
@@ -180,9 +162,11 @@ void World::readTileData() {
 		throw;
 	}
 	catch( StreamReader::EndOfFile ) {
+		reader->close();
 		throw StreamReader::EndOfFile(tileFileName);
 	}
 	catch( StreamReader::BadString ex ) {
+		reader->close();
 		throw StreamReader::BadString(ex.getString(), tileFileName);
 	}
 }
