@@ -1,6 +1,6 @@
 //	Tile.h
 //	Programmer: Brendan Brassil
-//	Date Last Modified: 2019-11-29
+//	Date Last Modified: 2019-12-14
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	Abstract Tile class
@@ -32,19 +32,14 @@ public:
 	virtual std::string toString() const = 0;
 	virtual char toChar() const = 0;
 	virtual bool isWall() const = 0;
-	World& getWorld() const { return *position.world; }
+	World* getWorld() const { return position.world; }
 	int getX() const { return position.x; }
 	int getY() const { return position.y; }
-	Tile& north() const;
-	Tile& east() const;
-	Tile& south() const;
-	Tile& west() const;
-	Tile& operator++() const;
-	Tile& operator++(int) const;
-	Tile& operator--() const;
-	Tile& operator--(int) const;
-	Tile& operator()(const int& x, const int& y) const;
-	Tile& operator()(const int& cardinal) const;
+	Tile* neighbor(const int& cardinal);
+	Tile* operator++();
+	Tile* operator++(int);
+	Tile* operator--();
+	Tile* operator--(int);
 	friend std::ostream& operator<<(std::ostream& os, const Tile& t);
 };
 

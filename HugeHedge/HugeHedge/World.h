@@ -1,6 +1,6 @@
 //	World.h
 //	Programmer: Brendan Brassil
-//	Date Last Modified: 2019-11-29
+//	Date Last Modified: 2019-12-14
 
 #ifndef WORLD_H
 #define WORLD_H
@@ -31,11 +31,9 @@ public:
 	int xyToIndex(const int& x, const int& y) const;
 	int indexToX(const int& index) const;
 	int indexToY(const int& index) const;
-	Tile& getDefaultTile() const;
-	Tile& tile(const int& index) const;
-	Tile& tile(const int& x, const int& y) const;
-	Tile& operator[](const int& index) const;
-	Tile& operator()(const int& x, const int& y) const;
+	Tile* getDefaultTile() const;
+	Tile* tile(const int& index) const;
+	Tile* tile(const int& x, const int& y) const;
 
 	//////////////////////////////////////////////////////////////////////////////
 	/* BadDimensions exception
@@ -66,7 +64,7 @@ public:
 			position.x = w->indexToX(n);
 			position.y = w->indexToY(n);
 		}
-		OutOfWorld(World* w, const int&x, const int& y) {
+		OutOfWorld(World* w, int x, int y) {
 			position.world = w;
 			position.x = x;
 			position.y = y;

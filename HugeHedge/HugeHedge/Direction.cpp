@@ -1,6 +1,6 @@
 //	Direction.h
 //	Programmer: Brendan Brassil
-//	Date Last Modified 2019-11-23
+//	Date Last Modified 2019-12-14
 
 #include "Direction.h"
 
@@ -42,6 +42,31 @@ int Direction::opposite(const int &cardinal) {
 ////////////////////////////////////////////////////////////////////////////////
 int Direction::leftFrom(const int &cardinal) {
 	return (cardinal + 3) % 4;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/*	navigate()
+	Finds a cardinal direction to move to, based on the current cardinal
+	direction and a given relative direction.
+	e.g. If we are facing South and go left, our new direction is East.
+
+	Returns an integer corresponding to the cardinal direction enum.
+	(NORTH = 0, EAST = 1, SOUTH = 2, WEST = 3)
+
+	! Throws a Misdirection exception for any invalid input.
+
+	- cardinal: Starting cardinal direction (NORTH, EAST, SOUTH, WEST)
+	- relative: Relative direciton in which to move (FORWARD, RIGHT, BACK, LEFT)
+*/
+////////////////////////////////////////////////////////////////////////////////
+int Direction::navigate(const int& cardinal, const int& relative) {
+	switch( relative ) {
+	case FORWARD: return cardinal;
+	case RIGHT: return Direction::rightFrom(cardinal);
+	case BACK: return Direction::opposite(cardinal);
+	case LEFT: return Direction::leftFrom(cardinal);
+	default: throw new Misdirection(relative);
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////

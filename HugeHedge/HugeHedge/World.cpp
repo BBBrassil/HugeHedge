@@ -1,6 +1,6 @@
 //	World.cpp
 //	Programmer: Brendan Brassil
-//	Date Last Modified: 2019-11-29
+//	Date Last Modified: 2019-12-14
 
 #include "World.h"
 
@@ -78,7 +78,7 @@ void World::setDimensions() {
 		if( line == "" )
 			throw BadDimensions(fileName);
 		row = 1;
-		col = line.length();
+		col = (int)line.length();
 		while( StreamReader::getline(reader->file(), line) ) {
 			row++;
 			// World must be a rectangle
@@ -239,8 +239,8 @@ void World::makeTileMap() {
 	Used for when the player inspects a tile that exists outside of the world.
 */
 ////////////////////////////////////////////////////////////////////////////////
-Tile& World::getDefaultTile() const {
-	return *defaultTile;
+Tile* World::getDefaultTile() const {
+	return defaultTile;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -249,7 +249,7 @@ Tile& World::getDefaultTile() const {
 */
 ////////////////////////////////////////////////////////////////////////////////
 int World::xyToIndex(const int& x, const int& y) const {
-	return (colCount * x) + y;
+	return (colCount * y) + x;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -277,10 +277,10 @@ int World::indexToY(const int& index) const {
 	! Throws an OutOfWorld exception if this index falls outside of the array.
 */
 ////////////////////////////////////////////////////////////////////////////////
-Tile& World::tile(const int& index) const {
+Tile* World::tile(const int& index) const {
 	if( index < 0 || index > tileCount )
-		throw OutOfWorld((World*)this, index);
-	return *tileMap[index];
+		throw new OutOfWorld((World*)this, index);
+	return tileMap[index];
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -291,46 +291,8 @@ Tile& World::tile(const int& index) const {
 	  world.
 */
 ////////////////////////////////////////////////////////////////////////////////
-Tile& World::tile(const int& x, const int& y) const {
-	if( !(x >= 0 && x < width()) || !(y >= 0 || y < height()) )
-		throw OutOfWorld((World*)this, x, y);
-	try {
-		return *tileMap[xyToIndex(x, y)];
-	}
-	catch( OutOfWorld ) {
-		throw;
-	}
-}
-
-////////////////////////////////////////////////////////////////////////////////
-/*	operator[]
-	Returns the tile at the given 1D index in world's tile map array.
-
-	! Throws an OutOfWorld exception if this index falls outside of the array.
-*/
-////////////////////////////////////////////////////////////////////////////////
-Tile& World::operator[](const int& index) const {
-	try {
-		return tile(index);
-	}
-	catch( OutOfWorld ) {
-		throw;
-	}
-}
-
-////////////////////////////////////////////////////////////////////////////////
-/*	operator()
-	Returns the tile at the given xy coordinates in the world.
-
-	! Throws an OutOfWorld exception if these coordinates fall outside of the
-	  world.
-*/
-////////////////////////////////////////////////////////////////////////////////
-Tile& World::operator()(const int& x, const int& y) const {
-	try {
-		return tile(x, y);
-	}
-	catch( OutOfWorld ) {
-		throw;
-	}
+Tile* World::tile(const int& x, const int& y) const {
+	if( x < 0 || x >= width() || y < 0 || y >= height() )
+		throw new OutOfWorld((World*)this, x, y);
+	return tileMap[xyToIndex(x, y)];
 }

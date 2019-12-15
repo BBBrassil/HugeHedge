@@ -1,6 +1,6 @@
 //	Tile.cpp
 //	Programmer: Brendan Brassil
-//	Date Last Modified: 2019-11-29
+//	Date Last Modified: 2019-12-14
 
 #include "Tile.h"
 
@@ -8,158 +8,100 @@
 #include "World.h"
 
 ////////////////////////////////////////////////////////////////////////////////
-/*	north()
-	Returns the Tile that lies to the north.
-*/
-////////////////////////////////////////////////////////////////////////////////
-Tile& Tile::north() const {
-	try {
-		return getWorld().tile(position.x, position.y + 1);
-	}
-	catch( World::OutOfWorld ) {
-		return getWorld().getDefaultTile();
-	}
-}
+/*	neighbor()
+	Returns the tile that lies in a given cardinal direction.
+	If that tile would be outside of the world, returns the default tile
+	instead.
 
-////////////////////////////////////////////////////////////////////////////////
-/*	east()
-	Returns the Tile that lies to the east.
+	! Throws a Misdirection exception upon invalid input.
 */
 ////////////////////////////////////////////////////////////////////////////////
-Tile& Tile::east() const {
-	try {
-		return getWorld().tile(position.x + 1, position.y);
-	}
-	catch( World::OutOfWorld ) {
-		return getWorld().getDefaultTile();
-	}
-}
+Tile* Tile::neighbor(const int& cardinal) {
+	Tile* t;
 
-////////////////////////////////////////////////////////////////////////////////
-/*	south()
-	Returns a pointer to the Tile that lies to the south.
-*/
-////////////////////////////////////////////////////////////////////////////////
-Tile& Tile::south() const {
 	try {
-		return getWorld().tile(position.x, position.y - 1);
+		switch( cardinal ) {
+		case NORTH:
+			t = getWorld()->tile(position.x, position.y - 1);
+			break;
+		case EAST:
+			t = getWorld()->tile(position.x + 1, position.y);
+			break;
+		case SOUTH:
+			t = getWorld()->tile(position.x, position.y + 1);
+			break;
+		case WEST:
+			t = getWorld()->tile(position.x - 1, position.y);
+			break;
+		default:
+			throw new Direction::Misdirection(cardinal);
+			break;
+		}
 	}
 	catch( World::OutOfWorld ) {
-		return getWorld().getDefaultTile();
+		t = getWorld()->getDefaultTile();
 	}
-}
-
-////////////////////////////////////////////////////////////////////////////////
-/*	west()
-	Returns the Tile that lies to the west.
-*/
-////////////////////////////////////////////////////////////////////////////////
-Tile& Tile::west() const {
-	try {
-		return getWorld().tile(position.x - 1, position.y);
-	}
-	catch( World::OutOfWorld ) {
-		return getWorld().getDefaultTile();
+	catch( Direction::Misdirection ) {
+		throw;
 	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	operator++ prefix
 	Returns the tile at the next index in the world's tiles array.
-	Returns the default tile if the index goes out of bounds.
-	Can be used to iterate through all tiles in a world's array.
-
-	Note: This method increments the index, not the tile; it does nothing to the
-		  tile object. It only returns another tile reference. So it does
-		  exactly the same thing as the postfix operator.
+	Goes to tile 0 if it gets to the end of the array.
 */
 ////////////////////////////////////////////////////////////////////////////////
-Tile& Tile::operator++() const {
+Tile* Tile::operator++() {
+	Tile* temp;
 	try {
-		return getWorld()[getWorld().xyToIndex(getX(), getY() + 1)];
+		temp = getWorld()->tile(getWorld()->xyToIndex(getX(), getY() + 1));
 	}
 	catch( World::OutOfWorld ) {
-		return getWorld().getDefaultTile();
+		temp = getWorld()->tile(0);
 	}
+	return temp;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	operator++ postfix
-	Returns the tile at the next index in the world's tiles array.
-	Returns the default tile if the index goes out of bounds.
-	Can be used to iterate through all tiles in a world's array.
-
-	Note: This method increments the index, not the tile; it does nothing to the
-		  tile object. It only returns another tile reference. So it does
-		  exactly the same thing as the prefix operator.
+	Returns the tile at the next index in the world's tile map.
+	Goes to tile 0 if it gets to the end of the array.
 */
 ////////////////////////////////////////////////////////////////////////////////
-Tile& Tile::operator++(int) const {
-	return ++(*this);
+Tile* Tile::operator++(int) {
+	Tile* temp = this;
+	++(*this);
+	return temp;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	operator-- prefix
-	Returns the tile at the previous index in the world's tiles array.
-	Returns the default tile if the index goes out of bounds.
-	Can be used to iterate through all tiles in a world's array.
-
-	Note: This method decrements the index, not the tile; it does nothing to the
-		  tile object. It only returns another tile reference. So it does
-		  exactly the same thing as the postfix operator.
+	Returns the tile at the next index in the world's tile map.
+	Goes back to last tile if it gets to the beginning of the array.
 */
 ////////////////////////////////////////////////////////////////////////////////
-Tile& Tile::operator--() const {
+Tile* Tile::operator--() {
+	Tile* temp;
 	try {
-		return getWorld()[getWorld().xyToIndex(getX(), getY() - 1)];
+		temp = getWorld()->tile(getWorld()->xyToIndex(getX(), getY() - 1));
 	}
 	catch( World::OutOfWorld ) {
-		return getWorld().getDefaultTile();
+		temp = getWorld()->tile(getWorld()->size() - 1);
 	}
+	return temp;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	operator-- postfix
-	Returns the tile at the previous index in the world's tiles array.
-	Returns the default tile if the index goes out of bounds.
-	Can be used to iterate through all tiles in a world's array.
-
-	Note: This method decrements the index, not the tile; it does nothing to the
-		  tile object. It only returns another tile reference. So it does
-		  exactly the same thing as the prefix operator.
+	Returns the tile at the next index in the world's tile map.
+	Goes back to last tile if it gets to the beginning of the array.
 */
 ////////////////////////////////////////////////////////////////////////////////
-Tile& Tile::operator--(int) const {
-	return --(*this);
-}
-
-////////////////////////////////////////////////////////////////////////////////
-/*	operator() overloaded for xy coordinates
-	Returns the tile at the given xy coordinates in the world.
-*/
-////////////////////////////////////////////////////////////////////////////////
-Tile& Tile::operator()(const int& x, const int& y) const {
-	try {
-		return getWorld().tile(x, y);
-	}
-	catch( World::OutOfWorld ) {
-		return getWorld().getDefaultTile();
-	}
-}
-
-////////////////////////////////////////////////////////////////////////////////
-/*	operator() overloaded for cardinal direction
-	Returns the tile that lies in the given direction.
-*/
-////////////////////////////////////////////////////////////////////////////////
-Tile& Tile::operator()(const int& cardinal) const {
-	switch( cardinal ) {
-	case NORTH: return north(); break;
-	case EAST: return east(); break;
-	case SOUTH: return south(); break;
-	case WEST: return west(); break;
-	}
-	return getWorld().getDefaultTile();
+Tile* Tile::operator--(int) {
+	Tile* temp = this;
+	--(*this);
+	return temp;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
