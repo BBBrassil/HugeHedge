@@ -1,8 +1,13 @@
+//	ObjectReader.cpp
+//	Programmer: Brendan Brassil
+//	Date Last Modified: 2019-12-15
+
 #include "ObjectReader.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 /*
 	I got linker errors when the ObjectReader code wasn't in the .h file.
-	Works when it's in the .ccp though. Not sure why.
+	Not sure why.
+	Works when it's in the .ccp, though.
 */
 ////////////////////////////////////////////////////////////////////////////////

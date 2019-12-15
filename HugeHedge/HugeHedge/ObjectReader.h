@@ -1,5 +1,6 @@
-#ifndef OBJECTREADER_H
-#define OBJECTREADER_H
+//	ObjectReader.h
+//	Programmer: Brendan Brassil
+//	Date Last Modified: 2019-12-15
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	ObjectReader class
@@ -9,6 +10,9 @@
 	Works with any class that overloads the >> operator.
 */
 ////////////////////////////////////////////////////////////////////////////////
+
+#ifndef OBJECTREADER_H
+#define OBJECTREADER_H
 
 #include "StreamReader.h"
 template <class T>
