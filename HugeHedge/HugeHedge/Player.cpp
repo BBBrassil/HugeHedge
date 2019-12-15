@@ -1,10 +1,8 @@
 //	Player.cpp
 //	Programmer: Brendan Brassil
-//	Date Last Modified: 2019-12-14
+//	Date Last Modified: 2019-12-15
 
 #include "Player.h"
-
-#include <iostream>
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	getTile()

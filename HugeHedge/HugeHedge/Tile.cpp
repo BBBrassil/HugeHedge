@@ -1,11 +1,8 @@
 //	Tile.cpp
 //	Programmer: Brendan Brassil
-//	Date Last Modified: 2019-12-14
+//	Date Last Modified: 2019-12-15
 
 #include "Tile.h"
-
-#include "Direction.h"
-#include "World.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	neighbor()

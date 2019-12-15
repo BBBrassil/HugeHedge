@@ -1,12 +1,12 @@
-//	UniqueTile.cpp
+//	PointOfInterest.cpp
 //	Programmer: Brendan Brassil
 //	Date Last Modified: 2019-12-15
 
-#include "UniqueTile.h"
+#include "PointOfInterest.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	Constructor
-	Reads data from a file, storing it in the tile's fields.
+	Adds a mystery to the tile.
 
 	! Throws a FileOpenFail exception if the file fails to open.
 	! Throws an EndOfFile exception if the end of the input stream is reached
@@ -15,34 +15,14 @@
 	  incorrect formatting.
 */
 ////////////////////////////////////////////////////////////////////////////////
-UniqueTile::UniqueTile(const Position& p, const std::string& fn) : Tile(p) {
-	ObjectReader<UniqueTile>* reader = new ObjectReader<UniqueTile>();
-
-	// Default initializations to get the IDE to stop yelling at me
-	token = '\0';
-	wall = true;
-
-	// Read fields from file
+PointOfInterest::PointOfInterest(const Position& p, const std::string& fn) : UniqueTile(p, fn) {
+	mystery = nullptr;
 	try {
-		reader->read((UniqueTile*)this);
+		mystery = new Mystery(mysteryFileName);
 	}
-	catch( StreamReader::FileOpenFail ) {
-		delete reader;
-		reader = nullptr;
+	catch( ... ) {
 		throw;
 	}
-	catch( StreamReader::EndOfFile ) {
-		delete reader;
-		reader = nullptr;
-		throw;
-	}
-	catch( StreamReader::BadString ) {
-		delete reader;
-		reader = nullptr;
-		throw;
-	}
-	delete reader;
-	reader = nullptr;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -55,23 +35,27 @@ UniqueTile::UniqueTile(const Position& p, const std::string& fn) : Tile(p) {
 	  incorrect formatting.
 */
 ////////////////////////////////////////////////////////////////////////////////
-std::istream& operator>>(std::istream& ns, UniqueTile& t) {
+std::istream& operator>>(std::istream& ns, PointOfInterest& poi) {
 	std::string line, data;
 
 	try {
 		StreamReader::getlineEOF(ns, line);
 		data = StreamReader::valueFrom(line);
-		t.objectName = data;
+		poi.objectName = data;
 
 		StreamReader::getlineEOF(ns, line);
 		data = StreamReader::valueFrom(line);
-		t.token = data[0];
+		poi.token = data[0];
 
 		StreamReader::getlineEOF(ns, line);
 		data = StreamReader::valueFrom(line);
 		if( data != "0" && data != "1" )
 			throw StreamReader::BadString(line);
-		t.wall = data[0] - '0';
+		poi.wall = data[0] - '0';
+
+		StreamReader::getlineEOF(ns, line);
+		data = StreamReader::valueFrom(line);
+		poi.mysteryFileName = data;
 	}
 	catch( ... ) {
 		throw;

@@ -1,18 +1,8 @@
 //	World.cpp
 //	Programmer: Brendan Brassil
-//	Date Last Modified: 2019-12-14
+//	Date Last Modified: 2019-12-15
 
 #include "World.h"
-
-#include "Path.h"
-#include "Position.h"
-#include "StreamReader.h"
-#include "Tile.h"
-#include "UniqueTile.h"
-#include "Wall.h"
-#include <fstream>
-#include <sstream>
-#include <string>
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	Constructor

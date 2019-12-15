@@ -17,7 +17,7 @@
 #define PATH_H
 
 #include "Tile.h"
-
+#include "StreamReader.h"
 #include "World.h"
 
 class Path : public Tile {

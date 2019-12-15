@@ -1,6 +1,6 @@
 //	Tile.h
 //	Programmer: Brendan Brassil
-//	Date Last Modified: 2019-12-14
+//	Date Last Modified: 2019-12-15
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	Abstract Tile class
@@ -11,6 +11,7 @@
 	Implemented by:
 	- Path
 	- UniqueTile
+	  -> PointOfInterest
 	- Wall
 */
 ////////////////////////////////////////////////////////////////////////////////
@@ -18,7 +19,9 @@
 #ifndef TILE_H
 #define TILE_H
 
+#include "Direction.h"
 #include "Position.h"
+#include "World.h"
 #include <iostream>
 #include <string>
 

@@ -1,10 +1,8 @@
 //	Path.cpp
 //	Programmer: Brendan Brassil
-//	Date Last Modified: 2019-11-29
+//	Date Last Modified: 2019-12-15
 
 #include "Path.h"
-
-#include "StreamReader.h"
 
 std::string Path::fileName;
 std::string Path::objectName;

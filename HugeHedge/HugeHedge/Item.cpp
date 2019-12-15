@@ -4,10 +4,6 @@
 
 #include "Item.h"
 
-#include "ObjectReader.h"
-#include <string>
-#include <sstream>
-
 ////////////////////////////////////////////////////////////////////////////////
 /*	Constructor
 	Reads data from a file, storing it in the item's fields.

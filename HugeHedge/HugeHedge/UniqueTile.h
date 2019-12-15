@@ -1,6 +1,6 @@
 //	UniqueTile.h
 //	Programmer: Brendan Brassil
-//	Date Last Modified: 2019-11-29
+//	Date Last Modified: 2019-12-15
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	UniqueTile class
@@ -8,7 +8,7 @@
 	Class for tile objects that will have their data read from a file when
 	instantiated. Implements the abstract Tile class.
 
-	Overloads the >> operator to read member data from an input stream.
+	* Overloads the >> operator to read fields from an input stream.
 */
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -16,9 +16,10 @@
 #define UNIQUETILE_H
 
 #include "Tile.h"
+#include "ObjectReader.h"
 
 class UniqueTile : public Tile {
-private:
+protected:
 	std::string fileName;
 	std::string objectName;
 	char token;
