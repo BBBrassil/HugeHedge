@@ -5,30 +5,38 @@
 #include "Tile.h"
 
 ////////////////////////////////////////////////////////////////////////////////
+/*	onEnter()
+	Fired when the player enters this tile.
+*/
+////////////////////////////////////////////////////////////////////////////////
+void Tile::onEnter(std::ostream& os) {
+	os << toString() << "\n\n";
+
+}
+
+////////////////////////////////////////////////////////////////////////////////
 /*	neighbor()
 	Returns the tile that lies in a given cardinal direction.
-	If that tile would be outside of the world, returns the default tile
+	If that tile would be located outside of the world, returns the default tile
 	instead.
 
 	! Throws a Misdirection exception upon invalid input.
 */
 ////////////////////////////////////////////////////////////////////////////////
 Tile* Tile::neighbor(const int& cardinal) {
-	Tile* t;
-
 	try {
 		switch( cardinal ) {
 		case NORTH:
-			t = getWorld()->tile(position.x, position.y - 1);
+			return getWorld()->tile(position.x, position.y - 1);
 			break;
 		case EAST:
-			t = getWorld()->tile(position.x + 1, position.y);
+			return getWorld()->tile(position.x + 1, position.y);
 			break;
 		case SOUTH:
-			t = getWorld()->tile(position.x, position.y + 1);
+			return getWorld()->tile(position.x, position.y + 1);
 			break;
 		case WEST:
-			t = getWorld()->tile(position.x - 1, position.y);
+			return getWorld()->tile(position.x - 1, position.y);
 			break;
 		default:
 			throw new Direction::Misdirection(cardinal);
@@ -36,7 +44,7 @@ Tile* Tile::neighbor(const int& cardinal) {
 		}
 	}
 	catch( World::OutOfWorld ) {
-		t = getWorld()->getDefaultTile();
+		return getWorld()->getDefaultTile();
 	}
 	catch( Direction::Misdirection ) {
 		throw;
@@ -50,14 +58,12 @@ Tile* Tile::neighbor(const int& cardinal) {
 */
 ////////////////////////////////////////////////////////////////////////////////
 Tile* Tile::operator++() {
-	Tile* temp;
 	try {
-		temp = getWorld()->tile(getWorld()->xyToIndex(getX(), getY() + 1));
+		return getWorld()->tile(getWorld()->xyToIndex(getX(), getY() + 1));
 	}
 	catch( World::OutOfWorld ) {
-		temp = getWorld()->tile(0);
+		return getWorld()->tile(0);
 	}
-	return temp;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -79,14 +85,12 @@ Tile* Tile::operator++(int) {
 */
 ////////////////////////////////////////////////////////////////////////////////
 Tile* Tile::operator--() {
-	Tile* temp;
 	try {
-		temp = getWorld()->tile(getWorld()->xyToIndex(getX(), getY() - 1));
+		return getWorld()->tile(getWorld()->xyToIndex(getX(), getY() - 1));
 	}
 	catch( World::OutOfWorld ) {
-		temp = getWorld()->tile(getWorld()->size() - 1);
+		return getWorld()->tile(getWorld()->size() - 1);
 	}
-	return temp;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

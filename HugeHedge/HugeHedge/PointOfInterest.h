@@ -10,9 +10,13 @@
 */
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "Mystery.h"
-#include "Player.h"
 #include "UniqueTile.h"
+
+#include "StreamReader.h"
+#include "ObjectReader.h"
+
+//#include "Mystery.h"
+#include "Player.h"
 
 class PointOfInterest : public UniqueTile {
 private:
@@ -20,7 +24,7 @@ private:
 	Mystery* mystery = nullptr;
 public:
 	PointOfInterest(const Position& p, const std::string& fn);
-	friend void Player::lookAt(Mystery* mystery);
+	//friend void Player::lookAt(Mystery* mystery);
 	friend std::istream& operator>>(std::istream& ns, PointOfInterest& poi);
 };
 

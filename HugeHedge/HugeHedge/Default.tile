@@ -1,4 +1,5 @@
 ; Default Tile
 name=Hedge
+description=A tall hedge blocks your path.
 token=H
 wall=1

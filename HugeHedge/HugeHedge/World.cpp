@@ -4,6 +4,12 @@
 
 #include "World.h"
 
+#include "Path.h"
+#include "StreamReader.h"
+#include "UniqueTile.h"
+#include "Wall.h"
+#include <sstream>
+
 ////////////////////////////////////////////////////////////////////////////////
 /*	Constructor
 	- s: Name of text file used to read the tile layout.

@@ -4,7 +4,6 @@
 #include "StreamReader.h"
 #include "UniqueTile.h"
 #include "Wall.h"
-
 #include <iostream>
 #include <fstream>
 using namespace std;
@@ -21,9 +20,6 @@ int main() {
 	cout << endl;
 
 	player->options();
-
-
-
 	/*
 
 

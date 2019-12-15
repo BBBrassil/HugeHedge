@@ -1,6 +1,6 @@
 //	Wall.cpp
 //	Programmer: Brendan Brassil
-//	Date Last Modified: 2019-11-29
+//	Date Last Modified: 2019-12-15
 
 #include "Wall.h"
 
@@ -8,13 +8,8 @@
 
 std::string Wall::fileName;
 std::string Wall::objectName;
+std::string Wall::description;
 char Wall::token;
-
-////////////////////////////////////////////////////////////////////////////////
-/*	Constructor
-*/
-////////////////////////////////////////////////////////////////////////////////
-Wall::Wall(const Position& p) : Tile(p) {}
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	read()
@@ -36,6 +31,10 @@ void Wall::read(std::istream& ns) {
 		StreamReader::getlineEOF(ns, line);
 		data = StreamReader::valueFrom(line);
 		objectName = data;
+
+		StreamReader::getlineEOF(ns, line);
+		data = StreamReader::valueFrom(line);
+		description = data;
 
 		StreamReader::getlineEOF(ns, line);
 		data = StreamReader::valueFrom(line);

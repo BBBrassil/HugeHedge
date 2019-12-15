@@ -15,10 +15,8 @@
 #ifndef ITEM_H
 #define ITEM_H
 
-#include "ObjectReader.h"
 #include <string>
 #include <iostream>
-#include <sstream>
 
 class Item {
 private:

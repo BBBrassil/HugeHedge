@@ -4,6 +4,13 @@
 
 #include "Player.h"
 
+#include "Direction.h"
+#include "Tile.h"
+#include "World.h"
+#include <iostream>
+#include <sstream>
+#include <string>
+
 ////////////////////////////////////////////////////////////////////////////////
 /*	getTile()
 	Gets a tile in a given direction relative to the player.

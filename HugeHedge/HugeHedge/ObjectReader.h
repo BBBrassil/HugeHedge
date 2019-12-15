@@ -3,7 +3,7 @@
 //	Date Last Modified: 2019-12-15
 
 ////////////////////////////////////////////////////////////////////////////////
-/*	ObjectReader class
+/*	ObjectReader template class
 	Inherits from StreamReader. Used for reading data from text files into
 	object member variables.
 
@@ -15,10 +15,11 @@
 #define OBJECTREADER_H
 
 #include "StreamReader.h"
+
 template <class T>
 class ObjectReader : public StreamReader {
 public:
-	ObjectReader() : StreamReader() {}
+	ObjectReader(const std::string& fn) : StreamReader() { fileName = fn; }
 
 	////////////////////////////////////////////////////////////////////////////
 	/*	readObject()
@@ -31,7 +32,8 @@ public:
 		  of incorrect formatting.
 	*/
 	////////////////////////////////////////////////////////////////////////////
-	void read(T* obj) {
+	template <class T>
+	void read(T& obj) {
 		// Open input file.
 		try {
 			open(fileName);
@@ -42,7 +44,7 @@ public:
 		// Read data from file.
 		// Include the file name when rethrowing any exceptions.
 		try {
-			file() >> *obj;
+			file() >> obj;
 		}
 		catch( EndOfFile ) {
 			close();

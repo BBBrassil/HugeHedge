@@ -11,15 +11,12 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include "Direction.h"
 #include "Position.h"
-#include "Tile.h"
-#include "World.h"
-#include <iostream>
-#include <string>
 
 class Item;
 class Mystery;
+class Tile;
+class World;
 
 class Player {
 private:
@@ -38,6 +35,7 @@ public:
 	int getFacing() const { return facing; }
 	Tile* getTile(const int& direction) const;
 	Tile* getCurrentTile() const;
+	void collectItem(const Item* item);
 	void options();
 	void mainMenu();
 };

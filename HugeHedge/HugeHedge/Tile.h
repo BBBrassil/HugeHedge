@@ -35,6 +35,7 @@ public:
 	virtual std::string toString() const = 0;
 	virtual char toChar() const = 0;
 	virtual bool isWall() const = 0;
+	virtual void onEnter(std::ostream& os = std::cout);
 	World* getWorld() const { return position.world; }
 	int getX() const { return position.x; }
 	int getY() const { return position.y; }

@@ -16,15 +16,16 @@
 */
 ////////////////////////////////////////////////////////////////////////////////
 UniqueTile::UniqueTile(const Position& p, const std::string& fn) : Tile(p) {
-	ObjectReader<UniqueTile>* reader = new ObjectReader<UniqueTile>();
+	ObjectReader<UniqueTile>* reader = new ObjectReader<UniqueTile>(fn);
 
+	fileName = fn;
 	// Default initializations to get the IDE to stop yelling at me
 	token = '\0';
 	wall = true;
 
 	// Read fields from file
 	try {
-		reader->read((UniqueTile*)this);
+		reader->read(*this);
 	}
 	catch( StreamReader::FileOpenFail ) {
 		delete reader;
@@ -62,6 +63,10 @@ std::istream& operator>>(std::istream& ns, UniqueTile& t) {
 		StreamReader::getlineEOF(ns, line);
 		data = StreamReader::valueFrom(line);
 		t.objectName = data;
+
+		StreamReader::getlineEOF(ns, line);
+		data = StreamReader::valueFrom(line);
+		t.description = data;
 
 		StreamReader::getlineEOF(ns, line);
 		data = StreamReader::valueFrom(line);

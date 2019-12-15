@@ -5,15 +5,8 @@
 #ifndef WORLD_H
 #define WORLD_H
 
-#include "Path.h"
 #include "Position.h"
-#include "StreamReader.h"
-#include "Tile.h"
-#include "UniqueTile.h"
-#include "Wall.h"
-#include <fstream>
-#include <sstream>
-#include <string>
+#include "Position.h"
 #include <string>
 
 class Tile;

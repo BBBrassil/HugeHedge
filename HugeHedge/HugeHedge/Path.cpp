@@ -4,15 +4,12 @@
 
 #include "Path.h"
 
+#include "StreamReader.h"
+
 std::string Path::fileName;
 std::string Path::objectName;
+std::string Path::description;
 char Path::token;
-
-////////////////////////////////////////////////////////////////////////////////
-/*	Constructor
-*/
-////////////////////////////////////////////////////////////////////////////////
-Path::Path(const Position& p) : Tile(p) {}
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	read()
@@ -34,6 +31,10 @@ void Path::read(std::istream& ns) {
 		StreamReader::getlineEOF(ns, line);
 		data = StreamReader::valueFrom(line);
 		objectName = data;
+
+		StreamReader::getlineEOF(ns, line);
+		data = StreamReader::valueFrom(line);
+		description = data;
 
 		StreamReader::getlineEOF(ns, line);
 		data = StreamReader::valueFrom(line);

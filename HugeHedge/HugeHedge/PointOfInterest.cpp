@@ -18,7 +18,7 @@
 PointOfInterest::PointOfInterest(const Position& p, const std::string& fn) : UniqueTile(p, fn) {
 	mystery = nullptr;
 	try {
-		mystery = new Mystery(mysteryFileName);
+		//mystery = new Mystery(mysteryFileName);
 	}
 	catch( ... ) {
 		throw;
@@ -52,6 +52,10 @@ std::istream& operator>>(std::istream& ns, PointOfInterest& poi) {
 		if( data != "0" && data != "1" )
 			throw StreamReader::BadString(line);
 		poi.wall = data[0] - '0';
+
+		StreamReader::getlineEOF(ns, line);
+		data = StreamReader::valueFrom(line);
+		poi.description = data;
 
 		StreamReader::getlineEOF(ns, line);
 		data = StreamReader::valueFrom(line);

@@ -16,12 +16,14 @@
 #define UNIQUETILE_H
 
 #include "Tile.h"
+
 #include "ObjectReader.h"
 
 class UniqueTile : public Tile {
 protected:
 	std::string fileName;
 	std::string objectName;
+	std::string description;
 	char token;
 	bool wall;
 public:

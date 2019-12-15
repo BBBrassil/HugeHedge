@@ -4,6 +4,9 @@
 
 #include "Item.h"
 
+#include "ObjectReader.h"
+#include <sstream>
+
 ////////////////////////////////////////////////////////////////////////////////
 /*	Constructor
 	Reads data from a file, storing it in the item's fields.
@@ -16,12 +19,12 @@
 */
 ////////////////////////////////////////////////////////////////////////////////
 Item::Item(const std::string& fn) {
-	ObjectReader<Item>* reader = new ObjectReader<Item>();
+	ObjectReader<Item>* reader = new ObjectReader<Item>(fileName);
 	name = "";
 	description = "";
 
 	try {
-		reader->read((Item*)this);
+		reader->read(*this);
 	}
 	catch( StreamReader::FileOpenFail ) {
 		delete reader;
