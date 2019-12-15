@@ -11,6 +11,7 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
+#include "LinkedList.h"
 #include "Position.h"
 
 class Item;
@@ -27,6 +28,7 @@ private:
 	void lookAt(const Mystery* mystery);
 	void lookAt(const Tile* tile);
 	void use(const Item* item);
+	LinkedList<Item> inventory;
 public:
 	Player(const Position& p) { position = p; facing = 0; }
 	World* getWorld() const { return position.world; }
@@ -35,7 +37,7 @@ public:
 	int getFacing() const { return facing; }
 	Tile* getTile(const int& direction) const;
 	Tile* getCurrentTile() const;
-	void collectItem(const Item* item);
+	void collectItem(const Item& item);
 	void options();
 	void mainMenu();
 };

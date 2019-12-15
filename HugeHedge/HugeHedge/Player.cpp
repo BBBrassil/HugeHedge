@@ -69,7 +69,17 @@ void Player::move(const int& relative) {
 	facing = direction;
 }
 
-#include <sstream>
+////////////////////////////////////////////////////////////////////////////////
+/*	collectItem()
+	Adds an item to the player's inventory.
+*/
+////////////////////////////////////////////////////////////////////////////////
+void Player::collectItem(const Item& item) {
+	inventory.insert(item);
+}
+
+
+
 void Player::options() {
 	char choice;
 	
