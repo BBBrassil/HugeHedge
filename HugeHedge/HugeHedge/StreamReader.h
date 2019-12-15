@@ -25,7 +25,7 @@
 #include <string>
 
 class StreamReader {
-private:
+protected:
 	std::string fileName;
 	std::ifstream fileStream;
 public:

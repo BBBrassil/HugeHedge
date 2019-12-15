@@ -1,14 +1,16 @@
-//	UniqueTile.cpp
+//	Item.h
 //	Programmer: Brendan Brassil
 //	Date Last Modified: 2019-12-15
 
-#include "UniqueTile.h"
+#include "Item.h"
 
 #include "ObjectReader.h"
+#include <string>
+#include <sstream>
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	Constructor
-	Reads data from a file, storing it in the tile's fields.
+	Reads data from a file, storing it in the item's fields.
 
 	! Throws a FileOpenFail exception if the file fails to open.
 	! Throws an EndOfFile exception if the end of the input stream is reached
@@ -17,14 +19,13 @@
 	  incorrect formatting.
 */
 ////////////////////////////////////////////////////////////////////////////////
-UniqueTile::UniqueTile(const Position& p, const std::string& fn) : Tile(p) {
-	ObjectReader<UniqueTile>* reader = new ObjectReader<UniqueTile>();
-
-	token = '\0';
-	wall = true;
+Item::Item(const std::string& fn) {
+	ObjectReader<Item>* reader = new ObjectReader<Item>();
+	name = "";
+	description = "";
 
 	try {
-		reader->read((UniqueTile*)this);
+		reader->read((Item*)this);
 	}
 	catch( StreamReader::FileOpenFail ) {
 		delete reader;
@@ -43,8 +44,22 @@ UniqueTile::UniqueTile(const Position& p, const std::string& fn) : Tile(p) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+/*	toString()
+	Shows the item name and description.
+*/
+////////////////////////////////////////////////////////////////////////////////
+std::string Item::toString() const {
+	std::stringstream ss;
+	ss
+		<< name << '\n'
+		<< '\t' << description << '\n';
+
+	return ss.str();
+}
+
+////////////////////////////////////////////////////////////////////////////////
 /*	operator>>
-	Reads data from an input stream, storing it in the unique tile's fields
+	Reads data from an input stream, storing it in the item's fields.
 
 	! Throws an EndOfFile exception if the end of the input stream is reached
 	  before the expected data is read.
@@ -52,26 +67,30 @@ UniqueTile::UniqueTile(const Position& p, const std::string& fn) : Tile(p) {
 	  incorrect formatting.
 */
 ////////////////////////////////////////////////////////////////////////////////
-std::istream& operator>>(std::istream& ns, UniqueTile& t) {
+std::istream& operator>>(std::istream& ns, Item& item) {
 	std::string line, data;
 
 	try {
 		StreamReader::getlineEOF(ns, line);
 		data = StreamReader::valueFrom(line);
-		t.objectName = data;
+		item.name = data;
 
 		StreamReader::getlineEOF(ns, line);
 		data = StreamReader::valueFrom(line);
-		t.token = data[0];
-
-		StreamReader::getlineEOF(ns, line);
-		data = StreamReader::valueFrom(line);
-		if( data != "0" && data != "1" )
-			throw StreamReader::BadString(line);
-		t.wall = data[0] - '0';
+		item.description = data;
 	}
 	catch( ... ) {
 		throw;
 	}
 	return ns;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/*	operator<<
+	Simply sends the the toString() method into the stream.
+*/
+////////////////////////////////////////////////////////////////////////////////
+std::ostream& operator<<(std::ostream& os, Item& item) {
+	os << item.toString();
+	return os;
 }
