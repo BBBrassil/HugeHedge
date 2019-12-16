@@ -4,6 +4,8 @@
 
 #include "UniqueTile.h"
 
+#include <memory>
+
 ////////////////////////////////////////////////////////////////////////////////
 /*	Constructor
 	Reads data from a file, storing it in the tile's fields.
@@ -16,7 +18,7 @@
 */
 ////////////////////////////////////////////////////////////////////////////////
 UniqueTile::UniqueTile(const Position& p, const std::string& fn) : Tile(p) {
-	ObjectReader<UniqueTile>* reader = new ObjectReader<UniqueTile>(fn);
+	std::unique_ptr<ObjectReader<UniqueTile>> reader(new ObjectReader<UniqueTile>(fn));
 
 	fileName = fn;
 	// Default initializations to get the IDE to stop yelling at me
@@ -27,23 +29,9 @@ UniqueTile::UniqueTile(const Position& p, const std::string& fn) : Tile(p) {
 	try {
 		reader->read(*this);
 	}
-	catch( StreamReader::FileOpenFail ) {
-		delete reader;
-		reader = nullptr;
+	catch( ... ) {
 		throw;
 	}
-	catch( StreamReader::EndOfFile ) {
-		delete reader;
-		reader = nullptr;
-		throw;
-	}
-	catch( StreamReader::BadString ) {
-		delete reader;
-		reader = nullptr;
-		throw;
-	}
-	delete reader;
-	reader = nullptr;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

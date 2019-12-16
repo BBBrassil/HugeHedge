@@ -1,6 +1,6 @@
 //	Direction.h
 //	Programmer: Brendan Brassil
-//	Date Last Modified 2019-12-14
+//	Date Last Modified 2019-12-16
 
 #ifndef DIRECTION_H	
 #define DIRECTION_H
@@ -39,6 +39,9 @@ public:
 	static std::string toString(const int &cardinal);
 	static std::string toStringUpper(const int &cardinal);
 	static std::string toStringMixed(const int &cardinal);
+	static std::string relativeString(const int& relative);
+	static std::string relativeStringUpper(const int& relative);
+	static std::string relativeStringMixed(const int& relative);
 
 	///////////////////////////////////////////////////////////////////////////////
 	/*	Misdirection exception

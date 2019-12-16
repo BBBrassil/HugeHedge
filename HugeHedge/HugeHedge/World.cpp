@@ -1,6 +1,6 @@
 //	World.cpp
 //	Programmer: Brendan Brassil
-//	Date Last Modified: 2019-12-15
+//	Date Last Modified: 2019-12-16
 
 #include "World.h"
 
@@ -8,6 +8,7 @@
 #include "StreamReader.h"
 #include "UniqueTile.h"
 #include "Wall.h"
+#include <memory>
 #include <sstream>
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -66,7 +67,6 @@ void World::setDimensions() {
 	int row, col;
 	std::string line;
 	std::unique_ptr<StreamReader> reader(new StreamReader());
-
 	try {
 		reader->open(fileName);
 		StreamReader::getline(reader->file(), line);

@@ -6,8 +6,8 @@
 #define WORLD_H
 
 #include "Position.h"
-#include "Position.h"
 #include <string>
+#include <vector>
 
 class Tile;
 

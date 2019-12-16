@@ -1,6 +1,6 @@
 //	Direction.h
 //	Programmer: Brendan Brassil
-//	Date Last Modified 2019-12-14
+//	Date Last Modified 2019-12-16
 
 #include "Direction.h"
 
@@ -129,6 +129,54 @@ std::string Direction::toStringMixed(const int &cardinal) {
 	case EAST: return "East";
 	case SOUTH: return "South";
 	case WEST: return "West";
+	}
+	return "Null";
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/*	relativeString()
+	Returns relative direction as a string.
+	(north, east, south, west, or null)
+*/
+////////////////////////////////////////////////////////////////////////////////
+std::string Direction::relativeString(const int &cardinal) {
+	switch( cardinal ) {
+	case FORWARD: return "forward";
+	case RIGHT: return "right";
+	case BACK: return "back";
+	case LEFT: return "left";
+	}
+	return "null";
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/*	relativeStringUpper()
+	Returns relative direction as an uppercase string.
+	(FORWARD, RIGHT, BACK, LEFT)
+*/
+////////////////////////////////////////////////////////////////////////////////
+std::string Direction::relativeStringUpper(const int &cardinal) {
+	switch( cardinal ) {
+	case FORWARD: return "FORWARD";
+	case RIGHT: return "RIGHT";
+	case BACK: return "BACK";
+	case LEFT: return "LEFT";
+	}
+	return "NULL";
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/*	relativeStringMixed()
+	Returns relative direction as a mixed case string.
+	(Forward, Right, Back, Left)
+*/
+////////////////////////////////////////////////////////////////////////////////
+std::string Direction::relativeStringMixed(const int &cardinal) {
+	switch( cardinal ) {
+	case FORWARD: return "Forward";
+	case RIGHT: return "Right";
+	case BACK: return "Back";
+	case LEFT: return "Left";
 	}
 	return "Null";
 }

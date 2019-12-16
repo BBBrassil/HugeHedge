@@ -22,7 +22,7 @@ public:
 	ObjectReader(const std::string& fn) : StreamReader() { fileName = fn; }
 
 	////////////////////////////////////////////////////////////////////////////
-	/*	readObject()
+	/*	read()
 		Reads data from an file, storing it in an object's member variables.
 
 		! Throws a FileOpenFail exception if the input file fails to open.
@@ -32,13 +32,12 @@ public:
 		  of incorrect formatting.
 	*/
 	////////////////////////////////////////////////////////////////////////////
-	template <class T>
 	void read(T& obj) {
 		// Open input file.
 		try {
 			open(fileName);
 		}
-		catch( FileOpenFail ) {
+		catch( StreamReader::FileOpenFail ) {
 			throw;
 		}
 		// Read data from file.
@@ -46,11 +45,11 @@ public:
 		try {
 			file() >> obj;
 		}
-		catch( EndOfFile ) {
+		catch( StreamReader::EndOfFile ) {
 			close();
 			throw new StreamReader::EndOfFile(fileName);
 		}
-		catch( BadString ex ) {
+		catch( StreamReader::BadString ex ) {
 			close();
 			throw new StreamReader::BadString(ex.getString(), fileName);
 		}

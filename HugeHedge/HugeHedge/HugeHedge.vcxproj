@@ -126,7 +126,7 @@
     <ClCompile Include="Direction.cpp" />
     <ClCompile Include="HugeHedge.cpp" />
     <ClCompile Include="Item.cpp" />
-    <ClCompile Include="LinkedList.cpp" />
+    <ClCompile Include="Mystery.cpp" />
     <ClCompile Include="Path.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PointOfInterest.cpp" />
@@ -140,6 +140,7 @@
     <ClInclude Include="Direction.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="LinkedList.h" />
+    <ClInclude Include="Mystery.h" />
     <ClInclude Include="ObjectReader.h" />
     <ClInclude Include="Path.h" />
     <ClInclude Include="Player.h" />
