@@ -4,6 +4,7 @@
 
 #include "World.h"
 
+#include "Exit.h"
 #include "Path.h"
 #include "StreamReader.h"
 #include "UniqueTile.h"
@@ -205,6 +206,18 @@ void World::makeTileMap() {
 			switch( type ) {
 			case '#':
 				tileMap[i] = new Wall(position);
+				break;
+			case '-':
+				tileMap[i] = new Exit(position, "Exit.tile");
+				break;
+			case 'C':
+				tileMap[i] = new UniqueTile(position, "CropCircle.tile");
+				break;
+			case 'F':
+				tileMap[i] = new UniqueTile(position, "Fountain.tile");
+				break;
+			case 'G':
+				tileMap[i] = new UniqueTile(position, "Garden.tile");
 				break;
 			default:
 				tileMap[i] = new Path(position);

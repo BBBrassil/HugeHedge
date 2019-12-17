@@ -48,7 +48,7 @@
     <ClCompile Include="PointOfInterest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Mystery.cpp">
+    <ClCompile Include="Exit.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -89,10 +89,10 @@
     <ClInclude Include="PointOfInterest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Mystery.h">
+    <ClInclude Include="LinkedList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="LinkedList.h">
+    <ClInclude Include="Exit.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

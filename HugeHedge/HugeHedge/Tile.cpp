@@ -1,17 +1,29 @@
 //	Tile.cpp
 //	Programmer: Brendan Brassil
-//	Date Last Modified: 2019-12-15
+//	Date Last Modified: 2019-12-16
 
 #include "Tile.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	onEnter()
 	Fired when the player enters this tile.
+	- player: Player object who has entered the tile.
+	- os: Any output stream.
 */
 ////////////////////////////////////////////////////////////////////////////////
-void Tile::onEnter(std::ostream& os) {
+void Tile::onEnter(const Player& player, std::ostream& os) {
 	os << toString() << "\n\n";
+}
 
+////////////////////////////////////////////////////////////////////////////////
+/*	onExamined()
+	Fired when the player looks at this tile.
+	- player: Player object who has examined the tile.
+	- os: Any output stream.
+*/
+////////////////////////////////////////////////////////////////////////////////
+void Tile::onExamined(const Player& player ,std::ostream& os) {
+	os << toString() << "\n\n";
 }
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -1,6 +1,6 @@
 //	PointOfInterest.cpp
 //	Programmer: Brendan Brassil
-//	Date Last Modified: 2019-12-15
+//	Date Last Modified: 2019-12-16
 
 #include "PointOfInterest.h"
 
@@ -16,13 +16,7 @@
 */
 ////////////////////////////////////////////////////////////////////////////////
 PointOfInterest::PointOfInterest(const Position& p, const std::string& fn) : UniqueTile(p, fn) {
-	mystery = nullptr;
-	try {
-		//mystery = new Mystery(mysteryFileName);
-	}
-	catch( ... ) {
-		throw;
-	}
+	solved = false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -56,10 +50,6 @@ std::istream& operator>>(std::istream& ns, PointOfInterest& poi) {
 		StreamReader::getlineEOF(ns, line);
 		data = StreamReader::valueFrom(line);
 		poi.description = data;
-
-		StreamReader::getlineEOF(ns, line);
-		data = StreamReader::valueFrom(line);
-		poi.mysteryFileName = data;
 	}
 	catch( ... ) {
 		throw;

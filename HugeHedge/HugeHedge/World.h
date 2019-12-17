@@ -19,6 +19,7 @@ private:
 	int rowCount;
 	int colCount;
 	int tileCount;
+	bool gameOver;
 	void setDimensions();
 	void clear();
 public:
@@ -32,6 +33,8 @@ public:
 	int xyToIndex(const int& x, const int& y) const;
 	int indexToX(const int& index) const;
 	int indexToY(const int& index) const;
+	bool getGameOver() const { return gameOver; }
+	void setGameOver(const bool& b) { gameOver = b; };
 	Tile* getDefaultTile() const;
 	Tile* tile(const int& index) const;
 	Tile* tile(const int& x, const int& y) const;

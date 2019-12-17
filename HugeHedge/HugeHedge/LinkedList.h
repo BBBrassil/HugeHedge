@@ -1,6 +1,6 @@
 //	LinkedList.h
 //	Programmer: Brendan Brassil
-//	Date Last Modified: 2019-12-15
+//	Date Last Modified: 2019-12-16
 
 #ifndef LINKEDLIST_H
 #define LINKEDLIST_H
@@ -30,6 +30,22 @@ public:
 	LinkedList() { head = nullptr; }
 	~LinkedList() { clear(); }
 	bool empty() const { return !head; }
+
+	/////////////////////////////////////////////////////////////////////////////
+	/*	contains()
+		Returns true if the list contains the item being checked.
+	*/
+	/////////////////////////////////////////////////////////////////////////////
+	bool contains(const T& data) const {
+		ListNode<T>* curNode = head;
+
+		while( curNode ) {
+			if( curNode->data == data )
+				return true;
+			curNode = curNode->next;
+		}
+		return false;
+	}
 
 	/////////////////////////////////////////////////////////////////////////////
 	/*	insert()
@@ -146,7 +162,7 @@ public:
 		- os: Any output stream
 	*/
 	////////////////////////////////////////////////////////////////////////////
-	void print(std::ostream& os) {
+	void print(std::ostream& os = std::cout) {
 		ListNode<T>* curNode = head;
 
 		while( curNode ) {

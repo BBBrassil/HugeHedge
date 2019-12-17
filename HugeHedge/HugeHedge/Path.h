@@ -1,6 +1,6 @@
 //	Path.h
 //	Programmer: Brendan Brassil
-//	Date Last Modified: 2019-12-15
+//	Date Last Modified: 2019-12-16
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	Path class
@@ -31,6 +31,7 @@ private:
 	static void read(std::istream& ns);
 public:
 	Path(const Position& p) : Tile(p) {}
+	std::string getName() const { return objectName; }
 	std::string toString() const { return description; }
 	char toChar() const { return token; }
 	bool isWall() const { return false; }

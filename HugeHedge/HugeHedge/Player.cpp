@@ -5,12 +5,13 @@
 #include "Player.h"
 
 #include "Direction.h"
-#include "Mystery.h"
+#include "Exit.h"
 #include "Tile.h"
 #include "World.h"
 #include <iostream>
 #include <sstream>
 #include <string>
+
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	Constructor
@@ -54,15 +55,22 @@ Tile* Player::getCurrentTile() const {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/*	actionWord()
+/*	actionText()
 	Returns a string with the action the player is allowed to perform.
 	"Move" if they can move, "Look" otherwise.
 */
 ////////////////////////////////////////////////////////////////////////////////
-std::string Player::actionWord(const bool& canMove) const {
-	if( canMove )
-		return "Move";
-	return "Look";
+std::string Player::actionText(const int& relative) const {
+	std::stringstream ss;
+
+	if( canMoveTo(relative) )
+		ss << "Move " << Direction::relativeString(relative) << '.';
+	else if( dynamic_cast<Exit*>(getTile(relative)) )
+		ss << "Use the exit.";
+	else
+		ss << "Look " << Direction::relativeString(relative) << '.';
+
+	return ss.str();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -74,16 +82,20 @@ std::string Player::actionWord(const bool& canMove) const {
 ////////////////////////////////////////////////////////////////////////////////
 void Player::doAction(const int& relative) {
 	std::string direction = Direction::relativeString(relative);
+	Tile* tile = getTile(relative);
 
 	system("cls");
 	if( canMoveTo(relative) ) {
 		std::cout << "You move " << direction << ".\n";
-		lookAt(getTile(relative));
+		lookAt(tile);
 		move(relative);
+	}
+	else if( dynamic_cast<Exit*>(tile) ) {
+		lookAt(tile);
 	}
 	else {
 		std::cout << "You look " << direction << ".\n";
-		lookAt(getTile(relative));
+		lookAt(tile);
 	}
 }
 
@@ -93,7 +105,7 @@ void Player::doAction(const int& relative) {
 	(FORWARD, RIGHT, BACK, LEFT)
 */
 ////////////////////////////////////////////////////////////////////////////////
-bool Player::canMoveTo(const int& relative) {
+bool Player::canMoveTo(const int& relative) const {
 	return !getTile(relative)->isWall();
 }
 
@@ -115,21 +127,21 @@ void Player::move(const int& relative) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/*	lookAt() overloaded for Mystery objects
-*/
-////////////////////////////////////////////////////////////////////////////////
-void Player::lookAt(Mystery* mystery) {
-
-	inventory->steal(*(mystery->inventory));
-}
-
-////////////////////////////////////////////////////////////////////////////////
-/*	lookAt() overloaded for Tile objects
-	Gives the player a description of a tile.
+/*	lookAt()
+	Player looks at a tile, getting a description or interaction options.
 */
 ////////////////////////////////////////////////////////////////////////////////
 void Player::lookAt(Tile* tile) {
-	std::cout << tile->toString() << "\n\n";
+	tile->onExamined(*this);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/*	hasItem()
+	Returns true if a given item is found in the player's inventory.
+*/
+////////////////////////////////////////////////////////////////////////////////
+bool Player::hasItem(const Item& item) const {
+	return inventory->contains(item);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -142,16 +154,17 @@ void Player::collectItem(Item& item) {
 	item.onAcquired();
 }
 
-
-
-void Player::options() {
-	char choice;
-
+////////////////////////////////////////////////////////////////////////////////
+/*	debug()
+	Cheat function for debugging.
+*/
+////////////////////////////////////////////////////////////////////////////////
+void Player::debug() {
 	std::stringstream ss;
 	std::string print;
-
 	World* world = getWorld();
 
+	std::cout << '\n';
 	for( int i = 0; i < world->size(); i++ ) {
 		ss << world->tile(i)->toChar();
 		if( world->indexToX(i) == world->width() - 1 )
@@ -163,16 +176,40 @@ void Player::options() {
 			getFacing() == 1 ? '>' :
 			getFacing() == 2 ? 'V' :
 			'<');
-	std::cout << print << "\n\n";
+	std::cout << print << "\n";
 
 	std::cout << "Current position: (" << getX() << ", " << getY() << ") facing "
-		<< Direction::toChar(getFacing()) << ".\n";
+		<< Direction::toChar(getFacing()) << ".\n\n";
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/*	mainMenu()
+	Displays the game main menu.
+*/
+////////////////////////////////////////////////////////////////////////////////
+void Player::mainMenu(std::ostream& os) {
+	getWorld()->setGameOver(false);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/*	optionsMenu()
+	Displays the player's current options in the game.
+	Runs recursively as long as the game isn't over.
+*/
+////////////////////////////////////////////////////////////////////////////////
+void Player::optionsMenu(std::ostream& os) {
+	char choice;
+
 	std::cout
-		<< "W) " << actionWord(canMoveTo(FORWARD)) << " forward.\n"
-		<< "A) " << actionWord(canMoveTo(LEFT)) << " left.\n"
-		<< "S) " << actionWord(canMoveTo(BACK)) << " back.\n"
-		<< "D) " << actionWord(canMoveTo(RIGHT)) << " right.\n"
+		<< "W) " << actionText(FORWARD) << '\n'
+		<< "A) " << actionText(LEFT) << '\n'
+		<< "S) " << actionText(BACK) << '\n'
+		<< "D) " << actionText(RIGHT) << '\n'
+		<< "I) " << "View inventory.\n"
 		<< "Q) Quit.\n";
+	std::cout << "X) " << "Debug.\n";
+	std::cout << "\n> ";
+
 	choice = std::toupper(std::cin.get());
 	std::cin.ignore(100, '\n');
 
@@ -189,14 +226,37 @@ void Player::options() {
 	case 'D':
 		doAction(RIGHT);
 		break;
+	case 'I':
+			inventoryMenu();
+			break;
 	case 'Q':
+		os << "\nQuitting to main menu...\n\n";
+		getWorld()->setGameOver(true);
+		break;
+	case 'X':
+		debug();
 		break;
 	default:
-		std::cout << "Invalid input. Try again.\n";
+		std::cout << "\nInvalid input. Try again.\n\n";
 		break;
 	}
+
 	system("pause");
 	system("cls");
 
-	options();
+	if( getWorld()->getGameOver() )
+		mainMenu();
+	else
+		optionsMenu();
+}
+
+void Player::inventoryMenu(std::ostream& os) {
+	system("cls");
+	os << "INVENTORY\n\n";
+	if( inventory->empty() )
+		os << "[You have no items.]\n\n";
+	else {
+		inventory->print(os);
+		os << "\n";
+	}
 }

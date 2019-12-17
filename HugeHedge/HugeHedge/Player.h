@@ -11,13 +11,13 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
+#include "Item.h"
 #include "LinkedList.h"
 #include "Position.h"
+#include <iostream>
 #include <memory>
 
-#include "Item.h"
 class Item;
-class Mystery;
 class Tile;
 class World;
 
@@ -26,10 +26,10 @@ private:
 	Position position;
 	int facing;
 	std::unique_ptr<LinkedList<Item>> inventory;
-	bool canMoveTo(const int& relative);
+	bool canMoveTo(const int& relative) const;
 	void move(const int& relative);
 	void use(Item* item);
-	std::string actionWord(const bool& canMove) const;
+	std::string actionText(const int& relative) const;
 public:
 	Player(const Position& p);
 	World* getWorld() const { return position.world; }
@@ -38,12 +38,14 @@ public:
 	int getFacing() const { return facing; }
 	Tile* getTile(const int& relative) const;
 	Tile* getCurrentTile() const;
+	bool hasItem(const Item& item) const;
 	void collectItem(Item& item);
 	void doAction(const int& relative);
-	void lookAt(Mystery* mystery);
 	void lookAt(Tile* tile);
-	void options();
-	void mainMenu();
+	void mainMenu(std::ostream& os = std::cout);
+	void optionsMenu(std::ostream& os = std::cout);
+	void inventoryMenu(std::ostream& os = std::cout);
+	void debug();
 };
 
 #endif

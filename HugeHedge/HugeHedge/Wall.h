@@ -1,6 +1,6 @@
 //	Wall.h
 //	Programmer: Brendan Brassil
-//	Date Last Modified: 2019-12-15
+//	Date Last Modified: 2019-12-16
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	Wall class
@@ -29,6 +29,7 @@ private:
 	static void read(std::istream& ns);
 public:
 	Wall(const Position& p) : Tile(p) {}
+	std::string getName() const { return objectName; }
 	std::string toString() const { return description; }
 	char toChar() const { return token; }
 	bool isWall() const { return true; }
