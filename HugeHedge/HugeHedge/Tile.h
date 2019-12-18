@@ -31,7 +31,6 @@
 #include <string>
 
 class Player;
-class World;
 
 class Tile {
 private:

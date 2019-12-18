@@ -5,8 +5,9 @@
 #include "World.h"
 
 #include "Exit.h"
-#include "Path.h"
 #include "IOManager.h"
+#include "Map.h"
+#include "Path.h"
 #include "UniqueTile.h"
 #include "Wall.h"
 #include <memory>
@@ -128,6 +129,9 @@ void World::clear() {
 		}
 	}
 
+	delete worldMap;
+	worldMap = nullptr;
+
 	delete[] tileMap;
 	tileMap = nullptr;
 
@@ -247,6 +251,8 @@ void World::makeTileMap() {
 			}
 		}
 		reader->close();
+
+		worldMap = new Map(this);
 	}
 	catch( IOManager::FileOpenFail ) {
 		clear();

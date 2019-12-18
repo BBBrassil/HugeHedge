@@ -8,24 +8,30 @@
 /*	onEnter()
 	Fired when the player enters this tile.
 
+	Default definition does nothing fancy, but may be overridden by child
+	classes.
+
 	- player: Player object who has entered the tile.
 	- os: Any output stream.
 */
 ////////////////////////////////////////////////////////////////////////////////
 void Tile::onEnter(Player& player, std::ostream& os) {
-	os << toString() << "\n\n";
+	os << *this << "\n\n";
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	onExamined()
 	Fired when the player looks at this tile.
 
+	Default definition does nothing fancy, but may be overridden by child
+	classes.
+
 	- player: Player object who has examined the tile.
 	- os: Any output stream.
 */
 ////////////////////////////////////////////////////////////////////////////////
 void Tile::onExamined(const Player& player ,std::ostream& os) {
-	os << toString() << "\n\n";
+	os << *this << "\n\n";
 }
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -127,6 +127,7 @@
     <ClCompile Include="Exit.cpp" />
     <ClCompile Include="HugeHedge.cpp" />
     <ClCompile Include="Item.cpp" />
+    <ClCompile Include="Map.cpp" />
     <ClCompile Include="Path.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PointOfInterest.cpp" />
@@ -141,6 +142,7 @@
     <ClInclude Include="Exit.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="LinkedList.h" />
+    <ClInclude Include="Map.h" />
     <ClInclude Include="ObjectReader.h" />
     <ClInclude Include="Path.h" />
     <ClInclude Include="Player.h" />

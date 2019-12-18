@@ -16,16 +16,19 @@
 #define WORLD_H
 
 #include "Position.h"
+#include <iostream>
 #include <string>
 #include <vector>
 
 class Tile;
+class Map;
 
 class World {
 private:
 	std::string fileName;
 	Tile** tileMap; // array of Tile pointers; acts like a 2D array, but isn't
 	Tile* defaultTile;
+	Map* worldMap;
 	int rowCount;
 	int colCount;
 	int tileCount;
@@ -49,6 +52,7 @@ public:
 	Tile* getDefaultTile() const;
 	Tile* tile(const int& index) const;
 	Tile* tile(const int& x, const int& y) const;
+	Map* getWorldMap() const { return worldMap; }
 
 	//////////////////////////////////////////////////////////////////////////////
 	/* BadDimensions exception

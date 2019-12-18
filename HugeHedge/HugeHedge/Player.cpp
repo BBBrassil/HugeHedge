@@ -6,6 +6,7 @@
 
 #include "Direction.h"
 #include "Exit.h"
+#include "Map.h"
 #include "Tile.h"
 #include "World.h"
 #include <iostream>
@@ -172,12 +173,7 @@ void Player::debug() {
 	std::string print;
 	World* world = getWorld();
 
-	std::cout << '\n';
-	for( int i = 0; i < world->size(); i++ ) {
-		ss << world->tile(i)->toChar();
-		if( world->indexToX(i) == world->width() - 1 )
-			ss << '\n';
-	}
+	world->getWorldMap()->print(ss);
 	print = ss.str();
 	print[world->xyToIndex(getX(), (size_t)getY()) + (size_t)getY()] =
 		(getFacing() == 0 ? '^' :
