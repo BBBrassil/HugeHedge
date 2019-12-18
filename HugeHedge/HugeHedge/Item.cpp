@@ -31,10 +31,6 @@ Item::Item(const std::string& fn) {
 	}
 }
 
-void Item::onAcquired(std::ostream& os) {
-	os << "Acquired item: " << getName() << '\n';
-}
-
 ////////////////////////////////////////////////////////////////////////////////
 /*	toString()
 	Shows the item name and description.
@@ -44,7 +40,7 @@ std::string Item::toString() const {
 	std::stringstream ss;
 	ss
 		<< name << '\n'
-		<< '\t' << description << '\n';
+		<< "  " << description << '\n';
 
 	return ss.str();
 }

@@ -88,7 +88,6 @@ void Player::doAction(const int& relative) {
 	if( canMoveTo(relative) ) {
 		std::cout << "You move " << direction << ".\n";
 		move(relative);
-		tile->onEnter(*this);
 	}
 	else if( dynamic_cast<Exit*>(tile) ) {
 		lookAt(tile);
@@ -124,6 +123,8 @@ void Player::move(const int& relative) {
 	position.x = destination->getX();
 	position.y = destination->getY();
 	facing = direction;
+
+	destination->onEnter(*this);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -150,8 +151,8 @@ bool Player::hasItem(const Item& item) const {
 */
 ////////////////////////////////////////////////////////////////////////////////
 void Player::collectItem(Item& item) {
+	std::cout << "Acquired item:\n" << item << '\n';
 	inventory->insert(item);
-	item.onAcquired();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -160,7 +161,13 @@ void Player::collectItem(Item& item) {
 */
 ////////////////////////////////////////////////////////////////////////////////
 void Player::collectAll(LinkedList<Item>& list) {
-	list.move(*inventory);
+	int numItems = list.size();
+	
+	if( numItems > 0 ) {
+		std::cout << "Acquired item" << (numItems == 1 ? ":" : "s:") << "\n\n";
+		list.print();
+		list.move(*inventory);
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -262,7 +269,7 @@ void Player::optionsMenu(std::ostream& os) {
 ////////////////////////////////////////////////////////////////////////////////
 void Player::inventoryMenu(std::ostream& os) {
 	os << "INVENTORY\n\n";
-	if( inventory->empty() )
+	if( !(*inventory) )
 		os << "[You have no items.]\n\n";
 	else {
 		inventory->print(os);

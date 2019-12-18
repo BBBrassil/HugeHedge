@@ -31,7 +31,6 @@ public:
 	std::string getName() const { return name; }
 	std::string getDescription() const { return description; }
 	virtual std::string toString() const;
-	virtual void onAcquired(std::ostream& os = std::cout);
 	bool operator<(const Item& right) const;
 	bool operator>(const Item& right) const;
 	bool operator==(const Item& right) const;

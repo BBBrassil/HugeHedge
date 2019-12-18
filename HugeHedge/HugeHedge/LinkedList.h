@@ -6,7 +6,6 @@
 /*	LinkedList class
 	Basic implementation of a linked list, using a template.
 	Works with any class that overloads the <, ==, and << operators.
-
 	* Bool type conversion for whether the list contains any items.
 */
 ////////////////////////////////////////////////////////////////////////////////
@@ -28,12 +27,14 @@ template <class T>
 class LinkedList {
 private:
 	ListNode<T>* head;
+	int listSize;
 	void clear();
 
 public:
-	LinkedList() { head = nullptr; }
+	LinkedList() { head = nullptr; listSize = 0; }
 	~LinkedList() { clear(); }
-	bool empty() const { return !head; }
+	bool empty() const { return size() < 1; }
+	int size() const { return listSize; }
 	bool contains(const T& data) const;
 	void insert(T& data);
 	void remove(T& data);
@@ -61,6 +62,7 @@ void LinkedList<T>::clear() {
 	}
 	// List is empty, head points to nothing.
 	head = nullptr;
+	listSize = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -116,6 +118,7 @@ void LinkedList<T>::insert(T& data) {
 			newNode->next = curNode;
 		}
 	}
+	listSize++;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -136,6 +139,7 @@ void LinkedList<T>::remove(T& data) {
 		curNode = head->next;
 		delete head;
 		head = curNode;
+		listSize--;
 	}
 	// Otherwise, we need to find which node to delete.
 	else {
@@ -152,6 +156,7 @@ void LinkedList<T>::remove(T& data) {
 			prevNode->next = curNode;
 			delete curNode;
 			curNode = nullptr;
+			listSize--;
 		}
 	}
 }
@@ -184,7 +189,7 @@ void LinkedList<T>::print(std::ostream& os) {
 	ListNode<T>* curNode = head;
 
 	while( curNode ) {
-		os << '\t' << curNode->data << '\n';
+		os << curNode->data << '\n';
 		curNode = curNode->next;
 	}
 }
@@ -197,7 +202,7 @@ void LinkedList<T>::print(std::ostream& os) {
 ////////////////////////////////////////////////////////////////////////////////
 template <class T>
 LinkedList<T>::operator bool() {
-	return empty();
+	return !empty();
 }
 
 #endif

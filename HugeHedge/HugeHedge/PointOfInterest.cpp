@@ -15,6 +15,7 @@
 */
 ////////////////////////////////////////////////////////////////////////////////
 PointOfInterest::PointOfInterest(const Position& p, const std::string& fn) : UniqueTile(p, fn) {
+	inventory = std::unique_ptr<LinkedList<Item>>(new LinkedList<Item>());
 	solved = false;
 }
 
@@ -57,16 +58,14 @@ std::istream& operator>>(std::istream& ns, PointOfInterest& poi) {
 }
 
 void PointOfInterest::addItem(Item& item) {
-	if( !inventory )
-		inventory = std::unique_ptr<LinkedList<Item>>(new LinkedList<Item>());
 	inventory->insert(item);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/*	onExamined()
+/*	onEnter()
 	Fired when the player looks at this tile.
 
-	//
+	Adds any items in the tile's inventory to the player's inventory.
 
 	- player: Player object who has examined the tile.
 	- os: Any output stream.
@@ -74,6 +73,6 @@ void PointOfInterest::addItem(Item& item) {
 ////////////////////////////////////////////////////////////////////////////////
 void PointOfInterest::onEnter(Player& player, std::ostream& os) {
 	os << toString() << "\n\n";
-	if( inventory )
+	if( *inventory )
 		player.collectAll(*inventory);
 }
