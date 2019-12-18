@@ -87,8 +87,8 @@ void Player::doAction(const int& relative) {
 	system("cls");
 	if( canMoveTo(relative) ) {
 		std::cout << "You move " << direction << ".\n";
-		lookAt(tile);
 		move(relative);
+		tile->onEnter(*this);
 	}
 	else if( dynamic_cast<Exit*>(tile) ) {
 		lookAt(tile);
@@ -155,12 +155,12 @@ void Player::collectItem(Item& item) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/*	collectItem() overloaded for inventory
-	Adds an item to the player's inventory.
+/*	collectAll()
+	Adds all items from a list to the player's inventory.
 */
 ////////////////////////////////////////////////////////////////////////////////
-void Player::collectItem(LinkedList<Item>& list) {
-	inventory->steal(list);
+void Player::collectAll(LinkedList<Item>& list) {
+	list.move(*inventory);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -175,7 +175,7 @@ void Player::debug() {
 
 	world->getWorldMap()->print(ss);
 	print = ss.str();
-	print[world->xyToIndex(getX(), (size_t)getY()) + (size_t)getY()] =
+	print[world->xyToIndex(getX(), (size_t)getY()) + (size_t)getY() + 1] =
 		(getFacing() == 0 ? '^' :
 			getFacing() == 1 ? '>' :
 			getFacing() == 2 ? 'V' :

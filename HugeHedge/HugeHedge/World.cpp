@@ -211,8 +211,10 @@ void World::makeTileMap() {
 	std::string line;
 	std::stringstream ss;
 	char type;
+	PointOfInterest* keyLocation = nullptr;
 
 	tileMap = new Tile*[tileCount];
+	exit = nullptr;
 	try {
 		reader->open(fileName);
 		position.world = this;
@@ -232,6 +234,7 @@ void World::makeTileMap() {
 				break;
 			case '-':
 				tileMap[i] = new Exit(position, "Exit.tile");
+				exit = (Exit*)(tileMap[i]);
 				break;
 			case 'C':
 				tileMap[i] = new UniqueTile(position, "CropCircle.tile");
@@ -244,6 +247,7 @@ void World::makeTileMap() {
 				break;
 			case 'X':
 				tileMap[i] = new PointOfInterest(position, "KeyLocation.tile");
+				keyLocation = (PointOfInterest*)tileMap[i];
 				break;
 			default:
 				tileMap[i] = new Path(position);
@@ -251,6 +255,7 @@ void World::makeTileMap() {
 			}
 		}
 		reader->close();
+		keyLocation->addItem(exit->getKey());
 
 		worldMap = new Map(this);
 	}

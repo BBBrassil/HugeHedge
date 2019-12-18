@@ -20,6 +20,7 @@
 #include <string>
 #include <vector>
 
+class Exit;
 class Tile;
 class Map;
 
@@ -28,6 +29,7 @@ private:
 	std::string fileName;
 	Tile** tileMap; // array of Tile pointers; acts like a 2D array, but isn't
 	Tile* defaultTile;
+	Exit* exit;
 	Map* worldMap;
 	int rowCount;
 	int colCount;

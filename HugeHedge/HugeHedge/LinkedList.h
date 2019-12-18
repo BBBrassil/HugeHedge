@@ -37,7 +37,7 @@ public:
 	bool contains(const T& data) const;
 	void insert(T& data);
 	void remove(T& data);
-	void steal(LinkedList<T>& list);
+	void move(LinkedList<T>& list);
 	void print(std::ostream& os = std::cout);
 	operator bool();
 };
@@ -157,19 +157,20 @@ void LinkedList<T>::remove(T& data) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/*	steal()
-	Takes all the items from another linked list of the same type.
-	Removes each item from the source list and adds it to this one.
+/*	move()
+	Takes all the items from this list and puts them into another of the same
+	type.
 */
 ////////////////////////////////////////////////////////////////////////////////
 template <class T>
-void LinkedList<T>::steal(LinkedList<T>& list) {
-	ListNode<T>* curNode = list.head;
+void LinkedList<T>::move(LinkedList<T>& list) {
+	ListNode<T>* curNode = head;
 
 	while( curNode ) {
-		insert(curNode->data);
-		list.remove(curNode->data);
+		list.insert(curNode->data);
+		curNode = curNode->next;
 	}
+	clear();
 }
 
 ////////////////////////////////////////////////////////////////////////////////

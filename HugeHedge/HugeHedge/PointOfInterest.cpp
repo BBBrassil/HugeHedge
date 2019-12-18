@@ -56,6 +56,12 @@ std::istream& operator>>(std::istream& ns, PointOfInterest& poi) {
 	return ns;
 }
 
+void PointOfInterest::addItem(Item& item) {
+	if( !inventory )
+		inventory = std::unique_ptr<LinkedList<Item>>(new LinkedList<Item>());
+	inventory->insert(item);
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 /*	onExamined()
 	Fired when the player looks at this tile.
@@ -68,4 +74,6 @@ std::istream& operator>>(std::istream& ns, PointOfInterest& poi) {
 ////////////////////////////////////////////////////////////////////////////////
 void PointOfInterest::onEnter(Player& player, std::ostream& os) {
 	os << toString() << "\n\n";
+	if( inventory )
+		player.collectAll(*inventory);
 }

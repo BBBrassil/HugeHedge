@@ -40,7 +40,7 @@ public:
 	Tile* getCurrentTile() const;
 	bool hasItem(const Item& item) const;
 	void collectItem(Item& item);
-	void collectItem(LinkedList<Item>& list);
+	void collectAll(LinkedList<Item>& list);
 	void doAction(const int& relative);
 	void lookAt(Tile* tile);
 	void mainMenu(std::ostream& os = std::cout);

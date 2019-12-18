@@ -33,7 +33,8 @@ protected:
 public:
 	PointOfInterest(const Position& p, const std::string& fn);
 	void onEnter(Player& player, std::ostream& os = std::cout);
+	void addItem(Item& item);
 	virtual void onExamined(Player& player, std::ostream& os = std::cout) {} //
 	friend std::istream& operator>>(std::istream& ns, PointOfInterest& poi);
+	friend class World;
 };
-
