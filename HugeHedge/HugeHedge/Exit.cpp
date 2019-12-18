@@ -1,11 +1,11 @@
 //	Exit.cpp
 //	Programmer: Brendan Brassil
-//	Date Last Modified: 2019-12-16
+//	Date Last Modified: 2019-12-18
 
 #include "Exit.h"
 
 Exit::Exit(const Position& p, const std::string& fn) : PointOfInterest(p, fn) {
-	//key = std::shared_ptr<Item>(new Item("ExitKey.item"));
+	key = std::shared_ptr<Item>(new Item("ExitKey.item"));
 }
 
 void Exit::onExamined(const Player& player, std::ostream& os) {

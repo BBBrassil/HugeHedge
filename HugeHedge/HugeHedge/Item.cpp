@@ -1,6 +1,6 @@
 //	Item.h
 //	Programmer: Brendan Brassil
-//	Date Last Modified: 2019-12-15
+//	Date Last Modified: 2019-12-18
 
 #include "Item.h"
 
@@ -29,6 +29,24 @@ Item::Item(const std::string& fn) {
 	catch( ... ) {
 		throw;
 	}
+}
+
+void Item::onAcquired(std::ostream& os) {
+	os << "Acquired item: " << getName() << '\n';
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/*	toString()
+	Shows the item name and description.
+*/
+////////////////////////////////////////////////////////////////////////////////
+std::string Item::toString() const {
+	std::stringstream ss;
+	ss
+		<< name << '\n'
+		<< '\t' << description << '\n';
+
+	return ss.str();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -86,20 +104,6 @@ bool Item::operator!=(const Item& right) const {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/*	toString()
-	Shows the item name and description.
-*/
-////////////////////////////////////////////////////////////////////////////////
-std::string Item::toString() const {
-	std::stringstream ss;
-	ss
-		<< name << '\n'
-		<< '\t' << description << '\n';
-
-	return ss.str();
-}
-
-////////////////////////////////////////////////////////////////////////////////
 /*	operator>>
 	Reads data from an input stream, storing it in the item's fields.
 
@@ -113,12 +117,12 @@ std::istream& operator>>(std::istream& ns, Item& item) {
 	std::string line, data;
 
 	try {
-		StreamReader::getlineEOF(ns, line);
-		data = StreamReader::valueFrom(line);
+		IOManager::getlineEOF(ns, line);
+		data = IOManager::valueFrom(line);
 		item.name = data;
 
-		StreamReader::getlineEOF(ns, line);
-		data = StreamReader::valueFrom(line);
+		IOManager::getlineEOF(ns, line);
+		data = IOManager::valueFrom(line);
 		item.description = data;
 	}
 	catch( ... ) {

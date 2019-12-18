@@ -1,15 +1,15 @@
-#include "Path.h"
+//	HudgeHedge.cpp
+//	Programmer: Brendan Brassil
+//	Date Last Modified: 2019-12-18
+
 #include "Player.h"
 #include "Position.h"
-#include "StreamReader.h"
-#include "UniqueTile.h"
-#include "Wall.h"
+#include "World.h"
 #include <iostream>
-#include <fstream>
 using namespace std;
 
 int main() {
-	World* world = new World("World.map");
+	World* world = new World();
 	Position position;
 	position.world = world;
 	position.x = 7;

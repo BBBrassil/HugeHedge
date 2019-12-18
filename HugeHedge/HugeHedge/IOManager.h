@@ -1,38 +1,39 @@
-//	StreamReader.h
+//	IOManager.h
 //	Programmer: Brendan Brassil
-//	Date Last Modified: 2019-11-29
+//	Date Last Modified: 2019-12-18
 
 ////////////////////////////////////////////////////////////////////////////////
-/*	StreamReader class
+/*	IOManager class
 
-	Responsible for reading and validating all data in the project.
+	Responsible for reading, writing, and validating all external data in the
+	project.
 
-	Has methods that mimic the functionality of ifstream::open, ifstream::close,
+	Has methods that mimic the functionality of fstream::open, fstream::close,
 	and std::getline that also throw exceptions for bad data.
 
 	Only needs to be instantiated to open or close files. Static methods will
-	suffice	for anything else and work with any input stream object. If these are
-	called using a file stream, however, the caller will be responsible for
+	suffice	for anything else and work with any input stream object. If these
+	are called using a file stream, however, the caller will be responsible for
 	knowing	the file name.
 */
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef STREAMREADER_H
-#define STREAMREADER_H
+#ifndef IOMANAGER_H
+#define IOMANAGER_H
 
 #include <fstream>
 #include <iostream>
 #include <string>
 
-class StreamReader {
+class IOManager {
 protected:
 	std::string fileName;
-	std::ifstream fileStream;
+	std::fstream fileStream;
 public:
-	StreamReader() { fileName = ""; }
+	IOManager() { fileName = ""; }
 	void open(const std::string& fn);
 	void close();
-	std::ifstream& file() { return fileStream; }
+	std::fstream& file() { return fileStream; }
 	static std::istream& getline(std::istream& ns, std::string& s);
 	static std::istream& getlineEOF(std::istream& ns, std::string& s);
 	static bool isComment(const std::string& s);

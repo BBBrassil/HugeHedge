@@ -1,15 +1,15 @@
 //	Path.h
 //	Programmer: Brendan Brassil
-//	Date Last Modified: 2019-12-16
+//	Date Last Modified: 2019-12-18
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	Path class
 	A generic tile class for tiles that don't block the player's movement.
 
-	Implements the abstract Tile class.
-
 	Uses static members for the name, token, etc that are shared between all
 	Path objects.
+
+	* Implements the abstract Tile class.
 */
 ////////////////////////////////////////////////////////////////////////////////
 

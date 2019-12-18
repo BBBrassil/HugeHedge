@@ -1,0 +1,5 @@
+; Key location
+name=Shed
+description=You find a storage shed and look inside for something useful.
+token=X
+wall=0

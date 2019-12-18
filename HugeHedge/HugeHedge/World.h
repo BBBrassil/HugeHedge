@@ -1,6 +1,16 @@
 //	World.h
 //	Programmer: Brendan Brassil
-//	Date Last Modified: 2019-12-15
+//	Date Last Modified: 2019-12-18
+
+////////////////////////////////////////////////////////////////////////////////
+/*	World class
+	Sets up and manages the space that the player can move through.
+
+	Contains an array of Tile objects which is read from a file when the World
+	is instantiated. Creates different types of Tile objects based on the layout
+	read from the file.
+*/
+////////////////////////////////////////////////////////////////////////////////
 
 #ifndef WORLD_H
 #define WORLD_H
@@ -23,6 +33,7 @@ private:
 	void setDimensions();
 	void clear();
 public:
+	World();
 	World(const std::string& s);
 	~World();
 	void readTileData();
@@ -42,7 +53,7 @@ public:
 	//////////////////////////////////////////////////////////////////////////////
 	/* BadDimensions exception
 		Thrown when the data read from a file would not produce a rectangular
-		tile set for the World.
+		tile map for the World.
 	*/
 	//////////////////////////////////////////////////////////////////////////////
 	class BadDimensions {

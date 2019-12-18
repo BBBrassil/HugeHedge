@@ -1,19 +1,33 @@
 //	World.cpp
 //	Programmer: Brendan Brassil
-//	Date Last Modified: 2019-12-16
+//	Date Last Modified: 2019-12-18
 
 #include "World.h"
 
 #include "Exit.h"
 #include "Path.h"
-#include "StreamReader.h"
+#include "IOManager.h"
 #include "UniqueTile.h"
 #include "Wall.h"
 #include <memory>
 #include <sstream>
 
 ////////////////////////////////////////////////////////////////////////////////
-/*	Constructor
+/*	Default Constructor
+
+	! Throws a FileOpenFailure exception if any input file fails to open.
+	! Throws an EndOfFile exception if the end of the input stream is reached
+	  before the expected data is read.
+	! Throws a BadDimensions exception if the data read from the tile map file
+	  will not create a rectangular tile map.
+	! Throws a BadString exception if data can't be read from a line because of
+	  incorrect formatting.
+*/
+////////////////////////////////////////////////////////////////////////////////
+World::World() : World("World.map") {}
+
+////////////////////////////////////////////////////////////////////////////////
+/*	Constructor with file name
 	- s: Name of text file used to read the tile layout.
 
 	! Throws a FileOpenFailure exception if any input file fails to open.
@@ -67,16 +81,16 @@ World::~World() {
 void World::setDimensions() {
 	int row, col;
 	std::string line;
-	std::unique_ptr<StreamReader> reader(new StreamReader());
+	std::unique_ptr<IOManager> reader(new IOManager());
 	try {
 		reader->open(fileName);
-		StreamReader::getline(reader->file(), line);
+		IOManager::getline(reader->file(), line);
 		// World must have substance
 		if( line == "" )
 			throw BadDimensions(fileName);
 		row = 1;
 		col = (int)line.length();
-		while( StreamReader::getline(reader->file(), line) ) {
+		while( IOManager::getline(reader->file(), line) ) {
 			row++;
 			// World must be a rectangle
 			if( line.length() != col )
@@ -88,12 +102,12 @@ void World::setDimensions() {
 		colCount = col;
 		tileCount = row * col;
 	}
-	catch( StreamReader::FileOpenFail ) {
+	catch( IOManager::FileOpenFail ) {
 		throw;
 	}
-	catch( StreamReader::EndOfFile ) {
+	catch( IOManager::EndOfFile ) {
 		reader->close();
-		throw StreamReader::EndOfFile(fileName);
+		throw IOManager::EndOfFile(fileName);
 	}
 	catch( BadDimensions ) {
 		reader->close();
@@ -103,7 +117,7 @@ void World::setDimensions() {
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	clear()
-	Deallocates memory for the tile map array and defaultTile.
+	Deallocates memory for the tile map array and default tile.
 */
 ////////////////////////////////////////////////////////////////////////////////
 void World::clear() {
@@ -123,8 +137,13 @@ void World::clear() {
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	readTileData()
-	Reads data for the default tile and the static members of the Wall and Path
+	Reads data for the default tile and the static fields of the Wall and Path
 	classes from their respective files.
+
+	* Friend function of the Wall and Path classes.
+	  Their static fields are assigned here instead of in their constructors so
+	  it won't happen every time the classes are instantiated and instead will
+	  only happen once when the World is instantiated.
 
 	! Throws a FileOpenFail exception if any input file fails to open.
 	! Throws an EndOfFile exception if the end of the input stream is reached
@@ -136,7 +155,7 @@ void World::clear() {
 void World::readTileData() {
 	std::string tileFileName, line;
 	Position position;
-	std::unique_ptr<StreamReader> reader(new StreamReader());
+	std::unique_ptr<IOManager> reader(new IOManager());
 
 	try {
 		tileFileName = "Default.tile";
@@ -155,16 +174,16 @@ void World::readTileData() {
 		Path::read(reader->file());
 		reader->close();
 	}
-	catch( StreamReader::FileOpenFail ) {
+	catch( IOManager::FileOpenFail ) {
 		throw;
 	}
-	catch( StreamReader::EndOfFile ) {
+	catch( IOManager::EndOfFile ) {
 		reader->close();
-		throw StreamReader::EndOfFile(tileFileName);
+		throw IOManager::EndOfFile(tileFileName);
 	}
-	catch( StreamReader::BadString ex ) {
+	catch( IOManager::BadString ex ) {
 		reader->close();
-		throw StreamReader::BadString(ex.getString(), tileFileName);
+		throw IOManager::BadString(ex.getString(), tileFileName);
 	}
 }
 
@@ -183,7 +202,7 @@ void World::readTileData() {
 */
 ////////////////////////////////////////////////////////////////////////////////
 void World::makeTileMap() {
-	std::unique_ptr<StreamReader> reader(new StreamReader());
+	std::unique_ptr<IOManager> reader(new IOManager());
 	Position position;
 	std::string line;
 	std::stringstream ss;
@@ -194,7 +213,7 @@ void World::makeTileMap() {
 		reader->open(fileName);
 		position.world = this;
 		// Ignore comments and get only map data characters
-		while( StreamReader::getline(reader->file(), line) )
+		while( IOManager::getline(reader->file(), line) )
 			ss << line;
 		// Creat a tile for each character read
 		for( int i = 0; i < size(); i++ ) {
@@ -219,6 +238,9 @@ void World::makeTileMap() {
 			case 'G':
 				tileMap[i] = new UniqueTile(position, "Garden.tile");
 				break;
+			case 'X':
+				tileMap[i] = new PointOfInterest(position, "KeyLocation.tile");
+				break;
 			default:
 				tileMap[i] = new Path(position);
 				break;
@@ -226,14 +248,14 @@ void World::makeTileMap() {
 		}
 		reader->close();
 	}
-	catch( StreamReader::FileOpenFail ) {
+	catch( IOManager::FileOpenFail ) {
 		clear();
 		throw;
 	}
-	catch( StreamReader::EndOfFile ) {
+	catch( IOManager::EndOfFile ) {
 		reader->close();
 		clear();
-		throw StreamReader::EndOfFile(fileName);
+		throw IOManager::EndOfFile(fileName);
 	}
 	catch( BadDimensions ) {
 		reader->close();

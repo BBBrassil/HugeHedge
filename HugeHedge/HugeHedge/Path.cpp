@@ -1,10 +1,10 @@
 //	Path.cpp
 //	Programmer: Brendan Brassil
-//	Date Last Modified: 2019-12-15
+//	Date Last Modified: 2019-12-18
 
 #include "Path.h"
 
-#include "StreamReader.h"
+#include "IOManager.h"
 
 std::string Path::fileName;
 std::string Path::objectName;
@@ -28,16 +28,16 @@ void Path::read(std::istream& ns) {
 	// Read data from input stream.
 	// Rethrow all exceptions.
 	try {
-		StreamReader::getlineEOF(ns, line);
-		data = StreamReader::valueFrom(line);
+		IOManager::getlineEOF(ns, line);
+		data = IOManager::valueFrom(line);
 		objectName = data;
 
-		StreamReader::getlineEOF(ns, line);
-		data = StreamReader::valueFrom(line);
+		IOManager::getlineEOF(ns, line);
+		data = IOManager::valueFrom(line);
 		description = data;
 
-		StreamReader::getlineEOF(ns, line);
-		data = StreamReader::valueFrom(line);
+		IOManager::getlineEOF(ns, line);
+		data = IOManager::valueFrom(line);
 		token = data[0];
 	}
 	catch( ... ) {

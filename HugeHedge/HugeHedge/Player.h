@@ -1,9 +1,10 @@
 //	Player.h
 //	Programmer: Brendan Brassil
-//	Date Last Modified: 2019-12-16
+//	Date Last Modified: 2019-12-18
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	Player class
+
 	Handles all actions the user can make in the game.
 */
 ////////////////////////////////////////////////////////////////////////////////
@@ -28,7 +29,6 @@ private:
 	std::unique_ptr<LinkedList<Item>> inventory;
 	bool canMoveTo(const int& relative) const;
 	void move(const int& relative);
-	void use(Item* item);
 	std::string actionText(const int& relative) const;
 public:
 	Player(const Position& p);
@@ -40,6 +40,7 @@ public:
 	Tile* getCurrentTile() const;
 	bool hasItem(const Item& item) const;
 	void collectItem(Item& item);
+	void collectItem(LinkedList<Item>& list);
 	void doAction(const int& relative);
 	void lookAt(Tile* tile);
 	void mainMenu(std::ostream& os = std::cout);

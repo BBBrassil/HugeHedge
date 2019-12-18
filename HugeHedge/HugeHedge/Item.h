@@ -1,12 +1,13 @@
 //	Item.h
 //	Programmer: Brendan Brassil
-//	Date Last Modified: 2019-12-15
+//	Date Last Modified: 2019-12-18
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	Item class
+
 	Class for things the player can collect.
 
-	* Overloads relational operators.
+	* Overloads relational <, <=, >, >=, ==, and != operators.
 	* Overloads the << operator to display the player's items in an inventory
 	  screen.
 	* Overloads the >> operator to read fields from an input stream.
@@ -30,7 +31,7 @@ public:
 	std::string getName() const { return name; }
 	std::string getDescription() const { return description; }
 	virtual std::string toString() const;
-	virtual void onAcquired() const {}
+	virtual void onAcquired(std::ostream& os = std::cout);
 	bool operator<(const Item& right) const;
 	bool operator>(const Item& right) const;
 	bool operator==(const Item& right) const;

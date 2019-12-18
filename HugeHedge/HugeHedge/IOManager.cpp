@@ -1,30 +1,31 @@
-//	StreamReader.cpp
+//	IOManager.cpp
 //	Programmer: Brendan Brassil
-//	Date Last Modified: 2019-11-29
+//	Date Last Modified: 2019-12-18
 
-#include "StreamReader.h"
+#include "IOManager.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	open()
-	Opens the StreamReader's file stream with the associated file name.
+	Opens the IOManager's file stream with the associated file name for both
+	reading and writing.
 
 	! Throws a FileOpenFail exception if the input file fails to open.
 */
 ////////////////////////////////////////////////////////////////////////////////
-void StreamReader::open(const std::string& fn) {
+void IOManager::open(const std::string& fn) {
 	fileName = fn;
 
-	fileStream.open(fileName);
+	fileStream.open(fileName, std::fstream::in | std::fstream::out);
 	if( !fileStream )
 		throw FileOpenFail(fileName);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	close()
-	Simply closes the StreamReader's file stream and clears the file name.
+	Simply closes the IOManager's file stream and clears the file name.
 */
 ////////////////////////////////////////////////////////////////////////////////
-void StreamReader::close() {
+void IOManager::close() {
 	fileStream.close();
 	fileName = "";
 }
@@ -35,7 +36,7 @@ void StreamReader::close() {
 	Returns an empty string if nothing was read.
 */
 ////////////////////////////////////////////////////////////////////////////////
-std::istream& StreamReader::getline(std::istream& ns, std::string& line) {
+std::istream& IOManager::getline(std::istream& ns, std::string& line) {
 	std::getline(ns, line);
 	if( !ns )
 		line = "";
@@ -50,13 +51,13 @@ std::istream& StreamReader::getline(std::istream& ns, std::string& line) {
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	getlineEOF()
-	Extracts a line from an input stream, Signoring comment lines.
+	Extracts a line from an input stream, ignoring comment lines.
 
 	! Throws an EndOfFile exception if the end of the input stream is reached
 	  before the expected data is read.
 */
 ////////////////////////////////////////////////////////////////////////////////
-std::istream& StreamReader::getlineEOF(std::istream& ns, std::string& line) {
+std::istream& IOManager::getlineEOF(std::istream& ns, std::string& line) {
 	std::getline(ns, line);
 	if( !ns )
 		throw EndOfFile();
@@ -74,7 +75,7 @@ std::istream& StreamReader::getlineEOF(std::istream& ns, std::string& line) {
 	A comment line is any line that starts with a semicolon (;).
 */
 ////////////////////////////////////////////////////////////////////////////////
-bool StreamReader::isComment(const std::string& s) {
+bool IOManager::isComment(const std::string& s) {
 	return s[0] == ';';
 }
 
@@ -86,7 +87,7 @@ bool StreamReader::isComment(const std::string& s) {
 	! Throws a BadString exception if a value could not be read from the string.
 */
 ////////////////////////////////////////////////////////////////////////////////
-std::string StreamReader::keyFrom(const std::string& s) {
+std::string IOManager::keyFrom(const std::string& s) {
 	int index = s.find_first_of('=');
 
 	if( index < 0 )
@@ -103,7 +104,7 @@ std::string StreamReader::keyFrom(const std::string& s) {
 	! Throws a BadString exception if a value could not be read from the string.
 */
 ////////////////////////////////////////////////////////////////////////////////
-std::string StreamReader::valueFrom(const std::string& s) {
+std::string IOManager::valueFrom(const std::string& s) {
 	int index = s.find_first_of('=');
 
 	if( index < 0 || index == s.length() - 1 )

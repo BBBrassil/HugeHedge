@@ -1,6 +1,6 @@
 //	Player.cpp
 //	Programmer: Brendan Brassil
-//	Date Last Modified: 2019-12-16
+//	Date Last Modified: 2019-12-18
 
 #include "Player.h"
 
@@ -12,14 +12,13 @@
 #include <sstream>
 #include <string>
 
-
 ////////////////////////////////////////////////////////////////////////////////
 /*	Constructor
 */
 ////////////////////////////////////////////////////////////////////////////////
 Player::Player(const Position& p) {
 	position = p;
-	facing = 0;
+	facing = NORTH;
 	inventory = std::unique_ptr<LinkedList<Item>>(new LinkedList<Item>());
 }
 
@@ -155,6 +154,15 @@ void Player::collectItem(Item& item) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+/*	collectItem() overloaded for inventory
+	Adds an item to the player's inventory.
+*/
+////////////////////////////////////////////////////////////////////////////////
+void Player::collectItem(LinkedList<Item>& list) {
+	inventory->steal(list);
+}
+
+////////////////////////////////////////////////////////////////////////////////
 /*	debug()
 	Cheat function for debugging.
 */
@@ -220,15 +228,16 @@ void Player::optionsMenu(std::ostream& os) {
 	case 'A':
 		doAction(LEFT);
 		break;
-	case 'S' :
+	case 'S':
 		doAction(BACK);
 		break;
 	case 'D':
 		doAction(RIGHT);
 		break;
 	case 'I':
-			inventoryMenu();
-			break;
+		system("cls");
+		inventoryMenu();
+		break;
 	case 'Q':
 		os << "\nQuitting to main menu...\n\n";
 		getWorld()->setGameOver(true);
@@ -250,8 +259,12 @@ void Player::optionsMenu(std::ostream& os) {
 		optionsMenu();
 }
 
+////////////////////////////////////////////////////////////////////////////////
+/*	inventoryMenu()
+	Displays the player's items.
+*/
+////////////////////////////////////////////////////////////////////////////////
 void Player::inventoryMenu(std::ostream& os) {
-	system("cls");
 	os << "INVENTORY\n\n";
 	if( inventory->empty() )
 		os << "[You have no items.]\n\n";

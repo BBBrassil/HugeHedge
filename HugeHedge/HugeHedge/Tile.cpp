@@ -1,23 +1,25 @@
 //	Tile.cpp
 //	Programmer: Brendan Brassil
-//	Date Last Modified: 2019-12-16
+//	Date Last Modified: 2019-12-18
 
 #include "Tile.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	onEnter()
 	Fired when the player enters this tile.
+
 	- player: Player object who has entered the tile.
 	- os: Any output stream.
 */
 ////////////////////////////////////////////////////////////////////////////////
-void Tile::onEnter(const Player& player, std::ostream& os) {
+void Tile::onEnter(Player& player, std::ostream& os) {
 	os << toString() << "\n\n";
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	onExamined()
 	Fired when the player looks at this tile.
+
 	- player: Player object who has examined the tile.
 	- os: Any output stream.
 */
@@ -65,7 +67,7 @@ Tile* Tile::neighbor(const int& cardinal) {
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	operator++ prefix
-	Returns the tile at the next index in the world's tiles array.
+	Returns the tile at the next index in the world's tile map.
 	Goes to tile 0 if it gets to the end of the array.
 */
 ////////////////////////////////////////////////////////////////////////////////

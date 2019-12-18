@@ -1,6 +1,6 @@
 //	UniqueTile.cpp
 //	Programmer: Brendan Brassil
-//	Date Last Modified: 2019-12-15
+//	Date Last Modified: 2019-12-18
 
 #include "UniqueTile.h"
 
@@ -48,22 +48,22 @@ std::istream& operator>>(std::istream& ns, UniqueTile& t) {
 	std::string line, data;
 
 	try {
-		StreamReader::getlineEOF(ns, line);
-		data = StreamReader::valueFrom(line);
+		IOManager::getlineEOF(ns, line);
+		data = IOManager::valueFrom(line);
 		t.objectName = data;
 
-		StreamReader::getlineEOF(ns, line);
-		data = StreamReader::valueFrom(line);
+		IOManager::getlineEOF(ns, line);
+		data = IOManager::valueFrom(line);
 		t.description = data;
 
-		StreamReader::getlineEOF(ns, line);
-		data = StreamReader::valueFrom(line);
+		IOManager::getlineEOF(ns, line);
+		data = IOManager::valueFrom(line);
 		t.token = data[0];
 
-		StreamReader::getlineEOF(ns, line);
-		data = StreamReader::valueFrom(line);
+		IOManager::getlineEOF(ns, line);
+		data = IOManager::valueFrom(line);
 		if( data != "0" && data != "1" )
-			throw StreamReader::BadString(line);
+			throw IOManager::BadString(line);
 		t.wall = data[0] - '0';
 	}
 	catch( ... ) {

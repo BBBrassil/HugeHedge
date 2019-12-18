@@ -1,13 +1,14 @@
 //	UniqueTile.h
 //	Programmer: Brendan Brassil
-//	Date Last Modified: 2019-12-16
+//	Date Last Modified: 2019-12-18
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	UniqueTile class
 
 	Class for tile objects that will have their data read from a file when
-	instantiated. Implements the abstract Tile class.
-
+	instantiated.
+	
+	* Implements the abstract Tile class.
 	* Overloads the >> operator to read fields from an input stream.
 */
 ////////////////////////////////////////////////////////////////////////////////

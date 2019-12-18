@@ -1,18 +1,23 @@
 //	Tile.h
 //	Programmer: Brendan Brassil
-//	Date Last Modified: 2019-12-16
+//	Date Last Modified: 2019-12-18
 
 ////////////////////////////////////////////////////////////////////////////////
-/*	Abstract Tile class
+/*	Tile abstract class
 
 	An abstract class for tile objects that can either block the player's
 	movement or can be occupied by the player and other objects.
 
-	Implemented by:
-	- Path
-	- UniqueTile
-	  -> PointOfInterest
-	- Wall
+	* Overloads the ++ and -- operators to make iterating through all the tiles
+	  a World easier.
+	* Overloads the << operator via a pure virtual toString() method that child
+	  classes will need to define.
+	* Implemented by:
+	  - Path
+	  - UniqueTile
+	    -> PointOfInterest
+		   -> Exit
+	  - Wall
 */
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -37,7 +42,7 @@ public:
 	virtual std::string toString() const = 0;
 	virtual char toChar() const = 0;
 	virtual bool isWall() const = 0;
-	virtual void onEnter(const Player& player, std::ostream& os = std::cout);
+	virtual void onEnter(Player& player, std::ostream& os = std::cout);
 	virtual void onExamined(const Player& player, std::ostream& os = std::cout);
 	World* getWorld() const { return position.world; }
 	int getX() const { return position.x; }
