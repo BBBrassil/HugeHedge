@@ -1,6 +1,6 @@
 //	Item.h
 //	Programmer: Brendan Brassil
-//	Date Last Modified: 2019-12-18
+//	Date Last Modified: 2019-12-19
 
 #include "Item.h"
 
@@ -111,10 +111,12 @@ std::istream& operator>>(std::istream& ns, Item& item) {
 	std::string line, data;
 
 	try {
+		// name
 		IOManager::getlineEOF(ns, line);
 		data = IOManager::valueFrom(line);
 		item.name = data;
 
+		// description
 		IOManager::getlineEOF(ns, line);
 		data = IOManager::valueFrom(line);
 		item.description = data;

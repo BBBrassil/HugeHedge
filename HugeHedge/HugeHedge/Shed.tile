@@ -1,0 +1,9 @@
+; Shed
+name=Shed
+description=You see a storage shed.
+token=0
+wall=0
+key=ShedKey.item
+unsolvedMessage=The rusted lock has seen better days, but it still bars your entrance.
+solvedMessage=You unlock the door and look inside for something useful.
+reward=no

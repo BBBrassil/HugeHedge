@@ -32,6 +32,7 @@ protected:
 public:
 	IOManager() { fileName = ""; }
 	void open(const std::string& fn);
+	void openOut(const std::string& fn);
 	void close();
 	std::fstream& file() { return fileStream; }
 	static std::istream& getline(std::istream& ns, std::string& s);

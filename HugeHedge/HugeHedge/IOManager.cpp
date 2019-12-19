@@ -6,8 +6,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	open()
-	Opens the IOManager's file stream with the associated file name for both
-	reading and writing.
+	Opens the IOManager's file stream with the associated file name for reading.
 
 	! Throws a FileOpenFail exception if the input file fails to open.
 */
@@ -15,7 +14,21 @@
 void IOManager::open(const std::string& fn) {
 	fileName = fn;
 
-	fileStream.open(fileName, std::fstream::in | std::fstream::out);
+	fileStream.open(fileName, std::fstream::in);
+	if( !fileStream )
+		throw FileOpenFail(fileName);
+}
+////////////////////////////////////////////////////////////////////////////////
+/*	openOut()
+	Opens the IOManager's file stream with the associated file name for writing.
+
+	! Throws a FileOpenFail exception if the input file fails to open.
+*/
+////////////////////////////////////////////////////////////////////////////////
+void IOManager::openOut(const std::string& fn) {
+	fileName = fn;
+
+	fileStream.open(fileName, std::fstream::out);
 	if( !fileStream )
 		throw FileOpenFail(fileName);
 }

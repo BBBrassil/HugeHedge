@@ -1,6 +1,6 @@
 //	World.cpp
 //	Programmer: Brendan Brassil
-//	Date Last Modified: 2019-12-18
+//	Date Last Modified: 2019-12-19
 
 #include "World.h"
 
@@ -10,6 +10,7 @@
 #include "Path.h"
 #include "UniqueTile.h"
 #include "Wall.h"
+#include <algorithm>
 #include <memory>
 #include <sstream>
 
@@ -50,6 +51,7 @@ World::World(const std::string& s) {
 		setDimensions();
 		makeTileMap();
 		readTileData();
+		placeItems();
 	}
 	catch( ... ) {
 		throw;
@@ -187,18 +189,29 @@ void World::makeTileMap() {
 				tileMap[i] = new Exit(position, "Exit.tile");
 				exit = (Exit*)(tileMap[i]);
 				break;
+			case 'B':
+				tileMap[i] = new UniqueTile(position, "BirdBath.tile");
+				break;
 			case 'C':
 				tileMap[i] = new UniqueTile(position, "CropCircle.tile");
 				break;
+			case 'D':
+				tileMap[i] = new PointOfInterest(position, "Shed.tile");
+				break;
 			case 'F':
-				tileMap[i] = new UniqueTile(position, "Fountain.tile");
+				tileMap[i] = new PointOfInterest(position, "Fountain.tile");
 				break;
 			case 'G':
-				tileMap[i] = new UniqueTile(position, "Garden.tile");
+				tileMap[i] = new PointOfInterest(position, "Garden.tile");
 				break;
-			case 'X':
-				tileMap[i] = new PointOfInterest(position, "KeyLocation.tile");
-				keyLocation = (PointOfInterest*)tileMap[i];
+			case 'S':
+				tileMap[i] = new PointOfInterest(position, "Statue.tile");
+				break;
+			case 'T':
+				tileMap[i] = new PointOfInterest(position, "Tree.tile");
+				break;
+			case 'Z':
+				tileMap[i] = new PointOfInterest(position, "Gazebo.tile");
 				break;
 			default:
 				tileMap[i] = new Path(position);
@@ -241,8 +254,10 @@ void World::readTileData() {
 	std::string tileFileName, line;
 	Position position;
 	std::unique_ptr<IOManager> tileReader(new IOManager());
+	std::unique_ptr<ObjectReader<Exit>> exitReader;
 	std::unique_ptr<ObjectReader<PointOfInterest>> poiReader;
 	std::unique_ptr<ObjectReader<UniqueTile>> uniqueReader;
+	std::unique_ptr<ObjectReader<Item>> itemReader;
 
 	try {
 		tileFileName = "Default.tile";
@@ -250,12 +265,14 @@ void World::readTileData() {
 		position.x = -1;
 		position.y = -1;
 		defaultTile = new UniqueTile(position, tileFileName);
+		exitReader = std::unique_ptr<ObjectReader<Exit>>(new ObjectReader<Exit>());
 		poiReader = std::unique_ptr<ObjectReader<PointOfInterest>>(new ObjectReader<PointOfInterest>());
 		uniqueReader = std::unique_ptr<ObjectReader<UniqueTile>>(new ObjectReader<UniqueTile>());
 		Tile* t = nullptr;
 		UniqueTile* uniqueTile = nullptr;
-		PointOfInterest* pointOfInterest = nullptr;
-		
+		PointOfInterest* poi = nullptr;
+		Exit* ex;
+
 		// Wall - static
 		tileFileName = "Wall.tile";
 		tileReader->open(tileFileName);
@@ -272,12 +289,24 @@ void World::readTileData() {
 		// Dyynamically cast as needed to use the right type of ObjectReader
 		for( int i = 0; i < size(); i++ ) {
 			t = tile(i);
-			if( dynamic_cast<PointOfInterest*>(t) ) {
-				pointOfInterest = dynamic_cast<PointOfInterest*>(t);
-				tileFileName = pointOfInterest->getFileName();
+			if( dynamic_cast<Exit*>(t) ) {
+				ex = dynamic_cast<Exit*>(t);
+				tileFileName = ex->getFileName();
+				exitReader->setFileName(tileFileName);
+				exitReader->read(*ex);
+				exitReader->close();
+			}
+			else if( dynamic_cast<PointOfInterest*>(t) ) {
+				poi = dynamic_cast<PointOfInterest*>(t);
+				tileFileName = poi->getFileName();
 				poiReader->setFileName(tileFileName);
-				poiReader->read(*pointOfInterest);
+				poiReader->read(*poi);
 				poiReader->close();
+				// If this tile has requires a key to solve, keep note
+				if( poi->isKeyRequired() )
+					keyLocations.push_back(i);
+				else
+					spareLocations.push_back(i);
 			}
 			else if( dynamic_cast<UniqueTile*>(t) ) {
 				uniqueTile = dynamic_cast<UniqueTile*>(t);
@@ -287,12 +316,6 @@ void World::readTileData() {
 				uniqueReader->close();
 			}
 		}
-		// Place the key to the exit
-		keyLocation->addItem(exit->getKey());
-
-		// Create the world map
-		worldMap = new Map(this);
-		mapItem = new Item("Map.item");
 	}
 	catch( IOManager::FileOpenFail ) {
 		throw;
@@ -309,6 +332,47 @@ void World::readTileData() {
 		uniqueReader->close();
 		throw IOManager::BadString(ex.getString(), tileFileName);
 	}
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/*	placeItems()
+	Places all the keys to solving puzzles and other handy items on point of
+	interest tiles.
+*/
+////////////////////////////////////////////////////////////////////////////////
+void World::placeItems() {
+	Item* key;
+	PointOfInterest* poi;
+
+	// Shuffle the vectors for randomness
+	std::random_shuffle(keyLocations.begin(), keyLocations.end());
+	std::random_shuffle(spareLocations.begin(), spareLocations.end());
+
+	// First thing to place is the exit key.
+	key = &exit->getKey();
+
+
+	// Next are all the other puzzle elements
+	// (done one by one in order so it's possible to solve them all)
+	for( int i : keyLocations ) {
+		poi = dynamic_cast<PointOfInterest*>(tile(i));
+		poi->addItem(*key);
+		key = &poi->getKey();
+	}
+
+	// Place the last item in a spare point of interest
+	poi = dynamic_cast<PointOfInterest*>(tile(spareLocations[0]));
+	poi->addItem(*key);
+	std::cout << key->getName() << " in " << poi->getName() << "\n";
+
+	// Create the world map and add it to another spare point of interest
+	worldMap = new Map(this);
+	mapItem = new Item("Map.item");
+	poi = dynamic_cast<PointOfInterest*>(tile(spareLocations[1]));
+	poi->addItem(getMapItem());
+
+	for( int i = 2; i < spareLocations.size(); i++ )
+		poi->setSolved(true);
 }
 
 ////////////////////////////////////////////////////////////////////////////////

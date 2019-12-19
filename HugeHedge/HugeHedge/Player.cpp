@@ -1,6 +1,6 @@
 //	Player.cpp
 //	Programmer: Brendan Brassil
-//	Date Last Modified: 2019-12-18
+//	Date Last Modified: 2019-12-19
 
 #include "Player.h"
 
@@ -9,6 +9,7 @@
 #include "Map.h"
 #include "Tile.h"
 #include "World.h"
+#include <cctype>
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -84,19 +85,24 @@ void Player::doAction(const int& relative) {
 	std::string direction = Direction::relativeString(relative);
 	Tile* tile = getTile(relative);
 
-	system("cls");
-	if( canMoveTo(relative) ) {
-		std::cout << "You move " << direction << ".\n";
-		move(relative);
+	try {
+		system("cls");
+		if( canMoveTo(relative) ) {
+			std::cout << "You move " << direction << ".\n";
+			move(relative);
+		}
+		else if( dynamic_cast<Exit*>(getTile(relative)) ) {
+			lookAt(tile);
+			face(relative);
+		}
+		else {
+			std::cout << "You look " << direction << ".\n";
+			lookAt(tile);
+			face(relative);
+		}
 	}
-	else if( dynamic_cast<Exit*>(getTile(relative)) ) {
-		lookAt(tile);
-		face(relative);
-	}
-	else {
-		std::cout << "You look " << direction << ".\n";
-		lookAt(tile);
-		face(relative);
+	catch( ... ) {
+		throw;
 	}
 }
 
@@ -130,13 +136,18 @@ void Player::face(const int& relative) {
 */
 ////////////////////////////////////////////////////////////////////////////////
 void Player::move(const int& relative) {
-	int direction = Direction::navigate(getFacing(), relative);
-	Tile* destination = getCurrentTile()->neighbor(direction);
-	position.x = destination->getX();
-	position.y = destination->getY();
-	facing = direction;
+	try {
+		int direction = Direction::navigate(getFacing(), relative);
+		Tile* destination = getCurrentTile()->neighbor(direction);
+		position.x = destination->getX();
+		position.y = destination->getY();
+		facing = direction;
 
-	destination->onEnter(*this);
+		destination->onEnter(*this);
+	}
+	catch( ... ) {
+		throw;
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -160,13 +171,20 @@ bool Player::hasItem(const Item& item) const {
 ////////////////////////////////////////////////////////////////////////////////
 /*	collectItem()
 	Adds an item to the player's inventory.
+
+	! Throws a FileOpenException if the map file fails to open.
 */
 ////////////////////////////////////////////////////////////////////////////////
 void Player::collectItem(Item& item) {
-	std::cout << "Acquired item:\n" << item << '\n';
-	inventory->insert(item);
-	if( item == getWorld()->getMapItem() )
-		mapFound();
+	try {
+		std::cout << "Acquired item:\n" << item << '\n';
+		inventory->insert(item);
+		if( item == getWorld()->getMapItem() )
+			mapFound();
+	}
+	catch( ... ) {
+		throw;
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -190,40 +208,52 @@ void Player::collectAll(LinkedList<Item>& list) {
 ////////////////////////////////////////////////////////////////////////////////
 /*	mapFound()
 	Fired when the player finds the maze map.
+
+	! Throws a FileOpenException if the map file fails to open.
 */
 ////////////////////////////////////////////////////////////////////////////////
 void Player::mapFound(std::ostream& os) {
+	std::unique_ptr<IOManager> writer(new IOManager());
+
 	os
 		<< "You have found a map! This will make navigating the maze easier.\n"
 		<< "[You can view the map in the menu. It has also been output to a file.]\n\n";
-}
+	try {
+		writer->openOut("Map.txt");
+		getWorld()->getWorldMap()->print(writer->file());
+		writer->close();
+	}
+	catch( IOManager::FileOpenFail ) {
+		throw;
+	}}
 
 ////////////////////////////////////////////////////////////////////////////////
-/*	debug()
-	Cheat function for debugging.
+/*	mapMenu()
+	Shows the map.
 */
 ////////////////////////////////////////////////////////////////////////////////
-void Player::debug() {
+void Player::mapMenu(std::ostream& os) {
 	std::stringstream ss;
 	std::string print;
 	World* world = getWorld();
-
-	world->getWorldMap()->print(ss);
-	print = ss.str();
-	print[world->xyToIndex(getX(), (size_t)getY()) + (size_t)getY() + 1] =
-		(getFacing() == 0 ? '^' :
-			getFacing() == 1 ? '>' :
-			getFacing() == 2 ? 'V' :
-			'<');
-	std::cout << print << "\n";
-
-	std::cout << "Current position: (" << getX() << ", " << getY() << ") facing "
-		<< Direction::toChar(getFacing()) << ".\n\n";
+	if( hasItem(getWorld()->getMapItem()) ) {
+		world->getWorldMap()->print(ss);
+		print = ss.str();
+		print[world->xyToIndex(getX(), (size_t)getY()) + (size_t)getY()] =
+			(getFacing() == 0 ? '^' :
+				getFacing() == 1 ? '>' :
+				getFacing() == 2 ? 'V' :
+				'<');
+		os << print << "\n";
+	}
+	else {
+		os << "[You don't have a map.]\n\n";
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	mainMenu()
-	Displays the game main menu.
+	Quits to the game's main menu.
 */
 ////////////////////////////////////////////////////////////////////////////////
 void Player::mainMenu(std::ostream& os) {
@@ -232,7 +262,7 @@ void Player::mainMenu(std::ostream& os) {
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	optionsMenu()
-	Displays the player's current options in the game.
+	Displays the player's standard options in the game.
 	Runs recursively as long as the game isn't over.
 */
 ////////////////////////////////////////////////////////////////////////////////
@@ -244,10 +274,12 @@ void Player::optionsMenu(std::ostream& os) {
 		<< "A) " << actionText(LEFT) << '\n'
 		<< "S) " << actionText(BACK) << '\n'
 		<< "D) " << actionText(RIGHT) << '\n'
+		<< '\n'
 		<< "I) " << "View inventory.\n"
-		<< "Q) Quit.\n";
-	std::cout << "X) " << "Debug.\n";
-	std::cout << "\n> ";
+		<< "M) " << "View map.\n"
+		<< "Q) Quit.\n"
+		<< '\n'
+		<< "> ";
 
 	choice = std::toupper(std::cin.get());
 	std::cin.ignore(100, '\n');
@@ -269,15 +301,16 @@ void Player::optionsMenu(std::ostream& os) {
 		system("cls");
 		inventoryMenu();
 		break;
+	case 'M':
+		system("cls");
+		mapMenu(os);
+		break;
 	case 'Q':
 		os << "\nQuitting to main menu...\n\n";
 		getWorld()->setGameOver(true);
 		break;
-	case 'X':
-		debug();
-		break;
 	default:
-		std::cout << "\nInvalid input. Try again.\n\n";
+		std::cout << "\nInvalid input. Try again.\n";
 		break;
 	}
 
@@ -288,6 +321,47 @@ void Player::optionsMenu(std::ostream& os) {
 		mainMenu();
 	else
 		optionsMenu();
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/*	examineMenu()
+	Displays the player's options when interacting with a point of interest.
+*/
+////////////////////////////////////////////////////////////////////////////////
+void Player::examineMenu(PointOfInterest* poi, std::ostream& os) {
+	char choice;
+	std::string poiName = poi->getName();
+	for( int i = 0; i < poiName.length(); i++ )
+		poiName[i] = std::tolower(poiName[i]);
+
+	try {
+		std::cout
+			<< "E) " << "Examine the " << poiName << '\n'
+			<< "X) " << "Ignore it and move on.\n"
+			<< '\n'
+			<< "> ";
+
+		choice = std::toupper(std::cin.get());
+		std::cin.ignore(100, '\n');
+
+		os << '\n';
+
+		if( choice != 'E' && choice != 'X' ) {
+			os << "\nInvalid input. Try again.\n";
+			system("pause");
+			system("cls");
+			examineMenu(poi, os);
+		}
+
+		if( choice == 'E' ) {
+			os << "\n\n";
+			system("cls");
+			poi->onExamined(*this, os);
+		}
+	}
+	catch( ... ) {
+		throw;
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////

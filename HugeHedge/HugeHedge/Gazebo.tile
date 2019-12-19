@@ -1,0 +1,9 @@
+; Gazebo
+name=Gazebo
+description=You spot a gazebo that looks to be a nice resting spot.
+token=0
+wall=0
+key=no
+unsolvedMessage=no
+solvedMessage=Someone's belongings were abandoned on one of the benches.
+reward=no

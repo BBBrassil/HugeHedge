@@ -1,0 +1,9 @@
+; Tree
+name=Tree
+description=Apples sway from the branches of the nearby tree.
+token=0
+wall=0
+key=no
+unsolvedMessage=no
+solvedMessage=But apples are not the only fruit this tree bears.
+reward=no

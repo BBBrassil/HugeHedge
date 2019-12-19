@@ -1,8 +1,0 @@
-; Shed
-name=Shed
-description=You see a storage shed.
-token=X
-wall=0
-key=no
-unsolvedMessage=no
-solvedMessage=You look inside for something useful.

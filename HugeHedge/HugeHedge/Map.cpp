@@ -1,6 +1,6 @@
 //	Map.cpp
 //	Programmer: Brendan Brassil
-//	Date Last Modified: 2019-12-18
+//	Date Last Modified: 2019-12-19
 
 #include "Map.h"
 
@@ -24,9 +24,7 @@ bool Map::isOrdered(Tile* tile) const {
 	Determines what character to print for identifying a tile on the map.
 */
 ////////////////////////////////////////////////////////////////////////////////
-char Map::getKey(Tile* tile) const {
-	static int count = 0;
-
+char Map::getKey(Tile* tile) {
 	if( isOrdered(tile) ) {
 		count++;
 		// 1 - 9
@@ -70,7 +68,6 @@ void Map::read() {
 	char key;
 	std::stringstream toc;
 
-	mapContents << '\n';
 	for( int i = 0; i < world->size(); i++ ) {
 		tile = world->tile(i);
 		key = getKey(tile);

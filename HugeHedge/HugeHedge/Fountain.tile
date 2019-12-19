@@ -3,3 +3,7 @@ name=Fountain
 description=The rustling waters of the nearby fountain give you a momentary calm.
 token=0
 wall=0
+key=no
+unsolvedMessage=no
+solvedMessage=Desperate, you fish inside.
+reward=Quarter.item

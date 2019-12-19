@@ -1,6 +1,6 @@
 //	Path.cpp
 //	Programmer: Brendan Brassil
-//	Date Last Modified: 2019-12-18
+//	Date Last Modified: 2019-12-19
 
 #include "Path.h"
 
@@ -28,14 +28,17 @@ void Path::read(std::istream& ns) {
 	// Read data from input stream.
 	// Rethrow all exceptions.
 	try {
+		// objectName
 		IOManager::getlineEOF(ns, line);
 		data = IOManager::valueFrom(line);
 		objectName = data;
 
+		// description
 		IOManager::getlineEOF(ns, line);
 		data = IOManager::valueFrom(line);
 		description = data;
 
+		// token
 		IOManager::getlineEOF(ns, line);
 		data = IOManager::valueFrom(line);
 		token = data[0];

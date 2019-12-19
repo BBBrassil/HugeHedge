@@ -1,6 +1,6 @@
 //	World.h
 //	Programmer: Brendan Brassil
-//	Date Last Modified: 2019-12-18
+//	Date Last Modified: 2019-12-19
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	World class
@@ -32,8 +32,8 @@ private:
 	Tile** tileMap; // array of Tile pointers; acts like a 2D array, but isn't
 	Tile* defaultTile;
 	Exit* exit;
-	PointOfInterest* keyLocation;
-	PointOfInterest* mapLocation;
+	std::vector<int> keyLocations;
+	std::vector<int> spareLocations;
 	Map* worldMap;
 	Item* mapItem;
 	int rowCount;
@@ -48,6 +48,7 @@ public:
 	~World();
 	void makeTileMap();
 	void readTileData();
+	void placeItems();
 	int height() const { return rowCount; }
 	int width() const { return colCount; }
 	int size() const { return tileCount; }

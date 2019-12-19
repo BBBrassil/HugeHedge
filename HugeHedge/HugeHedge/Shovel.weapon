@@ -1,0 +1,5 @@
+; Shovel
+name=Shovel
+description=A digger's tool.
+attack=1
+damage=6

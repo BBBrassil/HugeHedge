@@ -1,0 +1,22 @@
+#####-#####
+#  1# # #2#
+# ### # # #
+# 3   # 4 #
+# # ### # #
+# #  5  # #
+# ##### ###
+# #6  #   #
+# ### ### #
+#  7#  8  #
+###########
+
+- Exit
+1 Tree
+2 Bird Bath
+3 Fountain
+4 Statue
+5 Garden
+6 Gazebo
+7 Shed
+8 Crop Circle
+

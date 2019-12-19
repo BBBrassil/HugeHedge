@@ -33,12 +33,13 @@ class Map {
 private:
 	std::stringstream mapContents;
 	World* world;
+	int count;
 	bool isOrdered(Tile* tile) const;
-	char getKey(Tile* tile) const;
+	char getKey(Tile* tile);
 	std::string tocLine(const char& key, const Tile* tile) const;
 	void read();
 public:
-	Map(World* w) { world = w; read(); }
+	Map(World* w) { world = w; count = 0; read(); }
 	void print(std::ostream& os = std::cout);
 };
 

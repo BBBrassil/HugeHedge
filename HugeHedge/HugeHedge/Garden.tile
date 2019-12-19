@@ -3,3 +3,7 @@ name=Garden
 description=You see a lovely garden.
 token=0
 wall=0
+key=Shovel.weapon
+unsolvedMessage=You eye one patch of dirt suspiciously, but you can only leave it alone for now.
+solvedMessage=You start digging.
+reward=no

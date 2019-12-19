@@ -1,6 +1,6 @@
 //	Player.h
 //	Programmer: Brendan Brassil
-//	Date Last Modified: 2019-12-18
+//	Date Last Modified: 2019-12-19
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	Player class
@@ -21,6 +21,7 @@
 class Item;
 class Tile;
 class World;
+class PointOfInterest;
 
 class Player {
 private:
@@ -47,8 +48,9 @@ public:
 	void lookAt(Tile* tile);
 	void mainMenu(std::ostream& os = std::cout);
 	void optionsMenu(std::ostream& os = std::cout);
+	void examineMenu(PointOfInterest* poi, std::ostream& os = std::cout);
 	void inventoryMenu(std::ostream& os = std::cout);
-	void debug();
+	void mapMenu(std::ostream& os = std::cout);
 };
 
 #endif

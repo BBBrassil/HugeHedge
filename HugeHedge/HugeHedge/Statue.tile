@@ -5,4 +5,5 @@ token=0
 wall=0
 key=no
 unsolvedMessage=no
-solvedMessage=As you admire the statue's craftsmanship, you find something hidden in the pedestal.
+solvedMessage=As you admire the craftsmanship, you find something hidden in the pedestal.
+reward=no

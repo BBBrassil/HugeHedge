@@ -1,12 +1,16 @@
-| _Direction_                                  |
-| ---------------------------------------------|
-|                                              |
-|                                              |
-| + _dummy()_                                  |
-| + `rightFrom(const int& cardinal) : int`     |
-| + `opposite(const int& cardinal) : int`      |
-| + `leftFrom(const int& cardinal) : int`      |
-| + `toChar(const int& cardinal) : int`        |
-| + `toString(const int& cardinal) : int`      |
-| + `toStringUpper(const int& cardinal) : int` |
-| + `toStringMixed(const int& cardinal) : int` |
+| _Direction_                                   |
+| ----------------------------------------------|
+|                                               |
+|                                               |
+| + _dummy()_                                   |
+| + `rightFrom(cardinal : int) : int`           |
+| + `opposite(cardinal : int) : int`            |
+| + `leftFrom(cardinal : int) : int`            |
+| + `navigate(cardinal : int) : int`            |
+| + `toChar(cardinal : int) : int`              |
+| + `toString(cardinal : int) : int`            |
+| + `toStringUpper(cardinal : int) : int`       |
+| + `toStringMixed(cardinal : int) : int`       |
+| + `relativeString(cardinal : int) : int`      |
+| + `relativeStringUpper(cardinal : int) : int` |
+| + `relativeStringMixed(cardinal : int) : int` |

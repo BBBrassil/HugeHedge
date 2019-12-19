@@ -23,6 +23,7 @@
 class Item {
 private:
 	std::string fileName;
+protected:
 	std::string name;
 	std::string description;
 public:
