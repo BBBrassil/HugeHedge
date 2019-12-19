@@ -363,7 +363,6 @@ void World::placeItems() {
 	// Place the last item in a spare point of interest
 	poi = dynamic_cast<PointOfInterest*>(tile(spareLocations[0]));
 	poi->addItem(*key);
-	std::cout << key->getName() << " in " << poi->getName() << "\n";
 
 	// Create the world map and add it to another spare point of interest
 	worldMap = new Map(this);
