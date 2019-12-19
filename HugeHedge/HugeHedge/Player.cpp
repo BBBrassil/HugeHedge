@@ -89,12 +89,14 @@ void Player::doAction(const int& relative) {
 		std::cout << "You move " << direction << ".\n";
 		move(relative);
 	}
-	else if( dynamic_cast<Exit*>(tile) ) {
+	else if( dynamic_cast<Exit*>(getTile(relative)) ) {
 		lookAt(tile);
+		face(relative);
 	}
 	else {
 		std::cout << "You look " << direction << ".\n";
 		lookAt(tile);
+		face(relative);
 	}
 }
 
@@ -105,7 +107,17 @@ void Player::doAction(const int& relative) {
 */
 ////////////////////////////////////////////////////////////////////////////////
 bool Player::canMoveTo(const int& relative) const {
-	return !getTile(relative)->isWall();
+	return !(getTile(relative)->isWall());
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/*	face()
+	Makes the player face a given relative direction.
+	(FORWARD, RIGHT, BACK, LEFT)
+*/
+////////////////////////////////////////////////////////////////////////////////
+void Player::face(const int& relative) {
+	facing = Direction::navigate(getFacing(), relative);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -153,6 +165,8 @@ bool Player::hasItem(const Item& item) const {
 void Player::collectItem(Item& item) {
 	std::cout << "Acquired item:\n" << item << '\n';
 	inventory->insert(item);
+	if( item == getWorld()->getMapItem() )
+		mapFound();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -162,12 +176,26 @@ void Player::collectItem(Item& item) {
 ////////////////////////////////////////////////////////////////////////////////
 void Player::collectAll(LinkedList<Item>& list) {
 	int numItems = list.size();
-	
+	bool hasMap = list.contains(getWorld()->getMapItem());
+
 	if( numItems > 0 ) {
 		std::cout << "Acquired item" << (numItems == 1 ? ":" : "s:") << "\n\n";
 		list.print();
 		list.move(*inventory);
 	}
+	if( hasMap )
+		mapFound();
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/*	mapFound()
+	Fired when the player finds the maze map.
+*/
+////////////////////////////////////////////////////////////////////////////////
+void Player::mapFound(std::ostream& os) {
+	os
+		<< "You have found a map! This will make navigating the maze easier.\n"
+		<< "[You can view the map in the menu. It has also been output to a file.]\n\n";
 }
 
 ////////////////////////////////////////////////////////////////////////////////

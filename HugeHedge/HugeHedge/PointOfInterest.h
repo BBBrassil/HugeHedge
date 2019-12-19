@@ -24,17 +24,23 @@
 class PointOfInterest : public UniqueTile {
 private:
 	std::unique_ptr<LinkedList<Item>> inventory;
+	std::shared_ptr<Item> key;
 	std::string unsolvedMessage;
 	std::string solvedMessage;
-protected:
+	bool requiresKey;
 	bool solved;
+protected:
 	std::string seeUnsolvedMessage() const { return unsolvedMessage; }
 	std::string seeSolvedMessage() const { return solvedMessage; }
 public:
 	PointOfInterest(const Position& p, const std::string& fn);
-	void onEnter(Player& player, std::ostream& os = std::cout);
 	void addItem(Item& item);
-	virtual void onExamined(Player& player, std::ostream& os = std::cout) {} //
+	void onEnter(Player& player, std::ostream& os = std::cout);
+	virtual void onExamined(Player& player, std::ostream& os = std::cout);
+	virtual void onSolved(Player& player, std::ostream& os = std::cout);
 	friend std::istream& operator>>(std::istream& ns, PointOfInterest& poi);
+	bool isKeyRequired() const { return requiresKey; }
+	Item& getKey() { return *key; }
+
 	friend class World;
 };

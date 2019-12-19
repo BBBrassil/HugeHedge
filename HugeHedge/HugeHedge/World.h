@@ -21,8 +21,10 @@
 #include <vector>
 
 class Exit;
+class Item;
 class Tile;
 class Map;
+class PointOfInterest;
 
 class World {
 private:
@@ -30,7 +32,10 @@ private:
 	Tile** tileMap; // array of Tile pointers; acts like a 2D array, but isn't
 	Tile* defaultTile;
 	Exit* exit;
+	PointOfInterest* keyLocation;
+	PointOfInterest* mapLocation;
 	Map* worldMap;
+	Item* mapItem;
 	int rowCount;
 	int colCount;
 	int tileCount;
@@ -41,8 +46,8 @@ public:
 	World();
 	World(const std::string& s);
 	~World();
-	void readTileData();
 	void makeTileMap();
+	void readTileData();
 	int height() const { return rowCount; }
 	int width() const { return colCount; }
 	int size() const { return tileCount; }
@@ -55,6 +60,7 @@ public:
 	Tile* tile(const int& index) const;
 	Tile* tile(const int& x, const int& y) const;
 	Map* getWorldMap() const { return worldMap; }
+	Item& getMapItem() { return *mapItem; }
 
 	//////////////////////////////////////////////////////////////////////////////
 	/* BadDimensions exception

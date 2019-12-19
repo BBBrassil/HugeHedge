@@ -39,6 +39,10 @@ std::istream& operator>>(std::istream& ns, PointOfInterest& poi) {
 
 		IOManager::getlineEOF(ns, line);
 		data = IOManager::valueFrom(line);
+		poi.description = data;
+
+		IOManager::getlineEOF(ns, line);
+		data = IOManager::valueFrom(line);
 		poi.token = data[0];
 
 		IOManager::getlineEOF(ns, line);
@@ -46,10 +50,24 @@ std::istream& operator>>(std::istream& ns, PointOfInterest& poi) {
 		if( data != "0" && data != "1" )
 			throw IOManager::BadString(line);
 		poi.wall = data[0] - '0';
+		
+		IOManager::getlineEOF(ns, line);
+		data = IOManager::valueFrom(line);
+		if( data != "no" ) {
+			poi.requiresKey = true;
+			poi.key = std::shared_ptr<Item>(new Item(data));
+		}
+		else {
+			poi.requiresKey = false;
+		}
 
 		IOManager::getlineEOF(ns, line);
 		data = IOManager::valueFrom(line);
-		poi.description = data;
+		poi.unsolvedMessage = data;
+
+		IOManager::getlineEOF(ns, line);
+		data = IOManager::valueFrom(line);
+		poi.solvedMessage = data;
 	}
 	catch( ... ) {
 		throw;
@@ -57,12 +75,29 @@ std::istream& operator>>(std::istream& ns, PointOfInterest& poi) {
 	return ns;
 }
 
+////////////////////////////////////////////////////////////////////////////////
+/*	addItem()
+	Adds an item to the tile's inventory.
+*/
+////////////////////////////////////////////////////////////////////////////////
 void PointOfInterest::addItem(Item& item) {
 	inventory->insert(item);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	onEnter()
+	Fired when the player enters this tile.
+
+	- player: Player object who has entered the tile.
+	- os: Any output stream.
+*/
+////////////////////////////////////////////////////////////////////////////////
+void PointOfInterest::onEnter(Player& player, std::ostream& os) {
+	onExamined(player, os);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/*	onExamined()
 	Fired when the player looks at this tile.
 
 	Adds any items in the tile's inventory to the player's inventory.
@@ -71,8 +106,32 @@ void PointOfInterest::addItem(Item& item) {
 	- os: Any output stream.
 */
 ////////////////////////////////////////////////////////////////////////////////
-void PointOfInterest::onEnter(Player& player, std::ostream& os) {
-	os << toString() << "\n\n";
+void PointOfInterest::onExamined(Player& player, std::ostream& os) {
+	os << *this << "\n\n";
+	if( !solved ) {
+		if( !isKeyRequired() || player.hasItem(*key) ) {
+			solved = true;
+			onSolved(player, os);
+		}
+		else {
+			os << seeUnsolvedMessage() << "\n\n";
+		}
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/*	onSolved()
+	Fired when the player solves this tile's puzzle.
+
+	Displays a message and adds any items in the tile's inventory to the
+	player's inventory.
+
+	- player: Player object who has solved the puzzle.
+	- os: Any output stream.
+*/
+////////////////////////////////////////////////////////////////////////////////
+void PointOfInterest::onSolved(Player& player, std::ostream& os) {
+	os << seeSolvedMessage() << "\n\n";
 	if( *inventory )
 		player.collectAll(*inventory);
 }

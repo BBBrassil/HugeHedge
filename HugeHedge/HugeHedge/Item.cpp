@@ -20,8 +20,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 Item::Item(const std::string& fn) {
 	std::unique_ptr<ObjectReader<Item>> reader(new ObjectReader<Item>(fn));
-	name = "";
-	description = "";
 
 	try {
 		reader->read(*this);

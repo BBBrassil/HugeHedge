@@ -42,7 +42,7 @@ public:
 	virtual char toChar() const = 0;
 	virtual bool isWall() const = 0;
 	virtual void onEnter(Player& player, std::ostream& os = std::cout);
-	virtual void onExamined(const Player& player, std::ostream& os = std::cout);
+	virtual void onExamined(Player& player, std::ostream& os = std::cout);
 	World* getWorld() const { return position.world; }
 	int getX() const { return position.x; }
 	int getY() const { return position.y; }

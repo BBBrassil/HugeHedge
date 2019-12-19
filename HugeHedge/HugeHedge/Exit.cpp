@@ -4,21 +4,17 @@
 
 #include "Exit.h"
 
-Exit::Exit(const Position& p, const std::string& fn) : PointOfInterest(p, fn) {
-	key = std::shared_ptr<Item>(new Item("ExitKey.item"));
-}
+////////////////////////////////////////////////////////////////////////////////
+/*	onSolved()
+	Fired when the player solves this tile's puzzle.
 
-void Exit::onExamined(const Player& player, std::ostream& os) {
-	if( !solved ) {
-		os << toString() << '\n';
-		if( player.hasItem(*key) ) {
-			os << seeSolvedMessage();
-			solved = true;
-			getWorld()->setGameOver(true);
-		}
-		else {
-			os << seeUnsolvedMessage();
-		}
-		os << "\n\n";
-	}
+	Signals the world that the player has escaped the maze and won the game!
+
+	- player: Player object who has solved the puzzle.
+	- os: Any output stream.
+*/
+////////////////////////////////////////////////////////////////////////////////
+void Exit::onSolved(Player& player, std::ostream& os) {
+	os << seeSolvedMessage();
+	getWorld()->setGameOver(true);
 }

@@ -30,7 +30,7 @@ void Tile::onEnter(Player& player, std::ostream& os) {
 	- os: Any output stream.
 */
 ////////////////////////////////////////////////////////////////////////////////
-void Tile::onExamined(const Player& player ,std::ostream& os) {
+void Tile::onExamined(Player& player, std::ostream& os) {
 	os << *this << "\n\n";
 }
 

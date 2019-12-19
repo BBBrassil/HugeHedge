@@ -1,7 +1,8 @@
 ; Exit
 name=Exit
 description=The exit to the maze stands before you.
-token==
+token=-
 wall=1
-unsolved=The gate is locked and you don't have the key.
-solved=You use the golden key to unlock the exit to the maze.
+key=ExitKey.item
+unsolvedMessage=The gate is locked and you don't have the key.
+solvedMessage=You use the golden key to unlock the exit to the maze.

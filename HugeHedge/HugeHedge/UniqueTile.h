@@ -28,11 +28,12 @@ protected:
 	char token;
 	bool wall;
 public:
-	UniqueTile(const Position& p, const std::string& fn);
+	UniqueTile(const Position& p, const std::string& fn) : Tile(p) { fileName = fn; }
 	std::string getName() const { return objectName; }
 	std::string toString() const { return description; }
 	char toChar() const { return token; }
 	bool isWall() const { return wall; }
+	std::string getFileName() const { return fileName; }
 	friend std::istream& operator>>(std::istream& ns, UniqueTile& t);
 };
 

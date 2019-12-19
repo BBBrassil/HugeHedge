@@ -2,6 +2,7 @@
 //	Programmer: Brendan Brassil
 //	Date Last Modified: 2019-12-18
 
+#include "IOManager.h"
 #include "Player.h"
 #include "Position.h"
 #include "World.h"
@@ -9,21 +10,36 @@
 using namespace std;
 
 int main() {
-	World* world = new World();
-	Position position;
-	position.world = world;
-	position.x = 7;
-	position.y = 4;
+	World* world = nullptr;
+	Player* player = nullptr;
 
-	Player* player = new Player(position);
+	try {
+		world = new World();
 
-	player->optionsMenu();
+		Position position;
+		position.world = world;
+		position.x = 7;
+		position.y = 4;
 
-	delete world;
-	world = nullptr;
+		player = new Player(position);
 
-	delete player;
-	player = nullptr;
+		player->optionsMenu();
+
+		delete world;
+		world = nullptr;
+
+		delete player;
+		player = nullptr;
+	}
+	catch( IOManager::FileOpenFail ex ) {
+		cout << "unhandled exception: failed to open file \"" << ex.getFileName() << "\".\n";
+
+		delete world;
+		world = nullptr;
+
+		delete player;
+		player = nullptr;
+	}
 
 	cout << "Exiting...\n\n";
 	system("pause");

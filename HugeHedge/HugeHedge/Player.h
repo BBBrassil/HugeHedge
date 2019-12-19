@@ -28,6 +28,7 @@ private:
 	int facing;
 	std::unique_ptr<LinkedList<Item>> inventory;
 	bool canMoveTo(const int& relative) const;
+	void face(const int& relative);
 	void move(const int& relative);
 	std::string actionText(const int& relative) const;
 public:
@@ -41,6 +42,7 @@ public:
 	bool hasItem(const Item& item) const;
 	void collectItem(Item& item);
 	void collectAll(LinkedList<Item>& list);
+	void mapFound(std::ostream& os = std::cout);
 	void doAction(const int& relative);
 	void lookAt(Tile* tile);
 	void mainMenu(std::ostream& os = std::cout);

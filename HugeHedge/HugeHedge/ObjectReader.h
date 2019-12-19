@@ -20,7 +20,9 @@
 template <class T>
 class ObjectReader : public IOManager {
 public:
+	ObjectReader() : IOManager() { fileName = ""; }
 	ObjectReader(const std::string& fn) : IOManager() { fileName = fn; }
+	void setFileName(std::string& fn) { fileName = fn; }
 	void read(T& obj);
 };
 

@@ -1,5 +1,8 @@
-; Key location
+; Shed
 name=Shed
-description=You find a storage shed and look inside for something useful.
+description=You see a storage shed.
 token=X
 wall=0
+key=no
+unsolvedMessage=no
+solvedMessage=You look inside for something useful.

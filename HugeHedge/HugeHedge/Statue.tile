@@ -1,0 +1,8 @@
+; Statue
+name=Statue
+description=You see an elegant Greco-Roman statue.
+token=0
+wall=0
+key=no
+unsolvedMessage=no
+solvedMessage=As you admire the statue's craftsmanship, you find something hidden in the pedestal.

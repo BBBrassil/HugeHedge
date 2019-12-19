@@ -48,8 +48,8 @@ World::World(const std::string& s) {
 
 	try {
 		setDimensions();
-		readTileData();
 		makeTileMap();
+		readTileData();
 	}
 	catch( ... ) {
 		throw;
@@ -129,66 +129,18 @@ void World::clear() {
 		}
 	}
 
-	delete worldMap;
-	worldMap = nullptr;
-
 	delete[] tileMap;
 	tileMap = nullptr;
 
 	delete defaultTile;
 	defaultTile = nullptr;
-}
 
-////////////////////////////////////////////////////////////////////////////////
-/*	readTileData()
-	Reads data for the default tile and the static fields of the Wall and Path
-	classes from their respective files.
+	delete worldMap;
+	worldMap = nullptr;
 
-	* Friend function of the Wall and Path classes.
-	  Their static fields are assigned here instead of in their constructors so
-	  it won't happen every time the classes are instantiated and instead will
-	  only happen once when the World is instantiated.
+	delete mapItem;
+	mapItem = nullptr;
 
-	! Throws a FileOpenFail exception if any input file fails to open.
-	! Throws an EndOfFile exception if the end of the input stream is reached
-	  before all the expected data is read.
-	! Throws a BadString exception if data can't be read from a line because of
-	  incorrect formatting.
-*/
-////////////////////////////////////////////////////////////////////////////////
-void World::readTileData() {
-	std::string tileFileName, line;
-	Position position;
-	std::unique_ptr<IOManager> reader(new IOManager());
-
-	try {
-		tileFileName = "Default.tile";
-		position.world = this;
-		position.x = -1;
-		position.y = -1;
-		defaultTile = new UniqueTile(position, tileFileName);
-
-		tileFileName = "Wall.tile";
-		reader->open(tileFileName);
-		Wall::read(reader->file());
-		reader->close();
-
-		tileFileName = "Path.tile";
-		reader->open(tileFileName);
-		Path::read(reader->file());
-		reader->close();
-	}
-	catch( IOManager::FileOpenFail ) {
-		throw;
-	}
-	catch( IOManager::EndOfFile ) {
-		reader->close();
-		throw IOManager::EndOfFile(tileFileName);
-	}
-	catch( IOManager::BadString ex ) {
-		reader->close();
-		throw IOManager::BadString(ex.getString(), tileFileName);
-	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -211,9 +163,8 @@ void World::makeTileMap() {
 	std::string line;
 	std::stringstream ss;
 	char type;
-	PointOfInterest* keyLocation = nullptr;
 
-	tileMap = new Tile*[tileCount];
+	tileMap = new Tile * [tileCount];
 	exit = nullptr;
 	try {
 		reader->open(fileName);
@@ -255,9 +206,6 @@ void World::makeTileMap() {
 			}
 		}
 		reader->close();
-		keyLocation->addItem(exit->getKey());
-
-		worldMap = new Map(this);
 	}
 	catch( IOManager::FileOpenFail ) {
 		clear();
@@ -272,6 +220,94 @@ void World::makeTileMap() {
 		reader->close();
 		clear();
 		throw;
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/*	readTileData()
+	Reads data for the tiles from files, storing it in their fields.
+
+	* Friend function of the Wall and Path classes. Their static fields will be
+	  assigned here and only here.
+
+	! Throws a FileOpenFail exception if any input file fails to open.
+	! Throws an EndOfFile exception if the end of the input stream is reached
+	  before all the expected data is read.
+	! Throws a BadString exception if data can't be read from a line because of
+	  incorrect formatting.
+*/
+////////////////////////////////////////////////////////////////////////////////
+void World::readTileData() {
+	std::string tileFileName, line;
+	Position position;
+	std::unique_ptr<IOManager> tileReader(new IOManager());
+	std::unique_ptr<ObjectReader<PointOfInterest>> poiReader;
+	std::unique_ptr<ObjectReader<UniqueTile>> uniqueReader;
+
+	try {
+		tileFileName = "Default.tile";
+		position.world = this;
+		position.x = -1;
+		position.y = -1;
+		defaultTile = new UniqueTile(position, tileFileName);
+		poiReader = std::unique_ptr<ObjectReader<PointOfInterest>>(new ObjectReader<PointOfInterest>());
+		uniqueReader = std::unique_ptr<ObjectReader<UniqueTile>>(new ObjectReader<UniqueTile>());
+		Tile* t = nullptr;
+		UniqueTile* uniqueTile = nullptr;
+		PointOfInterest* pointOfInterest = nullptr;
+		
+		// Wall - static
+		tileFileName = "Wall.tile";
+		tileReader->open(tileFileName);
+		Wall::read(tileReader->file());
+		tileReader->close();
+
+		// Path - static
+		tileFileName = "Path.tile";
+		tileReader->open(tileFileName);
+		Path::read(tileReader->file());
+		tileReader->close();
+
+		// Non-static tiles
+		// Dyynamically cast as needed to use the right type of ObjectReader
+		for( int i = 0; i < size(); i++ ) {
+			t = tile(i);
+			if( dynamic_cast<PointOfInterest*>(t) ) {
+				pointOfInterest = dynamic_cast<PointOfInterest*>(t);
+				tileFileName = pointOfInterest->getFileName();
+				poiReader->setFileName(tileFileName);
+				poiReader->read(*pointOfInterest);
+				poiReader->close();
+			}
+			else if( dynamic_cast<UniqueTile*>(t) ) {
+				uniqueTile = dynamic_cast<UniqueTile*>(t);
+				tileFileName = uniqueTile->getFileName();
+				uniqueReader->setFileName(tileFileName);
+				uniqueReader->read(*uniqueTile);
+				uniqueReader->close();
+			}
+		}
+		// Place the key to the exit
+		keyLocation->addItem(exit->getKey());
+
+		// Create the world map
+		worldMap = new Map(this);
+		mapItem = new Item("Map.item");
+	}
+	catch( IOManager::FileOpenFail ) {
+		throw;
+	}
+	catch( IOManager::EndOfFile ) {
+		tileReader->close();
+		poiReader->close();
+		uniqueReader->close();
+		throw IOManager::EndOfFile(tileFileName);
+	}
+	catch( IOManager::BadString ex ) {
+		tileReader->close();
+		poiReader->close();
+		uniqueReader->close();
+		throw IOManager::BadString(ex.getString(), tileFileName);
 	}
 }
 

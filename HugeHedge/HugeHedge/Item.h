@@ -26,7 +26,7 @@ private:
 	std::string name;
 	std::string description;
 public:
-	Item() {} //
+	Item() { fileName = ""; }
 	Item(const std::string& fn);
 	std::string getName() const { return name; }
 	std::string getDescription() const { return description; }
